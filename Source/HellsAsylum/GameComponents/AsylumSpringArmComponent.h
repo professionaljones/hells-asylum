@@ -22,6 +22,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 		float BaseTargetArmLength;
 
+	/** Natural location of the spring arm */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
+		FVector BaseSpringArmLocation;
+
+	/** Value to add to the target arm, e.g. caused by camera modifiers. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
+		FVector TargetArmLocationModifer;
+
 	/** Value to add to the target arm length, e.g. caused by camera modifiers. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 		float TargetArmLengthModifier;

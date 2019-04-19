@@ -25,7 +25,7 @@ bool UCameraModInCombatState::ModifyCamera(float DeltaTime, FMinimalViewInfo & I
 				// Apply modifier.
 				AppyCameraTransition(PlayerCharacter->IsInCombat() ? Modifiers : FAsylumCameraInfo(), TransitionTime, InOutPOV,
 					DeltaTime);
-
+				//PlayerCharacter->ThirdPersonCameraBoom->bUsePawnControlRotation = false;
 				return true;
 			}
 			else
@@ -33,6 +33,7 @@ bool UCameraModInCombatState::ModifyCamera(float DeltaTime, FMinimalViewInfo & I
 				// Apply modifier.
 				AppyCameraTransition(PlayerCharacter->IsInCombat() ? Modifiers : FAsylumCameraInfo(), TransitionTime, InOutPOV,
 					DeltaTime);
+				//PlayerCharacter->ThirdPersonCameraBoom->bUsePawnControlRotation = false;
 				return true;
 			}
 
@@ -42,6 +43,7 @@ bool UCameraModInCombatState::ModifyCamera(float DeltaTime, FMinimalViewInfo & I
 			// Apply modifier.
 			AppyCameraTransition(PlayerCharacter->IsInCombat() ? Modifiers : FAsylumCameraInfo(), TransitionTime, InOutPOV,
 				DeltaTime);
+			//PlayerCharacter->ThirdPersonCameraBoom->bUsePawnControlRotation = true;
 			return false;
 		}
 

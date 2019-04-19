@@ -7,6 +7,7 @@ UAsylumSpringArmComponent::UAsylumSpringArmComponent(const FObjectInitializer& O
 {
 	// Enable camera controls.
 	bUsePawnControlRotation = true;
+	BaseSpringArmLocation = GetComponentLocation();
 
 	// Set reasonable default values for camera distance and perspective.
 	BaseTargetArmLength = 350.0f;
@@ -15,11 +16,14 @@ UAsylumSpringArmComponent::UAsylumSpringArmComponent(const FObjectInitializer& O
 	// Enable camera lag.
 	bEnableCameraLag = true;
 	CameraLagSpeed = 5.0f;
+	/*bEnableCameraRotationLag = true;
+	CameraRotationLagSpeed = 5.0f;*/
 }
 
 void UAsylumSpringArmComponent::UpdateDesiredArmLocation(bool bDoTrace, bool bDoLocationLag, bool bDoRotationLag, float DeltaTime)
 {
 	TargetArmLength = BaseTargetArmLength + TargetArmLengthModifier;
+	TargetArmLocationModifer = BaseSpringArmLocation + TargetArmLocationModifer;
 	Super::UpdateDesiredArmLocation(bDoTrace, bDoLocationLag, bDoRotationLag, DeltaTime);
 	TargetArmLengthModifier = 0.0f;
 }

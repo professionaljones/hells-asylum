@@ -163,6 +163,7 @@ bool UAsylumCameraModifier::PlayerHasRecentlyChangedCamera() const
 void UAsylumCameraModifier::ApplyCameraInfo(const FAsylumCameraInfo & CameraInfo, const float Factor, FMinimalViewInfo & InOutPOV) const
 {
 	float appliedFOV = 0.0f;
+	FVector appliedLocation = FVector(0.0f,0.0f,0.0f);
 	AActor* viewTarget = GetViewTarget();
 	// Get player character.
 	AAsylumPlayerCharacter* PlayerCharacter = Cast<AAsylumPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
@@ -174,6 +175,10 @@ void UAsylumCameraModifier::ApplyCameraInfo(const FAsylumCameraInfo & CameraInfo
 
 	TArray<USceneComponent*> children;
 	viewTarget->GetRootComponent()->GetChildrenComponents(true, children);
+
+	//Apply New Location
+	appliedLocation = CameraInfo.NewSpringArmLocation;
+	InOutPOV.Location = InOutPOV.Location + appliedLocation;
 
 	// Apply FOV.
 	if (PlayerCharacter->bIsCrouchButtonDown)

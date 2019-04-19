@@ -69,13 +69,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Cheats")
 		bool bEnableGodMode = false;
 
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Player Health Percentage", Keywords = "Health"), Category = "Character|Stats|Player")
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Player Health Percentage", Keywords = "Health"), Category = "Character|Stats")
 		float GetPlayerHealthPercentage();
 
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Player Shield Percentage", Keywords = "Shield"), Category = "Character|Stats|Player")
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Player Shield Percentage", Keywords = "Shield"), Category = "Character|Stats")
 		float GetPlayerShieldPercentage();
 
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Player Aragon Percentage", Keywords = "Shield"), Category = "Character|Stats|Player")
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Player Aragon Percentage", Keywords = "Shield"), Category = "Character|Stats")
 		float GetPlayerAragonPercentage();
 
 protected:
@@ -123,16 +123,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Cheats")
 		void EnableGodModeToggle();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Character|Stats|Player")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player")
 		class UAudioComponent* PlayerDialogueAudioComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Character|Stats|Player")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player")
 		class UAudioComponent* PlayerSuitAudioComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Character|Stats|Player")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player|Stats")
 		class UAsylumStatsComponent* PlayerStatsComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Character|Stats|Player")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player|Stats")
 		class UAsylumSuitComponent* GoetheSuitComponent;
 
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Character|Stats|Player")
@@ -140,7 +140,7 @@ public:
 
 
 	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Character|Stats|Player")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player")
 		class UAsylumSpringArmComponent* ThirdPersonCameraBoom;
 
 	FTimerHandle LockOnHandle;
@@ -151,16 +151,16 @@ public:
 
 	
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon|Slots|Player")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Weapon")
 		class AAsylumWeapon* WeaponSlotOne;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character|Weapon|Player")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Weapon")
 		class AAsylumWeapon* WeaponSlotTwo;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character|Weapon|Player")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Weapon")
 		class AAsylumWeapon* WeaponSlotThree;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character|Weapon|Player")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Weapon")
 		class AAsylumWeapon* LastWeaponEquipped;
 private:
 	bool bGotForwardInput;
