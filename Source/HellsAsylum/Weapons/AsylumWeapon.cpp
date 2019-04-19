@@ -1,0 +1,366 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "AsylumWeapon.h"
+
+// Sets default values
+AAsylumWeapon::AAsylumWeapon()
+{
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
+	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>("WeaponMesh");
+	FireArrow = CreateDefaultSubobject<UArrowComponent>("FireLocationArrow");
+	FireArrow->SetupAttachment(WeaponMesh, ProjectileSocket);
+	WeaponAudioComponent = CreateDefaultSubobject<UAudioComponent>("WeaponAudioComponent");
+	RootComponent = WeaponMesh;
+	MyLocation = GetActorLocation();
+
+	CurrentWeaponSlotType = WeaponStatsData.WeaponSlotType;
+
+	ObjectsToTarget.Add(UEngineTypes::ConvertToObjectType(ECC_WorldDynamic));
+	ObjectsToTarget.Add(UEngineTypes::ConvertToObjectType(ECC_Pawn));
+	ObjectsToTarget.Add(UEngineTypes::ConvertToObjectType(ECC_Destructible));
+
+	if (WeaponStatsData.FireRate > 0)
+	{
+		bIsAutomatic = true;
+	}
+}
+
+// Called when the game starts or when spawned
+void AAsylumWeapon::BeginPlay()
+{
+	Super::BeginPlay();
+	if (bIsChargeWeapon)
+	{
+		ChargeDamageModifer = WeaponStatsData.DamageModifierAmount;
+	}
+	CheckAmmo();
+}
+
+// Called every frame
+void AAsylumWeapon::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+void AAsylumWeapon::CheckAmmo()
+{
+	if (!bEnableInfiniteAmmo)
+	{
+		if (WeaponStatsData.CurrentMagazineAmmo != 0 || WeaponStatsData.CurrentWeaponClips != 0)
+		{
+			bCanWeaponFire = true;
+		}
+		if (WeaponStatsData.CurrentMagazineAmmo <= 0 && bCanWeaponFire)
+		{
+			bCanWeaponFire = false;
+			WeaponStatsData.CurrentMagazineAmmo = 0;
+		}
+		else
+		{
+			bCanWeaponFire = true;
+		}
+		if (WeaponStatsData.CurrentMagazineAmmo < WeaponStatsData.OriginalCurrentMagazineAmmo)
+		{
+			bCanReload = true;
+
+		}
+		else
+		{
+			bCanReload = false;
+		}
+
+
+		if (WeaponStatsData.CurrentWeaponClips <= 0)
+		{
+			bCanReload = false;
+			bIsWeaponEmpty = true;
+		}
+	}
+}
+
+void AAsylumWeapon::StartFire()
+{
+	if (bCanWeaponFire && !bIsReloading)
+	{
+		if (bIsChargeWeapon)
+		{
+			StartCharge();
+			if (bIsAutomatic && WeaponStatsData.WeaponAmmoType == AT_Energy)
+			{
+				StartCharge();
+				GetWorldTimerManager().SetTimer(AutoFireTimer, this, &AAsylumWeapon::Fire, WeaponStatsData.FireRate, true);
+			}
+		}
+		if (bIsAutomatic)
+		{
+			Fire();
+			GetWorldTimerManager().SetTimer(AutoFireTimer, this, &AAsylumWeapon::Fire, WeaponStatsData.FireRate, true);
+		}
+		if (!bIsAutomatic && !bIsChargeWeapon)
+		{
+			Fire();
+		}
+	}
+}
+
+void AAsylumWeapon::Fire()
+{
+	//Collision parameters
+	FCollisionQueryParams CollisionParameters;
+
+	//Execute Interface Event from BP - currently drives UI update
+	//if (this->GetClass()->ImplementsInterface(UBaseWeaponInterface::StaticClass()))
+	//{
+	//	IBaseWeaponInterface::Execute_OnFire(this);
+	//}
+
+	//If this weapon is not reloading and has ammo in mag
+	if (!bIsReloading && bCanWeaponFire)
+	{
+
+		//Consume ammo
+		if (!bEnableInfiniteAmmo)
+		{
+			WeaponStatsData.CurrentMagazineAmmo = WeaponStatsData.CurrentMagazineAmmo - WeaponStatsData.AmmoConsumptionAmount;
+		}
+
+
+
+		//Create temp variable for Actor we hit
+		AActor *HitActor = SingleHit.GetActor();
+
+		//Length of the ray in Unreal units
+		float WeaponRange = WeaponStatsData.WeaponDistanceRange;
+
+		//Play Fire SFX
+		if (WeaponFireSound != NULL)
+		{
+			//UGameplayStatics::PlaySoundAtLocation(this, WeaponFireSound, GetActorLocation());
+			WeaponAudioComponent->SetSound(WeaponFireSound);
+			WeaponAudioComponent->Play();
+		}
+
+		if (WeaponOwner == UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))
+		{
+			//AAsylumPlayerCharacter *PlayerCharacter = Cast<AAsylumPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+
+
+		
+			
+			//{
+			//	//The StartLocation of the raycast
+			//	StartLocation = PlayerCharacter->FollowCamera->GetComponentLocation();
+
+			//	//The EndLocation of the raycast
+			//	EndLocation = StartLocation + (PlayerCharacter->FollowCamera->GetForwardVector() * WeaponRange);
+			//	//UE_LOG(LogTemp, Warning, TEXT("Using Third Person Camera"));
+			//}
+		}
+
+		//Single line trace
+		if (GetWorld()->LineTraceSingleByObjectType(SingleHit, StartLocation, EndLocation, ObjectsToTarget, CollisionParameters))
+		{
+
+			//If we hit something and said target is what we are looking for
+			if (SingleHit.bBlockingHit && IsValid(HitActor))
+			{
+				//Apply damage
+				UGameplayStatics::ApplyPointDamage(HitActor, WeaponStatsData.DamageAmountSum, SingleHit.ImpactPoint, SingleHit, UGameplayStatics::GetPlayerController(GetWorld(), 0), this, NULL);
+				/*if (this->GetClass()->ImplementsInterface(UBaseWeaponInterface::StaticClass()))
+				{
+					IBaseWeaponInterface::Execute_OnHitTarget(this);
+				}*/
+			}
+		}
+	}
+}
+
+void AAsylumWeapon::FinishFire()
+{
+	if (WeaponStatsData.CurrentMagazineAmmo <= 0)
+	{
+
+	}
+	if (bIsAutomatic)
+	{
+		GetWorldTimerManager().ClearTimer(AutoFireTimer);
+	}
+	if (bIsChargeWeapon || WeaponStatsData.WeaponAmmoType == AT_Charge || WeaponStatsData.WeaponAmmoType == AT_Stun)
+	{
+		FinishCharge();
+
+		UE_LOG(LogTemp, Warning, TEXT("This should only print for charge weapons."))
+	}
+}
+
+void AAsylumWeapon::StartCharge()
+{
+	//Play Charge SFX
+	if (WeaponChargeFireSound != NULL)
+	{
+		//UGameplayStatics::PlaySoundAtLocation(this, WeaponChargeFireSound, GetActorLocation(), 1.0f, 1.0f, 0.0f);
+		WeaponAudioComponent->SetSound(WeaponChargeFireSound);
+		WeaponAudioComponent->Play();
+	}
+	//Start timer for charge
+	GetWorldTimerManager().SetTimer(ChargeTimer, this, &AAsylumWeapon::Charge, 0.01f, true);
+	bIsCharging = true;
+}
+
+void AAsylumWeapon::Charge()
+{
+	if (bIsCharging)
+	{
+		//bCanWeaponFire = false;
+		WeaponStatsData.CurrentWeaponCharge = WeaponStatsData.CurrentWeaponCharge + WeaponStatsData.AmountToCharge;
+
+		//This is temporary, will need to modify for balancing
+		WeaponStatsData.DamageModifierAmount = WeaponStatsData.CurrentWeaponCharge;
+		if (WeaponStatsData.CurrentWeaponCharge >= WeaponStatsData.WeaponChargeLimit)
+		{
+			WeaponStatsData.CurrentWeaponCharge = WeaponStatsData.WeaponChargeLimit;
+		}
+	}
+}
+
+void AAsylumWeapon::FinishCharge()
+{
+	//Stop Timer
+	GetWorldTimerManager().ClearTimer(ChargeTimer);
+	bIsCharging = false;
+	//Reset Charge value
+	WeaponStatsData.CurrentWeaponCharge = 0.f;
+	//Reset Damage modifier
+	WeaponStatsData.DamageModifierAmount = ChargeDamageModifer;
+	//Attempt to apply damage
+	Fire();
+
+	//Play Fire SFX
+	if (WeaponFireSound != NULL)
+	{
+		//UGameplayStatics::PlaySoundAtLocation(this, WeaponFireSound, GetActorLocation());
+		WeaponAudioComponent->SetSound(WeaponFireSound);
+		WeaponAudioComponent->Play();
+	}
+}
+
+void AAsylumWeapon::Reload()
+{
+	if (bIsReloading && !bIsWeaponEmpty)
+	{
+		//Prevent firing
+		bCanWeaponFire = false;
+		WeaponStatsData.CurrentReloadTime = WeaponStatsData.CurrentReloadTime + WeaponStatsData.ReloadSpeed;
+
+		//Actually reload ammo
+		if (WeaponStatsData.CurrentReloadTime >= WeaponStatsData.MaxReloadTime)
+		{
+			WeaponStatsData.CurrentMagazineAmmo = WeaponStatsData.OriginalCurrentMagazineAmmo;
+			WeaponStatsData.CurrentWeaponClips--;
+			FinishReload();
+			//GLog->Log("Reload complete");
+		}
+	}
+}
+
+void AAsylumWeapon::StartReload()
+{
+	if (bCanReload)
+	{
+		if (WeaponReloadSound != NULL)
+		{
+			//UGameplayStatics::PlaySoundAtLocation(this, WeaponReloadSound, GetActorLocation(), 1.0f, 1.0f, 0.0f);
+			WeaponAudioComponent->SetSound(WeaponReloadSound);
+			WeaponAudioComponent->Play();
+		}
+		bIsReloading = true;
+		GetWorldTimerManager().SetTimer(ReloadTimer, this, &AAsylumWeapon::Reload, WeaponStatsData.ReloadSpeed, true);
+	}
+}
+
+void AAsylumWeapon::FinishReload()
+{
+	if (bIsReloading)
+	{
+		bIsReloading = false;
+		bCanWeaponFire = true;
+		GetWorldTimerManager().ClearTimer(ReloadTimer);
+		WeaponStatsData.CurrentReloadTime = 0.0f;
+
+		//if (this->GetClass()->ImplementsInterface(UBaseWeaponInterface::StaticClass()))
+		//{
+		//	IBaseWeaponInterface::Execute_OnFinishReload(this);
+		//	GLog->Log("Reload UI update");
+		//}
+
+
+	}
+}
+
+float AAsylumWeapon::GetAmmoPercentage()
+{
+	float Percentage = WeaponStatsData.CurrentMagazineAmmo / WeaponStatsData.CurrentWeaponClips;
+	return Percentage;
+}
+
+float AAsylumWeapon::GetReloadPercentage()
+{
+	float Percentage = WeaponStatsData.CurrentReloadTime / WeaponStatsData.MaxReloadTime;
+	return Percentage;
+}
+
+float AAsylumWeapon::GetChargePercentage()
+{
+	float Percentage = WeaponStatsData.CurrentWeaponCharge / WeaponStatsData.WeaponChargeLimit;
+	return Percentage;
+}
+
+void AAsylumWeapon::InfiniteAmmoToggle()
+{
+	if (!bEnableInfiniteAmmo)
+	{
+		WeaponStatsData.CurrentMagazineAmmo = 999;
+		WeaponStatsData.CurrentWeaponClips = 999;
+		bEnableInfiniteAmmo = true;
+	}
+	else
+	{
+		WeaponStatsData.CurrentMagazineAmmo = WeaponStatsData.OriginalCurrentMagazineAmmo;
+		WeaponStatsData.CurrentWeaponClips = WeaponStatsData.MaxWeaponClips;
+	}
+}
+
+void AAsylumWeapon::UnlimitedClipsToggle()
+{
+	if (!bEnableNoClipLimit)
+	{
+		WeaponStatsData.CurrentWeaponClips = 999;
+		bEnableNoClipLimit = true;
+	}
+	else
+	{
+		WeaponStatsData.CurrentWeaponClips = WeaponStatsData.MaxWeaponClips;
+		bEnableNoClipLimit = false;
+	}
+}
+
+void AAsylumWeapon::GodModeToggle()
+{
+	if (!bEnableGodMode)
+	{
+		WeaponStatsData.DamageModifierAmount = 999;
+		InfiniteAmmoToggle();
+		bEnableGodMode = true;
+	}
+	else
+	{
+		WeaponStatsData.DamageModifierAmount = WeaponStatsData.OriginalDamageModifier;
+		InfiniteAmmoToggle();
+		bEnableGodMode = false;
+	}
+}
