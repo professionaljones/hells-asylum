@@ -10,6 +10,7 @@ bool FAsylumCameraInfo::Equals(const FAsylumCameraInfo & Other) const
 	delta.FOV = FOV - Other.FOV;
 	//This will modify the Spring Arm Length based on the info in the camera modifier
 	delta.SpringArmLength = SpringArmLength - Other.SpringArmLength;
+	delta.NewSpringArmLocation = NewSpringArmLocation + Other.NewSpringArmLocation;
 	delta.DepthOfFieldFocalDistance = DepthOfFieldFocalDistance - Other.DepthOfFieldFocalDistance;
 	delta.DepthOfFieldFocalRegion = DepthOfFieldFocalRegion - Other.DepthOfFieldFocalRegion;
 	delta.DepthOfFieldNearTransitionRegion = DepthOfFieldNearTransitionRegion - Other.DepthOfFieldNearTransitionRegion;

@@ -17,10 +17,10 @@ enum EWeaponType
 	WT_Unequipped UMETA(DisplayName = "Unequipped"),
 	WT_Pistol UMETA(DisplayName = "Pistol"),
 	WT_SMG UMETA(DisplayName = "SMG"),
-	WT_Dual_Pistol UMETA(DisplayName = "Dual Pistols"),
-	WT_Dual_SMG UMETA(DisplayName = "Dual SMGs"),
 	WT_Rifle UMETA(DisplayName = "Rifle"),
 	WT_Shotgun UMETA(DisplayName = "Shotgun"),
+	WT_Dual_Pistol UMETA(DisplayName = "Dual Pistols"),
+	WT_Dual_SMG UMETA(DisplayName = "Dual SMGs"),
 	WT_RocketLauncher UMETA(DisplayName = "Rocket Launcher"),
 	WT_Sniper UMETA(DisplayName = "Sniper Rifle")
 };
@@ -31,7 +31,8 @@ enum EWeaponSlotType
 	ST_None UMETA(DisplayName = "No Slot"),
 	ST_Primary UMETA(DisplayName = "Slot One"),
 	ST_Secondary UMETA(DisplayName = "Slot Two"),
-	ST_Tertiary UMETA(DisplayName = "Slot Three")
+	ST_Tertiary UMETA(DisplayName = "Slot Three"),
+	ST_Quaternary UMETA(DisplayName = "Special Slot")
 };
 
 UENUM(BlueprintType)

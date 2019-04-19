@@ -20,6 +20,10 @@ struct FAsylumCameraInfo
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 		float FOV_Crouching;
 
+	/** Modify the location of the spring arm */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
+		FVector NewSpringArmLocation;
+	
 	/** Distance between the camera and the view target, in cm. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 		float SpringArmLength;
