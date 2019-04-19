@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Engine/DataTable.h"
+#include "Engine/Texture2D.h"
 #include "AsylumSuitComponent.generated.h"
 
 
@@ -394,11 +395,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Abilities")
 		float AbilityThreeCooldown;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+		UDataTable *SuitStatsDataTable;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	void FindAsset();
+	//void FindAsset();
 
 public:
 	// Called every frame
