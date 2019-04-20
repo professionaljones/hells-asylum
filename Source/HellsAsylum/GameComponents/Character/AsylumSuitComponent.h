@@ -15,7 +15,8 @@ enum EGoetheMainAbilities
 	MA_None UMETA(DisplayName = "Unequipped"),
 	MA_Quicksilver UMETA(DisplayName = "Quicksilver"),
 	MA_Overdrive UMETA(DisplayName = "Overdrive"),
-	MA_Sacrifice UMETA(DisplayName = "Sacrifice")
+	MA_Sacrifice UMETA(DisplayName = "Sacrifice"),
+	MA_Overload UMETA(DisplayName = "Overload")
 };
 
 UENUM(BlueprintType)
