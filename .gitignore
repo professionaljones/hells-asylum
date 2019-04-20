@@ -74,6 +74,9 @@ Saved/*
 Intermediate/*
 Plugins/*/Intermediate/*
 
+# Log files when cooking/packaging
+Build/*.log
+
 # Cache files for the editor to use
 DerivedDataCache/*
 *.7z

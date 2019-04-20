@@ -36,6 +36,15 @@ public:
 		void OnMissionStart();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")
+		void OnMusicPlayer_PlayOneTrack(int32 TrackDesiredAtIndex);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")
+		void OnMusicPlayer_RestoreOriginalSettings();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")
+		void OnMusicPlayer_RepeatOneTrack(int32 TrackDesiredAtIndex);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")
 		void ShowMessageToPlayer();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")

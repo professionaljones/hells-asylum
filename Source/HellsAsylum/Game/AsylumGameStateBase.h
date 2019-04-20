@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
 #include "Engine/DataTable.h"
+#include "UI/AsylumHUDInterface.h"
 #include "AsylumGameStateBase.generated.h"
 
 USTRUCT(BlueprintType)
@@ -12,8 +13,6 @@ struct FSaveableLevelEventData : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
 public:
-	/*FSaveableLevelEventData()
-	{}*/
 
 	//This map will dictate what events need to be saved within a level
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Level Events")
@@ -35,8 +34,7 @@ struct FMissionLevelStats : public FTableRowBase
 	GENERATED_USTRUCT_BODY()
 
 public:
-	/*FMissionLevelStats()
-	{}*/
+	
 	//This score is the threshold to beat for third place
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level Data|Mission")
 		float ThirdPlaceMinimumScore = 0.0f;
@@ -67,11 +65,18 @@ public:
 };
 
 UCLASS()
-class HELLSASYLUM_API AAsylumGameStateBase : public AGameStateBase
+class HELLSASYLUM_API AAsylumGameStateBase : public AGameStateBase, public IAsylumHUDInterface
 {
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Level Data")
+		TMap<FString, FSaveableLevelEventData> SaveableCampaignDataMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Level Data")
+		TMap<FString, FMissionLevelStats> SaveableMissionDataMap;
+		
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level Data|Campaign")
 		struct FSaveableLevelEventData SaveableLevelEventDataStruct;
