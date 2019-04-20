@@ -44,7 +44,7 @@ enum EGoethePassivePowers
 	PP_MainAbility UMETA(DisplayName = "Power Optimizer"),
 	PP_Cooler UMETA(DisplayName = "Suit Boost"),
 	PP_SpaceJump UMETA(DisplayName = "Double Jump Boots"),
-	PP_JetBoots UMETA(DisplayName = "Jet Boots")
+	PP_JetBoots UMETA(DisplayName = "Jump Jets")
 
 };
 
@@ -82,6 +82,14 @@ public:
 	//Passive Power Slot Two
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Passive Powers")
 		TEnumAsByte<EGoethePassivePowers> GoethePassivePowerTwo;
+
+	//Passive Power Slot For Double Jump
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Passive Powers")
+		TEnumAsByte<EGoethePassivePowers> GoethePassivePowerBoots;
+
+	//Passive Power Slot For Jump Jets
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Passive Powers")
+		TEnumAsByte<EGoethePassivePowers> GoethePassivePowerJet;
 
 	//Active Power Slot One - Left Arm
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Powers")
