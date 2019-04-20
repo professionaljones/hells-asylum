@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Weapons/AsylumWeapon.h"
 #include "UObject/Interface.h"
 #include "AsylumCharacterInterface.generated.h"
 
@@ -29,7 +30,7 @@ public:
 		void OnRecoverShield(float RecoverAmount);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
-		void OnWeaponPickup(TSubclassOf<AAsylumWeapon> WeaponToAdd, int KeyToOccupy);
+		void OnWeaponPickup(TSubclassOf<AAsylumWeapon> WeaponToAdd, int32 KeyToOccupy);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Character")
 		void OnCharacterDeath(bool bIsDead);

@@ -84,10 +84,6 @@
 			"Enabled": false
 		},
 		{
-			"Name": "GLTFImporter",
-			"Enabled": true
-		},
-		{
 			"Name": "MfMedia",
 			"Enabled": true
 		},
@@ -110,6 +106,24 @@
 		{
 			"Name": "MapNames",
 			"Enabled": true
+		},
+		{
+			"Name": "AlembicImporter",
+			"Enabled": false
+		},
+		{
+			"Name": "ApexDestruction",
+			"Enabled": true
+		},
+		{
+			"Name": "HTML5Networking",
+			"Enabled": false
 		}
+	],
+	"TargetPlatforms": [
+		"HTML5",
+		"LinuxNoEditor",
+		"MacNoEditor",
+		"WindowsNoEditor"
 	]
 }
