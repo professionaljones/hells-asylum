@@ -2,6 +2,7 @@
 
 
 #include "AsylumWeapon.h"
+#include "Character/Player/AsylumPlayerCharacter.h"
 
 // Sets default values
 AAsylumWeapon::AAsylumWeapon()
@@ -177,7 +178,15 @@ void AAsylumWeapon::Fire()
 			}
 		}
 
-	
+		{
+			AAsylumPlayerCharacter* PChar = Cast<AAsylumPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+			//The StartLocation of the raycast
+			StartLocation = PChar->FollowCamera->GetComponentLocation();
+
+			//The EndLocation of the raycast
+			EndLocation = StartLocation + (PChar->FollowCamera->GetForwardVector() * WeaponRange);
+			//UE_LOG(LogTemp, Warning, TEXT("Using Third Person Camera"));
+		}
 
 		//Single line trace
 		if (GetWorld()->LineTraceSingleByObjectType(SingleHit, StartLocation, EndLocation, ObjectsToTarget, CollisionParameters))
