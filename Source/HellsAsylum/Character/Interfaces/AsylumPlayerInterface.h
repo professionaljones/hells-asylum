@@ -34,6 +34,15 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
 		void OnPlayerSuitEnable();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
+		void PlayerUIUpdate();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
+		void OnPlayerReload();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
+		void OnPlayerReloadFinish();
+
 	/*UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
 		void OnPlayerUseItem(TSubclassOf<AInventoryItemBase> ItemInUse);*/
 

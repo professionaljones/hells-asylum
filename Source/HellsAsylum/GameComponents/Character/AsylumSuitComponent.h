@@ -42,7 +42,9 @@ enum EGoethePassivePowers
 	PP_Reload UMETA(DisplayName = "Reload Speed Upgrade"),
 	PP_Damage UMETA(DisplayName = "Damage Upgrade"),
 	PP_MainAbility UMETA(DisplayName = "Power Optimizer"),
-	PP_Cooler UMETA(DisplayName = "Suit Boost")
+	PP_Cooler UMETA(DisplayName = "Suit Boost"),
+	PP_SpaceJump UMETA(DisplayName = "Double Jump Boots"),
+	PP_JetBoots UMETA(DisplayName = "Jet Boots")
 
 };
 
@@ -173,6 +175,13 @@ public:
 	//How many Main Ability tanks does the player currently have
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Main Abilities")
 		float CurrentAragonTanks;
+
+	//How much does the suit's aragon guage recharge
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit")
+		float AragonRegenAmount;
+	//How fast does the suit's aragon guage recharge
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit")
+		float AragonRegenSpeed;
 
 	//How many Main Ability tanks can the player currently have
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Main Abilities")
@@ -307,17 +316,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Arms")
 		float ReloadSpeedIncrease;
 
-//	///**
-//	//* Activate the player's main suit ability
-//	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
-//		void ActivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility);
-//
-//	/**
-//* Deactivate the player's main suit ability
-//*
-//*/
-//	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
-//		void DeactivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility);
+
 
 
 	//Feedback
@@ -411,37 +410,7 @@ public:
 
 
 
-	//UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
-	//	void ActivateQuicksilver();
 
-	//UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
-	//	void RechargeAragonTanks(float AmountToRecharge);
-
-	//UFUNCTION(BlueprintCallable, Category = "Suit|Abilities|Usage")
-	//	void OnQuicksilverConsumption();
-
-	//UFUNCTION(BlueprintCallable, Category = "Suit|Abilities|Usage")
-	//	void OnOverdriveConsumption();
-
-	//UFUNCTION(BlueprintCallable, Category = "Suit|Abilities|Usage")
-	//	void ConsumeAragon(float AmountToConsume);
-
-
-	//UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
-	//	void ActivateOverdrive();
-
-	//UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
-	//	void DeactivateQuicksilver();
-
-	//UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
-	//	void DeactivateOverdrive();
-
-	//UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
-	//	void DeactivateSacrifice();
-
-
-	//UFUNCTION(BlueprintCallable, Category = "Suit|Abilities|Usage")
-	//	void CheckAragonStatus();
 
 		
 };

@@ -86,7 +86,7 @@ void AAsylumPlayerCharacter::EnableGodModeToggle()
 
 void AAsylumPlayerCharacter::LockOnToTarget()
 {
-	bool bStartLockOn = false;
+	
 	if (!bStartLockOn)
 	{
 		GetWorldTimerManager().SetTimer(LockOnHandle, this, &AAsylumCharacter::LockOn, 0.01f, true);
@@ -99,6 +99,120 @@ void AAsylumPlayerCharacter::LockOnToTarget()
 	}
 
 	
+}
+
+void AAsylumPlayerCharacter::ActivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility)
+{
+	if (GoetheSuitComponent->bEnableMainAbility)
+	{
+		if (PlayerSelectedAbility == MA_Quicksilver)
+		{
+			ActivateQuicksilver();
+		}
+		if (PlayerSelectedAbility == MA_Overdrive)
+		{
+			ActivateOverdrive();
+		}
+		if (PlayerSelectedAbility == MA_Sacrifice)
+		{
+			ActivateSacrifice();
+		}
+	}
+
+}
+
+void AAsylumPlayerCharacter::DeactivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility)
+{
+	if (GoetheSuitComponent->bEnableMainAbility)
+	{
+		if (PlayerSelectedAbility == MA_Quicksilver)
+		{
+			DeactivateQuicksilver();
+		}
+		if (PlayerSelectedAbility == MA_Overdrive)
+		{
+			DeactivateOverdrive();
+		}
+		if (PlayerSelectedAbility == MA_Sacrifice)
+		{
+			DeactivateSacrifice();
+		}
+	}
+	
+}
+
+void AAsylumPlayerCharacter::ActivateQuicksilver()
+{
+	if (GoetheSuitComponent->bEnableMainAbility)
+	{
+		GoetheSuitComponent->bStartMainAbility = true;
+		if (GoetheSuitComponent->bStartMainAbility)
+		{
+			CustomTimeDilation = GoetheSuitComponent->SuitStatsData.QuicksilverPlayerSpeed;
+			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), GoetheSuitComponent->SuitStatsData.QuicksilverSlowDownAmount);
+			if (IsValid(CurrentEquippedWeapon))
+			{
+				CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = CurrentEquippedWeapon->WeaponStatsData.SpecialDamageMultiplier;
+				GetWorldTimerManager().SetTimer(QuickSilverHandle, this, &AAsylumPlayerCharacter::OnQuicksilverConsumption, 0.01f, true);
+			}
+		}
+	}
+}
+
+void AAsylumPlayerCharacter::ActivateSacrifice()
+{
+	if (GoetheSuitComponent->bEnableMainAbility)
+	{
+		GoetheSuitComponent->bStartMainAbility = true;
+		GetWorldTimerManager().SetTimer(SacrificeHandle, this, &AAsylumPlayerCharacter::UpdateSacrificeStatus, 0.01, false);
+		if (IsValid(CurrentEquippedWeapon))
+		{
+			CurrentEquippedWeapon->bSacrificeEnable = true;
+		}
+	}
+}
+
+void AAsylumPlayerCharacter::RechargeAragonTanks()
+{
+	if (GoetheSuitComponent->bStartGaugeRecharge)
+	{
+		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge + GoetheSuitComponent->SuitStatsData.AragonRegenAmount;
+
+	}
+	if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge >= GoetheSuitComponent->SuitStatsData.MaxAragonGauge)
+	{
+		GoetheSuitComponent->bStartGaugeRecharge = false;
+		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
+	}
+	
+}
+
+void AAsylumPlayerCharacter::OnQuicksilverConsumption()
+{
+	if (GoetheSuitComponent->bStartMainAbility)
+	{
+		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge - GoetheSuitComponent->SuitStatsData.QuicksilverConsumptionRate;
+		CheckAragonStatus();
+
+	}
+}
+
+void AAsylumPlayerCharacter::OnOverdriveConsumption()
+{
+	if (GoetheSuitComponent->bStartMainAbility)
+	{
+		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge - GoetheSuitComponent->SuitStatsData.OverdriveConsumptionRate;
+		CheckAragonStatus();
+	}
+}
+
+void AAsylumPlayerCharacter::OnSacrificeConsumption()
+{
+	if (GoetheSuitComponent->bStartMainAbility)
+	{
+		PlayerStatsComponent->CharacterStatsDataStruct.fCurrentHealth = PlayerStatsComponent->CharacterStatsDataStruct.fCurrentHealth - GoetheSuitComponent->SuitStatsData.SacrificeConsumptionRate;
+		UpdateSacrificeStatus();
+	}
 }
 
 float AAsylumPlayerCharacter::GetPlayerHealthPercentage()
@@ -205,4 +319,100 @@ void AAsylumPlayerCharacter::SetupPlayerInputComponent(UInputComponent * PlayerI
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("TurnRate", this, &AAsylumPlayerCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUpAtRate", this, &AAsylumPlayerCharacter::LookUpAtRate);
+}
+
+void AAsylumPlayerCharacter::ConsumeAragon(float AmountToConsume)
+{
+	GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge - AmountToConsume;
+	CheckAragonStatus();
+}
+
+void AAsylumPlayerCharacter::ActivateOverdrive()
+{
+	if (GoetheSuitComponent->bStartMainAbility)
+	{
+		GoetheSuitComponent->bStartMainAbility = false;
+		CustomTimeDilation = GoetheSuitComponent->SuitStatsData.OverdriveSpeedBoost;
+		if (IsValid(CurrentEquippedWeapon))
+		{
+			CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = CurrentEquippedWeapon->WeaponStatsData.SpecialDamageMultiplier;
+			GetWorldTimerManager().SetTimer(OverdriveHandle, this, &AAsylumPlayerCharacter::OnOverdriveConsumption, 0.01f, true);
+		}
+	}
+}
+
+void AAsylumPlayerCharacter::DeactivateQuicksilver()
+{
+	if (GoetheSuitComponent->bStartMainAbility)
+	{
+		GoetheSuitComponent->bStartMainAbility = false;
+		CustomTimeDilation = 1;
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
+		GetWorldTimerManager().ClearTimer(QuickSilverHandle);
+		if (IsValid(CurrentEquippedWeapon))
+		{
+			CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = CurrentEquippedWeapon->WeaponStatsData.OriginalDamageModifier;
+			
+		}
+	}
+}
+
+void AAsylumPlayerCharacter::DeactivateOverdrive()
+{
+	if (GoetheSuitComponent->bStartMainAbility)
+	{
+		CustomTimeDilation = 1;
+		if (IsValid(CurrentEquippedWeapon))
+		{
+			CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = CurrentEquippedWeapon->WeaponStatsData.OriginalDamageModifier;
+		}
+		GoetheSuitComponent->bStartMainAbility = false;
+		GetWorldTimerManager().ClearTimer(OverdriveHandle);
+	}
+}
+
+void AAsylumPlayerCharacter::DeactivateSacrifice()
+{
+	if (GoetheSuitComponent->bStartMainAbility)
+	{
+		GoetheSuitComponent->bStartMainAbility = false;
+		GetWorldTimerManager().ClearTimer(SacrificeHandle);
+		if (IsValid(CurrentEquippedWeapon))
+		{
+			CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = CurrentEquippedWeapon->WeaponStatsData.OriginalDamageModifier;
+			CurrentEquippedWeapon->bSacrificeEnable = false;
+		}
+		
+	}
+}
+
+void AAsylumPlayerCharacter::CheckAragonStatus()
+{
+	this->Execute_PlayerUIUpdate(this);
+	if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge <= GoetheSuitComponent->SuitStatsData.CurrentAragonGauge)
+	{
+		GoetheSuitComponent->bStartGaugeRecharge = true;
+		GetWorldTimerManager().SetTimer(RechargeAragonHandle, this, &AAsylumPlayerCharacter::RechargeAragonTanks, GoetheSuitComponent->SuitStatsData.AragonRegenSpeed, true);
+	}
+	if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge <= 0.0f)
+	{
+		GoetheSuitComponent->SuitStatsData.CurrentAragonTanks--;
+		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
+	}
+	if (GoetheSuitComponent->SuitStatsData.CurrentAragonTanks <= 0)
+	{
+		GoetheSuitComponent->bStartGaugeRecharge = false;
+	}
+}
+
+void AAsylumPlayerCharacter::UpdateSacrificeStatus()
+{
+	if (GoetheSuitComponent->bStartMainAbility)
+	{
+		CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount + GoetheSuitComponent->SuitStatsData.SacrificeConsumptionRate;
+		if (CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount >= GoetheSuitComponent->SuitStatsData.SacrificePowerLimit)
+		{
+			CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = GoetheSuitComponent->SuitStatsData.SacrificePowerLimit;
+		}
+	}
 }

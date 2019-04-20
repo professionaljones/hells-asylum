@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "AsylumDamageType.h"
 #include "HellsAsylum.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/AudioComponent.h"
@@ -129,9 +130,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
 		float FireRate;
 
-	////Our Damage Type
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-	//	TSubclassOf<UAsylumBaseDamageType> WeaponDamageType;
+	//Our Damage Type
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+		TSubclassOf<UAsylumDamageType> WeaponDamageType;
 
 
 	////End Damage
@@ -400,6 +401,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		ACharacter* WeaponOwner;
 
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Weapon Data")
+		bool bSacrificeEnable = false;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -430,6 +434,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon Attack")
 		void StartFire();
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon Attack")
+		void WeaponDryFire();
 
 	UFUNCTION()
 		void Fire();

@@ -58,6 +58,12 @@ void AAsylumWeapon::CheckAmmo()
 		{
 			bCanWeaponFire = false;
 			WeaponStatsData.CurrentMagazineAmmo = 0;
+
+			//Execute Interface Event from BP - currently drives UI update
+			if (this->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
+			{
+				this->Execute_OnEmptyWeaponFire(this);
+			}
 		}
 		else
 		{
@@ -105,6 +111,24 @@ void AAsylumWeapon::StartFire()
 			Fire();
 		}
 	}
+	if (!bCanWeaponFire)
+	{
+		this->Execute_OnEmptyWeaponFire(this);
+	}
+}
+
+void AAsylumWeapon::WeaponDryFire()
+{
+	if (WeaponDryFireSound != NULL)
+	{
+		WeaponAudioComponent->SetSound(WeaponDryFireSound);
+		WeaponAudioComponent->Play();
+	}
+
+	if (WeaponStatsData.CurrentMagazineAmmo < 0)
+	{
+		WeaponStatsData.CurrentMagazineAmmo = 0;
+	}
 }
 
 void AAsylumWeapon::Fire()
@@ -113,10 +137,10 @@ void AAsylumWeapon::Fire()
 	FCollisionQueryParams CollisionParameters;
 
 	//Execute Interface Event from BP - currently drives UI update
-	//if (this->GetClass()->ImplementsInterface(UBaseWeaponInterface::StaticClass()))
-	//{
-	//	IBaseWeaponInterface::Execute_OnFire(this);
-	//}
+	if (this->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
+	{
+		IAsylumWeaponInterface::Execute_OnFire(this);
+	}
 
 	//If this weapon is not reloading and has ammo in mag
 	if (!bIsReloading && bCanWeaponFire)
@@ -144,23 +168,16 @@ void AAsylumWeapon::Fire()
 			WeaponAudioComponent->Play();
 		}
 
-		if (WeaponOwner == UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))
+		if (bSacrificeEnable)
 		{
-			//AAsylumPlayerCharacter *PlayerCharacter = Cast<AAsylumPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-
-
-
-		
-			
-			//{
-			//	//The StartLocation of the raycast
-			//	StartLocation = PlayerCharacter->FollowCamera->GetComponentLocation();
-
-			//	//The EndLocation of the raycast
-			//	EndLocation = StartLocation + (PlayerCharacter->FollowCamera->GetForwardVector() * WeaponRange);
-			//	//UE_LOG(LogTemp, Warning, TEXT("Using Third Person Camera"));
-			//}
+			if (SacrificeFireSound != NULL)
+			{
+				WeaponAudioComponent->SetSound(SacrificeFireSound);
+				WeaponAudioComponent->Play();
+			}
 		}
+
+	
 
 		//Single line trace
 		if (GetWorld()->LineTraceSingleByObjectType(SingleHit, StartLocation, EndLocation, ObjectsToTarget, CollisionParameters))
@@ -171,20 +188,22 @@ void AAsylumWeapon::Fire()
 			{
 				//Apply damage
 				UGameplayStatics::ApplyPointDamage(HitActor, WeaponStatsData.DamageAmountSum, SingleHit.ImpactPoint, SingleHit, UGameplayStatics::GetPlayerController(GetWorld(), 0), this, NULL);
-				/*if (this->GetClass()->ImplementsInterface(UBaseWeaponInterface::StaticClass()))
+				if (this->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
 				{
-					IBaseWeaponInterface::Execute_OnHitTarget(this);
-				}*/
+					IAsylumWeaponInterface::Execute_OnHitTarget(this);
+				}
 			}
+			CheckAmmo();
 		}
 	}
 }
 
 void AAsylumWeapon::FinishFire()
 {
+	CheckAmmo();
 	if (WeaponStatsData.CurrentMagazineAmmo <= 0)
 	{
-
+		WeaponStatsData.CurrentMagazineAmmo = 0;
 	}
 	if (bIsAutomatic)
 	{
@@ -292,11 +311,11 @@ void AAsylumWeapon::FinishReload()
 		GetWorldTimerManager().ClearTimer(ReloadTimer);
 		WeaponStatsData.CurrentReloadTime = 0.0f;
 
-		//if (this->GetClass()->ImplementsInterface(UBaseWeaponInterface::StaticClass()))
-		//{
-		//	IBaseWeaponInterface::Execute_OnFinishReload(this);
-		//	GLog->Log("Reload UI update");
-		//}
+		if (this->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
+		{
+			IAsylumWeaponInterface::Execute_OnFinishReload(this);
+			//GLog->Log("Reload UI update");
+		}
 
 
 	}

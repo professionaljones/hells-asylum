@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/Interfaces/AsylumPlayerInterface.h"
+#include "HellsAsylum.h"
 #include "Character/Interfaces/AsylumInteractInterface.h"
 #include "GameComponents/Character/AsylumSuitComponent.h"
 #include "GameComponents/AsylumSpringArmComponent.h"
@@ -11,7 +12,7 @@
 #include "AsylumPlayerCharacter.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class HELLSASYLUM_API AAsylumPlayerCharacter : public AAsylumCharacter, public IAsylumPlayerInterface, public IAsylumInteractInterface
@@ -114,11 +115,11 @@ public:
 	/*UFUNCTION(BlueprintCallable, Category = "Player|Camera")
 		void UpdateShoulderPosition();*/
 
-	/*UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Camera|Boom")
-		FVector ShoulderSwapOffsetPosition;
+		/*UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Camera|Boom")
+			FVector ShoulderSwapOffsetPosition;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Camera|Boom")
-		FVector OriginalShoulderOffsetPosition;*/
+		UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Camera|Boom")
+			FVector OriginalShoulderOffsetPosition;*/
 
 	UFUNCTION(BlueprintCallable, Category = "Cheats")
 		void EnableGodModeToggle();
@@ -145,11 +146,11 @@ public:
 
 	FTimerHandle LockOnHandle;
 
-	
+
 	UFUNCTION(BlueprintCallable, Category = "Player|Actions")
 		void LockOnToTarget();
 
-	
+
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Weapon")
 		class AAsylumWeapon* WeaponSlotOne;
@@ -162,12 +163,69 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Weapon")
 		class AAsylumWeapon* LastWeaponEquipped;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player")
+		bool bStartLockOn = false;
+
+	///**
+//* Activate the player's main suit ability
+	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
+		void ActivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility);
+
+	/**
+* Deactivate the player's main suit ability
+*
+*/
+	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
+		void DeactivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility);
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
+		void ActivateQuicksilver();
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
+		void ActivateSacrifice();
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
+		void RechargeAragonTanks();
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
+		void OnQuicksilverConsumption();
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
+		void OnOverdriveConsumption();
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
+		void OnSacrificeConsumption();
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
+		void ConsumeAragon(float AmountToConsume);
+
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
+		void ActivateOverdrive();
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
+		void DeactivateQuicksilver();
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
+		void DeactivateOverdrive();
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
+		void DeactivateSacrifice();
+
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
+		void CheckAragonStatus();
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
+		void UpdateSacrificeStatus();
+
+	FTimerHandle OverdriveHandle;
+	FTimerHandle RechargeAragonHandle;
+	FTimerHandle QuickSilverHandle;
+	FTimerHandle SacrificeHandle;
 private:
 	bool bGotForwardInput;
 	bool bGotRightInput;
 
-public:
-
-	//FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-	
 };
