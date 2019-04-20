@@ -34,4 +34,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Character")
 		void OnCharacterDeath(bool bIsDead);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Character")
+		void OnPlayerLockOn(bool bIsLockedOn);
 };
