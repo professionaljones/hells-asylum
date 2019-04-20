@@ -72,20 +72,23 @@ FVector2D AAsylumCharacter::GetCurrentTargetSelectionInput() const
 	return FVector2D();
 }
 
-void AAsylumCharacter::LockOn()
-{
-	FVector StartLocation = FollowCamera->GetComponentLocation();
-	FVector ForwardVectorMod = FollowCamera->GetForwardVector() * fMaxLockOnDistance;
-	FVector EndLocation = StartLocation + ForwardVectorMod;
-	FHitResult LockOnHitResult;
-	AActor* HitActor = LockOnHitResult.GetActor();
-
-	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, StartLocation, EndLocation, fLockOnRadius, TValidLockOnObjects, true, LockOnActorsToIgnore, EDrawDebugTrace::ForDuration, LockOnHitResult, true, FLinearColor::Blue, FLinearColor::Yellow, 5.0f))
-	{
-		if (LockOnHitResult.bBlockingHit && IsValid(HitActor))
-		{
-			GLog->Log("Lock on target hit!");
-		}
-	}
-}
+//void AAsylumCharacter::LockOn()
+//{
+//	AAsylumPlayerController* PCon = Cast<AAsylumPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+//	FVector StartLocation = FollowCamera->GetComponentLocation();
+//	FVector ForwardVectorMod = FollowCamera->GetForwardVector() * fMaxLockOnDistance;
+//	FVector EndLocation = StartLocation + ForwardVectorMod;
+//	FHitResult LockOnHitResult;
+//	FRotator PlayerStartRotator = PCon->GetControlRotation();
+//	FRotator NewRotation;
+//	AActor* HitActor = LockOnHitResult.GetActor();
+//
+//	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, StartLocation, EndLocation, fLockOnRadius, TValidLockOnObjects, true, LockOnActorsToIgnore, EDrawDebugTrace::ForDuration, LockOnHitResult, true, FLinearColor::Blue, FLinearColor::Yellow, 5.0f))
+//	{
+//		if (LockOnHitResult.bBlockingHit && IsValid(HitActor))
+//		{
+//			
+//		}
+//	}
+//}
 

@@ -3,3 +3,7 @@
 
 #include "AsylumCharacterAI.h"
 
+AAsylumCharacterAI::AAsylumCharacterAI()
+{
+	EnemyStatsComponent = CreateDefaultSubobject<UAsylumStatsComponent>(TEXT("EnemyStatsComponent"));
+}

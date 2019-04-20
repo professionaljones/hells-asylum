@@ -59,7 +59,7 @@ public:
 		UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Camera")
 			class UCameraComponent* FollowCamera;
 
-		UFUNCTION(BlueprintCallable, Category = "Weapon")
-			void LockOn();
+		/*UFUNCTION(BlueprintCallable, Category = "Weapon")
+			void LockOn();*/
 
 };

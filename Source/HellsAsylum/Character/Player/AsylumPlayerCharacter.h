@@ -144,11 +144,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player")
 		class UAsylumSpringArmComponent* ThirdPersonCameraBoom;
 
-	FTimerHandle LockOnHandle;
+	//FTimerHandle LockOnHandle;
 
 
-	UFUNCTION(BlueprintCallable, Category = "Player|Actions")
-		void LockOnToTarget();
+	//UFUNCTION(BlueprintCallable, Category = "Player|Actions")
+	//	void LockOnToTarget();
 
 
 
