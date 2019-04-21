@@ -84,3 +84,5 @@ DerivedDataCache/*
 # Plugin-specific files
 Plugins/Runtime/Substance/Intermediate/**
 Plugins/Runtime/Substance/Binaries/**
+*.txt
+*.log
