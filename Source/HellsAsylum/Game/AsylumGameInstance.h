@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "AsylumDataCommInterface.h"
 #include "Character/Player/AsylumPlayerCharacter.h"
 #include "AsylumGameStateBase.h"
 #include "AsylumGameInstance.generated.h"
@@ -73,7 +74,7 @@ public:
 
 };
 UCLASS()
-class HELLSASYLUM_API UAsylumGameInstance : public UGameInstance
+class HELLSASYLUM_API UAsylumGameInstance : public UGameInstance, public IAsylumDataCommInterface
 {
 	GENERATED_BODY()
 

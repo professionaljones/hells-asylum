@@ -6,6 +6,8 @@
 AAsylumCharacterAI::AAsylumCharacterAI()
 {
 	EnemyStatsComponent = CreateDefaultSubobject<UAsylumStatsComponent>(TEXT("EnemyStatsComponent"));
+	RaycastLocationComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RaycastLocationComponent"));
+	RaycastLocationComponent->SetupAttachment(RootComponent);
 }
 
 void AAsylumCharacterAI::EnemyWeaponFire()

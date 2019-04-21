@@ -37,4 +37,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Character")
 		void OnPlayerLockOn(bool bIsLockedOn);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|AI")
+		void OnMissionMode(bool bIsMissionMode);
+
+
 };
