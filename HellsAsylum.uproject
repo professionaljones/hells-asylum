@@ -119,6 +119,10 @@
 		{
 			"Name": "HTML5Networking",
 			"Enabled": false
+		},
+		{
+			"Name": "LoadingScreen",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [

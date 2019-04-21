@@ -59,6 +59,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Weapon")
 		void OnEmptyWeaponFire();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Weapon")
+		void OnWeaponAmmoPickup(float AmmoToAdd);
+
 	/*UFUNCTION(BlueprintPure, BlueprintImplementableEvent, Category = "Weapon|Stats|Damage")
 		float DamageAmountProcessor(float BaseDamage, float DamageMultiplierAmount, float DamageModifierAmount);*/
 };

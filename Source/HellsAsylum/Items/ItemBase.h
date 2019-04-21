@@ -28,6 +28,9 @@ public:
 	// Sets default values for this actor's properties
 	AItemBase();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item|Properties")
+		TEnumAsByte<EItemType> ItemType;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item|Properties")
 		bool bIsKeyItem;
 

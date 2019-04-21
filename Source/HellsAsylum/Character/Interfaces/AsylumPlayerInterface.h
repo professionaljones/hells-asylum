@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "Items/ItemBase.h"
 #include "AsylumPlayerInterface.generated.h"
 
 // This class does not need to be modified.
@@ -43,8 +44,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
 		void OnPlayerReloadFinish();
 
-	/*UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
-		void OnPlayerUseItem(TSubclassOf<AInventoryItemBase> ItemInUse);*/
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
+		void OnPlayerUseItem(TSubclassOf<AItemBase> ItemInUse);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
 		void OnPlayerDrawWeapon(bool bIsWeaponActive);
