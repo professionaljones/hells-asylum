@@ -21,7 +21,6 @@ AAsylumPlayerCharacter::AAsylumPlayerCharacter()
 
 	PlayerStatsComponent = CreateDefaultSubobject<UAsylumStatsComponent>(TEXT("PlayerStatsComponent"));
 	GoetheSuitComponent = CreateDefaultSubobject<UAsylumSuitComponent>(TEXT("GoetheSuitComponent"));
-//	ItemInvComponent = CreateDefaultSubobject<UAsylumPlayerInventoryComponent>(TEXT("PlayerItemInventory"));
 	PlayerDialogueAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PlayerDialogueAudioComponent"));
 	PlayerSuitAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PlayerSuitAudioComponent"));
 
@@ -84,22 +83,6 @@ void AAsylumPlayerCharacter::EnableGodModeToggle()
 	}
 }
 
-//void AAsylumPlayerCharacter::LockOnToTarget()
-//{
-//	
-//	//if (!bStartLockOn)
-//	//{
-//	//	GetWorldTimerManager().SetTimer(LockOnHandle, this, &AAsylumCharacter::LockOn, 0.01f, true);
-//	//	bStartLockOn = true;
-//	//}
-//	//else
-//	//{
-//	//	GetWorldTimerManager().ClearTimer(LockOnHandle);
-//	//	bStartLockOn = false;
-//	//}
-//
-//	
-//}
 
 void AAsylumPlayerCharacter::ActivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility)
 {

@@ -51,7 +51,7 @@ public:
 		void OnPlayerDrawWeapon(bool bIsWeaponActive);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Cheats")
-		void OnGodModeToggle(bool bCheatEnabled);
+		void OnGodModeToggle();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Cheats")
 		void OnPlayerRecoverStats();
