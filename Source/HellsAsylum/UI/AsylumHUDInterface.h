@@ -51,6 +51,9 @@ public:
 		void OnUpdateMissionPanel();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")
+		void OnUpdateRPC_Mission(float NewPlayerScore);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")
 		void OnCampaignStart();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")
