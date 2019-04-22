@@ -35,9 +35,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Campaign|AI|Feedback")
 		float f_MissionPointsToAdd;
 
-	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character|AI")
-	//	TEnumAsByte<ECharacterState> AICharacterState;
-
 	UFUNCTION(BlueprintCallable, Category = "AI|Attack")
 		void EnemyWeaponFire();
 
@@ -50,14 +47,12 @@ public:
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Character Health Percentage", Keywords = "Health"), Category = "Character|Stats")
 		float GetAIHealthPercentage();
 
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Player Shield Percentage", Keywords = "Shield"), Category = "Character|Stats")
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Character Shield Percentage", Keywords = "Shield"), Category = "Character|Stats")
 		float GetAIShieldPercentage();
 
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Player Aragon Percentage", Keywords = "Shield"), Category = "Character|Stats")
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Character Aragon Percentage", Keywords = "Shield"), Category = "Character|Stats")
 		float GetAIAragonPercentage();
 
-	/*UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character|Weapon|AI")
-		class ABaseWeapon* AI_EquippedWeapon;*/
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character|Weapon|AI")
 		TSubclassOf<AAsylumWeapon> AI_WeaponToEquip;
