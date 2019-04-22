@@ -75,10 +75,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats|Movement")
 		float fCrouchMovementMaxRange = 500.0f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
-		TMap<int32, TSubclassOf<AAsylumWeapon>> WeaponInventory;
-
 	
 
 

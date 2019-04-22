@@ -92,11 +92,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Save Data")
 		struct FCharacterStatsData SavedPlayerCharacterStats;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
+		TMap<int32, TSubclassOf<AAsylumWeapon>> SavedPlayerWeaponInventory;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
+		TMap<int32, TSubclassOf<AItemBase>> SavedPlayerItemInventory;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Save Data")
 		struct FGoetheSuitStatsData SavedPlayerSuitStats;
 
-	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Save Data")
-		struct FPlayerItemInvStruct SavedPlayerItemInv;*/
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Save Data")
 		TMap<int, AAsylumWeapon*> SavedPlayerWeaponMap;
