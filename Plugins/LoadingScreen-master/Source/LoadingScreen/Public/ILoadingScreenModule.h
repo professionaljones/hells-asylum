@@ -3,6 +3,7 @@
 #pragma once
 
 #include "ModuleManager.h"
+#include "MoviePlayer.h"
 
 /**
  * The public interface to this module
@@ -32,5 +33,32 @@ public:
 	{
 		return FModuleManager::Get().IsModuleLoaded( "LoadingScreen" );
 	}
+};
+
+class FNullMovieStreamer : public IMovieStreamer
+{
+public:
+	FNullMovieStreamer()
+	{
+		MovieViewport = MakeShareable(new FMovieViewport());
+	};
+	virtual ~FNullMovieStreamer() {};
+
+	virtual bool Init(const TArray<FString>& MoviePaths, TEnumAsByte<EMoviePlaybackType> inPlaybackType) override { return true; };
+	virtual void ForceCompletion() override { };
+	virtual bool Tick(float DeltaTime) override { return false; };
+	virtual TSharedPtr<class ISlateViewport> GetViewportInterface() override { return MovieViewport; };
+	virtual float GetAspectRatio() const override { return 0.f; };
+	virtual void Cleanup() override { };
+
+	virtual FString GetMovieName() override { return FString(); };
+	virtual bool IsLastMovieInPlaylist() override { return false; };
+
+	FOnCurrentMovieClipFinished OnCurrentMovieClipFinishedDelegate;
+	virtual FOnCurrentMovieClipFinished& OnCurrentMovieClipFinished() override { return OnCurrentMovieClipFinishedDelegate; }
+
+private:
+	TSharedPtr<FMovieViewport> MovieViewport;
+	
 };
 

@@ -24,6 +24,7 @@ private:
 	void HandlePrepareLoadingScreen();
 
 	void BeginLoadingScreen(const FLoadingScreenDescription& ScreenDescription);
+	TSharedPtr<class FNullMovieStreamer> NullMovieStreamer;
 };
 
 IMPLEMENT_MODULE(FLoadingScreenModule, LoadingScreen)
@@ -51,6 +52,8 @@ void FLoadingScreenModule::StartupModule()
 		if ( IsMoviePlayerEnabled() )
 		{
 			GetMoviePlayer()->OnPrepareLoadingScreen().AddRaw(this, &FLoadingScreenModule::HandlePrepareLoadingScreen);
+			NullMovieStreamer = MakeShareable(new FNullMovieStreamer());
+			GetMoviePlayer()->RegisterMovieStreamer(NullMovieStreamer);
 		}
 
 		// Prepare the startup screen, the PrepareLoadingScreen callback won't be called

@@ -20,7 +20,8 @@ namespace UnrealBuildTool.Rules
 					"Slate",
 					"SlateCore",
 					"InputCore",
-					"Engine"
+					"Engine",
+                    "RHI"
 				});
 		}
 	}
