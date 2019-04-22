@@ -35,10 +35,6 @@
 			]
 		},
 		{
-			"Name": "AndroidPermission",
-			"Enabled": false
-		},
-		{
 			"Name": "MagicLeapMedia",
 			"Enabled": false,
 			"SupportedTargetPlatforms": [
@@ -54,10 +50,6 @@
 		},
 		{
 			"Name": "LocationServicesBPLibrary",
-			"Enabled": false
-		},
-		{
-			"Name": "AndroidDeviceProfileSelector",
 			"Enabled": false
 		},
 		{
