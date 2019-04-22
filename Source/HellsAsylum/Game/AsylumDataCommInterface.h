@@ -40,4 +40,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Campaign|Codex")
 		void OnAddToCodex();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Game")
+		void OnLevelExit();
 };
