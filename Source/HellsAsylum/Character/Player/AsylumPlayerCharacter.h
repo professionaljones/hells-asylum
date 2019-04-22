@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/Interfaces/AsylumPlayerInterface.h"
 #include "HellsAsylum.h"
+#include "Items/ItemBase.h"
 #include "Character/Interfaces/AsylumInteractInterface.h"
 #include "GameComponents/Character/AsylumSuitComponent.h"
 #include "GameComponents/AsylumSpringArmComponent.h"
@@ -29,6 +30,9 @@ public:
 	//Base Arm Length for TP Camera Boom
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 		float TP_BaseArmLength;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
+		TMap<int32, TSubclassOf<AItemBase>> ItemInventory;
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)

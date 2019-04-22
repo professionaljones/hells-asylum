@@ -48,6 +48,9 @@ public:
 		void OnPlayerUseItem(TSubclassOf<AItemBase> ItemInUse);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
+		void OnPlayerConsumeItem(int32 ItemAtIndexToRemove);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
 		void OnPlayerDrawWeapon(bool bIsWeaponActive);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Cheats")

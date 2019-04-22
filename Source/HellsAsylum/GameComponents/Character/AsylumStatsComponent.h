@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Engine/DataTable.h"
-#include "Items/ItemBase.h"
 #include "HellsAsylum.h"
 #include "Weapons/AsylumWeapon.h"
 #include "AsylumStatsComponent.generated.h"
@@ -80,8 +79,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
 		TMap<int32, TSubclassOf<AAsylumWeapon>> WeaponInventory;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
-		TMap<int32, TSubclassOf<AItemBase>> ItemInventory;
+	
 
 
 	//Resistances
