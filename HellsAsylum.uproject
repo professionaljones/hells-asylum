@@ -121,6 +121,7 @@
 		"HTML5",
 		"LinuxNoEditor",
 		"MacNoEditor",
-		"WindowsNoEditor"
+		"WindowsNoEditor",
+		"Android"
 	]
 }

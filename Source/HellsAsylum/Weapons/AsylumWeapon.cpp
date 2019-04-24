@@ -358,8 +358,7 @@ void AAsylumWeapon::InfiniteAmmoToggle()
 	}
 	else
 	{
-		WeaponStatsData.CurrentMagazineAmmo = WeaponStatsData.OriginalCurrentMagazineAmmo;
-		WeaponStatsData.CurrentWeaponClips = WeaponStatsData.MaxWeaponClips;
+		GiveWeaponFullAmmo();
 	}
 }
 
@@ -391,4 +390,10 @@ void AAsylumWeapon::GodModeToggle()
 		InfiniteAmmoToggle();
 		bEnableGodMode = false;
 	}
+}
+
+void AAsylumWeapon::GiveWeaponFullAmmo()
+{
+	WeaponStatsData.CurrentMagazineAmmo = WeaponStatsData.OriginalCurrentMagazineAmmo;
+	WeaponStatsData.CurrentWeaponClips = WeaponStatsData.MaxWeaponClips;
 }

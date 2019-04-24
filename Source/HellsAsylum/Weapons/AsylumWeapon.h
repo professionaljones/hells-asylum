@@ -425,7 +425,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Weapon|Cheats")
 		bool bEnableGodMode = false;
 
-
+	UFUNCTION(BlueprintCallable, Category = "Weapon|Ammo")
+		void GiveWeaponFullAmmo();
 
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon Reload")
