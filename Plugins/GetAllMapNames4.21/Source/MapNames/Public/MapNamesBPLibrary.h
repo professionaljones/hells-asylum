@@ -57,7 +57,7 @@ class UMapNamesBPLibrary : public UBlueprintFunctionLibrary
 		return MapFiles;
 	}
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "GetAllMapNames", Keywords = "GAMNMaps"), Category = "MapNames")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "GetAllMapNames_Callable", Keywords = "GAMNMaps"), Category = "MapNames")
 		static FORCEINLINE TArray<FString> GetAllMapNames()
 	{
 		TArray<FString> MapFiles;
@@ -92,6 +92,7 @@ class UMapNamesBPLibrary : public UBlueprintFunctionLibrary
 		TArray<FString> StoryMapFiles;
 
 		IFileManager::Get().FindFilesRecursive(StoryMapFiles, *FPaths::ProjectContentDir(), TEXT("CM_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(StoryMapFiles, *FPaths::ProjectPluginsDir(), TEXT("CM_*.umap"), true, false, false);
 
 		for (int32 i = 0; i < StoryMapFiles.Num(); i++)
 		{
@@ -118,6 +119,7 @@ class UMapNamesBPLibrary : public UBlueprintFunctionLibrary
 		TArray<FString> MissionMapFiles;
 
 		IFileManager::Get().FindFilesRecursive(MissionMapFiles, *FPaths::ProjectContentDir(), TEXT("AM_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(MissionMapFiles, *FPaths::ProjectPluginsDir(), TEXT("AM_*.umap"), true, false, false);
 
 		for (int32 i = 0; i < MissionMapFiles.Num(); i++)
 		{

@@ -71,16 +71,18 @@ class HELLSASYLUM_API AAsylumGameStateBase : public AGameStateBase, public IAsyl
 
 public:
 
+	//update save data's map when transitioning
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Level Data")
 		TMap<FString, FSaveableLevelEventData> SaveableCampaignDataMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Level Data")
 		TMap<FString, FMissionLevelStats> SaveableMissionDataMap;
 		
-
+	//Our Current Campaign Level's Event Data Struct - update save data's map when transitioning
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level Data|Campaign")
-		struct FSaveableLevelEventData SaveableLevelEventDataStruct;
+		struct FSaveableLevelEventData CurrentCampaignLevelData;
 
+	//Our Current Campaign Level's Event Data Struct - update save data's map when transitioning
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level Data|Mission")
 		struct FMissionLevelStats CurrentMissionLevelData;
 
