@@ -30,6 +30,9 @@ public:
 		void ShowEndScreen_Mission();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")
+		void ShowConsoleMenu();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")
 		void UpdateEnemyArray(AActor* EnemyKilled);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")

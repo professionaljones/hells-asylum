@@ -174,6 +174,17 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player")
 		bool bStartLockOn = false;
 
+	UFUNCTION(BlueprintCallable, Category = "Player")
+		void GrantFullHealth();
+
+	UFUNCTION(BlueprintCallable, Category = "Player")
+		void GrantFullShield();
+
+	UFUNCTION(BlueprintCallable, Category = "Player")
+		void GrantFullStats();
+
+
+
 	///**
 //* Activate the player's main suit ability
 	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")

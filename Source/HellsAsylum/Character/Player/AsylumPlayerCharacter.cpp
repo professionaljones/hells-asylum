@@ -84,6 +84,22 @@ void AAsylumPlayerCharacter::EnableGodModeToggle()
 }
 
 
+void AAsylumPlayerCharacter::GrantFullHealth()
+{
+	PlayerStatsComponent->CharacterStatsDataStruct.fCurrentHealth = PlayerStatsComponent->CharacterStatsDataStruct.fMaxHealth;
+}
+
+void AAsylumPlayerCharacter::GrantFullShield()
+{
+	PlayerStatsComponent->CharacterStatsDataStruct.fCurrentShield = PlayerStatsComponent->CharacterStatsDataStruct.fMaxShield;
+}
+
+void AAsylumPlayerCharacter::GrantFullStats()
+{
+	GrantFullHealth();
+	GrantFullShield();
+}
+
 void AAsylumPlayerCharacter::ActivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility)
 {
 	if (GoetheSuitComponent->bEnableMainAbility)
