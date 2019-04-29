@@ -2,6 +2,9 @@
 
 
 #include "AsylumPlayerCharacter.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "AsylumPlayerController.h"
+#include "Kismet/KismetMathLibrary.h"
 
 AAsylumPlayerCharacter::AAsylumPlayerCharacter()
 {
@@ -140,6 +143,46 @@ void AAsylumPlayerCharacter::DeactivateMainAbility(EGoetheMainAbilities PlayerSe
 	
 }
 
+void AAsylumPlayerCharacter::ActivateSelectedPower(EGoetheActivePowers PowerSelected)
+{
+	switch (PowerSelected)
+	{
+	case AP_DespairOrb :
+		//Spawn Actor
+		break;
+	case AP_HarmonyOrb :
+		//Spawn Actor
+		break;
+	case AP_Drain:
+			//Start Drain Timer
+			break;
+		case AP_None :
+				break;
+	}
+}
+
+void AAsylumPlayerCharacter::DeactivateSelectedPower(EGoetheActivePowers PowerUsed)
+{
+}
+
+void AAsylumPlayerCharacter::SpawnDiscordOrb(int DiscordPowerLevel)
+{
+	UWorld* World = GetWorld();
+	TSubclassOf<AActor> TestClass;
+	FActorSpawnParameters SpawnParameters;
+	AAsylumPlayerController* PCon = Cast<AAsylumPlayerController>(UGameplayStatics::GetPlayerController(World, 0));
+	FRotator SpawnRotation = PCon->GetControlRotation();
+	if (World)
+	{
+		if (DiscordPowerLevel == 1)
+		{
+			//World->SpawnActor<ABaseOrb>(DespairLVOne, GetActorTransform(), SpawnParameters);
+			World->SpawnActor<ABaseOrb>(DespairLVOne, OrbSpawnLocation, SpawnRotation, SpawnParameters);
+		}
+	}
+	
+}
+
 void AAsylumPlayerCharacter::ActivateQuicksilver()
 {
 	if (GoetheSuitComponent->bEnableMainAbility)
@@ -190,7 +233,7 @@ void AAsylumPlayerCharacter::OnQuicksilverConsumption()
 {
 	if (GoetheSuitComponent->bStartMainAbility)
 	{
-		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge - GoetheSuitComponent->SuitStatsData.QuicksilverConsumptionRate;
+		ConsumeAragon(GoetheSuitComponent->SuitStatsData.QuicksilverConsumptionRate);
 		CheckAragonStatus();
 
 	}
@@ -200,7 +243,7 @@ void AAsylumPlayerCharacter::OnOverdriveConsumption()
 {
 	if (GoetheSuitComponent->bStartMainAbility)
 	{
-		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge - GoetheSuitComponent->SuitStatsData.OverdriveConsumptionRate;
+		ConsumeAragon(GoetheSuitComponent->SuitStatsData.OverdriveConsumptionRate);
 		CheckAragonStatus();
 	}
 }
@@ -230,6 +273,21 @@ float AAsylumPlayerCharacter::GetPlayerAragonPercentage()
 {
 	float Percentage = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge / GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
 	return Percentage;
+}
+
+void AAsylumPlayerCharacter::ItemTractorBeam()
+{
+	FVector EndLocation = GetActorLocation() + (GetActorLocation() * 3000.0f);
+	FHitResult ItemHitResult;
+	AActor* HitActor = ItemHitResult.GetActor();
+	TArray<AActor*> ActorsToIgnore;
+	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetActorLocation(), EndLocation, GoetheSuitComponent->SuitStatsData.ScanRadius, Items, false, ActorsToIgnore, EDrawDebugTrace::None, ItemHitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0f))
+	{
+		if (ItemHitResult.bBlockingHit && IsValid(HitActor))
+		{
+			HitActor->SetActorLocation(UKismetMathLibrary::VInterpTo(HitActor->GetActorLocation(), GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f),false,nullptr,ETeleportType::None);
+		}
+	}
 }
 
 void AAsylumPlayerCharacter::MoveForward(float Value)

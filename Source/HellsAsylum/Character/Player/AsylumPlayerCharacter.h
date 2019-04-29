@@ -8,6 +8,7 @@
 #include "Items/ItemBase.h"
 #include "Character/Interfaces/AsylumInteractInterface.h"
 #include "GameComponents/Character/AsylumSuitComponent.h"
+#include "Weapons/SuitAbilities/BaseOrb.h"
 #include "GameComponents/AsylumSpringArmComponent.h"
 #include "Character/AsylumCharacter.h"
 #include "AsylumPlayerCharacter.generated.h"
@@ -30,6 +31,9 @@ public:
 	//Base Arm Length for TP Camera Boom
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 		float TP_BaseArmLength;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Powers")
+		FVector OrbSpawnLocation;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
 		TMap<int32, TSubclassOf<AItemBase>> ItemInventory;
@@ -86,6 +90,15 @@ public:
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Player Aragon Percentage", Keywords = "Shield"), Category = "Character|Stats")
 		float GetPlayerAragonPercentage();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Targets")
+		TArray<TEnumAsByte<EObjectTypeQuery>> Items;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Powers")
+		TSubclassOf<ABaseOrb> DespairLVOne;
+
+	UFUNCTION(BlueprintCallable, Category = "Player|Powers")
+		void ItemTractorBeam();
+
 protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
@@ -119,14 +132,6 @@ protected:
 	virtual FVector2D GetCurrentTargetSelectionInput() const override;
 
 public:
-	/*UFUNCTION(BlueprintCallable, Category = "Player|Camera")
-		void UpdateShoulderPosition();*/
-
-		/*UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Camera|Boom")
-			FVector ShoulderSwapOffsetPosition;
-
-		UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Camera|Boom")
-			FVector OriginalShoulderOffsetPosition;*/
 
 	UFUNCTION(BlueprintCallable, Category = "Cheats")
 		void EnableGodModeToggle();
@@ -142,10 +147,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player|Stats")
 		class UAsylumSuitComponent* GoetheSuitComponent;
-
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Character|Stats|Player")
-	//	class UAsylumPlayerInventoryComponent* ItemInvComponent;
-
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player")
@@ -185,35 +186,63 @@ public:
 
 
 
-	///**
-//* Activate the player's main suit ability
+	/**
+	 * Called via input to activate the selected Main Ability
+	 * @param PlayerSelectedAbility this is the Ability we want to Activate
+	 */
 	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
 		void ActivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility);
 
 	/**
-* Deactivate the player's main suit ability
-*
-*/
+	 * Called via input to deactivate the selected Main Ability
+	 * @param PlayerSelectedAbility this is the Ability we want to Deactivate
+	 */
 	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
 		void DeactivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility);
 
+	/**
+	 * Called via input to Activate the player's desired power to use
+	 * @param PowerSelected this is the Power we want to Activate
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
+		void ActivateSelectedPower(EGoetheActivePowers PowerSelected);
+
+	/**
+	 * Called via input to stop the power in use
+	 * @param PowerSelected this is the Power we want to Deactivate
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
+		void DeactivateSelectedPower(EGoetheActivePowers PowerUsed);
+
+	//Allows the player to activate the Quicksilver power
+	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
+		void SpawnDiscordOrb(int DiscordPowerLevel);
+
+	//Allows the player to activate the Quicksilver power
 	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
 		void ActivateQuicksilver();
 
+	//Allows the player to activate the Sacrifice power
 	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
 		void ActivateSacrifice();
 
+	//This function will allow the suit's Aragon Tank(s) to fill up to the max guage limit
 	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
 		void RechargeAragonTanks();
 
+	//This function controls how much Aragon is consumed when Quicksilver is activated
 	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
 		void OnQuicksilverConsumption();
 
+	//This function controls how much Aragon is consumed when Overdrive is activated
 	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
 		void OnOverdriveConsumption();
 
+	//This function controls how much HEALTH is consumed when Sacrifice is activated
 	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
 		void OnSacrificeConsumption();
+
+
 
 	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
 		void ConsumeAragon(float AmountToConsume);

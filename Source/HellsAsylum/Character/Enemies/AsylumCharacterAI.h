@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Character/AsylumCharacter.h"
+#include "AsylumEnemyInterface.h"
 #include "AsylumCharacterAI.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class HELLSASYLUM_API AAsylumCharacterAI : public AAsylumCharacter
+class HELLSASYLUM_API AAsylumCharacterAI : public AAsylumCharacter, public IAsylumEnemyInterface
 {
 	GENERATED_BODY()
 
