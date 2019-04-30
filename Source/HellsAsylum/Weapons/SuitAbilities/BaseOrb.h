@@ -83,7 +83,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 		TArray<AActor*> DespairActorsToIgnore;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	FVector EndLocation;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	FHitResult DespairHitResult;
@@ -106,14 +106,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Heal")
 		void SearchForPlayer();
 
-	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Orb")
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player")
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Orb")
 		USceneComponent* OrbRoot;
 
 
-	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Orb")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Orb")
 		class UStaticMeshComponent* SphereMesh;
 
-	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Orb")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Orb")
 		class UParticleSystemComponent* ParticleSystem;
 
 	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Orb")
@@ -122,13 +124,18 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Orb")
 		UParticleSystem* HarmonyDestroyPS;
 
-	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Orb")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Orb")
 		class USphereComponent* SphereCollision;
 
-	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Orb")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Orb")
 		class UProjectileMovementComponent* ProjMovementComponent;
 
 	FTimerHandle DespairOrbTimer;
 	FTimerHandle HarmonyOrbTimer;
+
+	/*FORCEINLINE class UStaticMeshComponent* GetSphereMesh() const { return SphereMesh;  }*/
+
+	/** Returns Mesh subobject **/
+	//FORCEINLINE class USkeletalMeshComponent* GetMesh() const { return Mesh; }
 
 };

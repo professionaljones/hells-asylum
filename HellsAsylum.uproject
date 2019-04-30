@@ -115,6 +115,10 @@
 		{
 			"Name": "LoadingScreen",
 			"Enabled": true
+		},
+		{
+			"Name": "GetGameVersion",
+			"Enabled": false
 		}
 	],
 	"TargetPlatforms": [

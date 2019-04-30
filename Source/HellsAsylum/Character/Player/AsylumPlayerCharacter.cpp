@@ -8,6 +8,9 @@
 
 AAsylumPlayerCharacter::AAsylumPlayerCharacter()
 {
+	MyScene = CreateDefaultSubobject<USceneComponent>(TEXT("MyScene"));
+	MyScene->SetupAttachment(GetMesh(), GetMesh()->GetSocketBoneName("upperarm_rSocket"));
+
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	ThirdPersonCameraBoom = CreateDefaultSubobject<UAsylumSpringArmComponent>(TEXT("TP_CameraBoom"));
 	ThirdPersonCameraBoom->SetupAttachment(RootComponent);
@@ -177,7 +180,7 @@ void AAsylumPlayerCharacter::SpawnDiscordOrb(int DiscordPowerLevel)
 		if (DiscordPowerLevel == 1)
 		{
 			//World->SpawnActor<ABaseOrb>(DespairLVOne, GetActorTransform(), SpawnParameters);
-			World->SpawnActor<ABaseOrb>(DespairLVOne, OrbSpawnLocation, SpawnRotation, SpawnParameters);
+			World->SpawnActor<ABaseOrb>(DespairLVOne, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
 		}
 	}
 	

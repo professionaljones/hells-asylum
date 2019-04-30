@@ -1,16 +1,3 @@
-{
-	"FileVersion": 3,
-	"Version": 1,
-	"VersionName": "1.0",
-	"FriendlyName": "MissionPack01",
-	"Description": "First set of free updates for mission mode",
-	"Category": "Other",
-	"CreatedBy": "Brandon Jones",
-	"CreatedByURL": "",
-	"DocsURL": "",
-	"MarketplaceURL": "",
-	"SupportURL": "",
-	"CanContainContent": true,
-	"IsBetaVersion": false,
-	"Installed": false
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:38ccca879d702c4cb621f393de09bd47d0538b78535423bd535a7b2a6b76d8af
+size 374

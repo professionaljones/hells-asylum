@@ -14,17 +14,19 @@ ABaseOrb::ABaseOrb()
 	OrbRoot = CreateDefaultSubobject<USceneComponent>(TEXT("OrbRoot"));
 	RootComponent = OrbRoot;
 	SphereMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SphereMesh"));
+	SphereMesh->SetupAttachment(RootComponent);
 	ParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystem"));
 	ParticleSystem->SetupAttachment(SphereMesh);
+
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollision"));
-	//SphereCollision->SetupAttachment(RootComponent);
+	SphereCollision->SetupAttachment(SphereMesh);
 	ProjMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjMovementComponent"));
 
 	ProjMovementComponent->InitialSpeed = OrbInitialSpeed;
 	ProjMovementComponent->MaxSpeed = OrbMaxSpeed;
 	ProjMovementComponent->bRotationFollowsVelocity = true;
 	ProjMovementComponent->ProjectileGravityScale = 0.0f;
-	ProjMovementComponent->Velocity = OrbVelocity;
+	//ProjMovementComponent->Velocity = OrbVelocity;
 	
 	EndLocation = GetActorLocation() + (GetActorLocation() * ForwardVectorMod);
 }
@@ -63,7 +65,7 @@ void ABaseOrb::SearchForEnemies()
 
 	AActor* HitActor = DespairHitResult.GetActor();
 	
-	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetActorLocation(), EndLocation, DespairTraceRadius, DespairTargets, false, HarmonyActorsToIgnore, EDrawDebugTrace::None, DespairHitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0f))
+	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetActorLocation(), EndLocation, DespairTraceRadius, DespairTargets, false, HarmonyActorsToIgnore, EDrawDebugTrace::ForDuration, DespairHitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0f))
 	{
 		if (DespairHitResult.bBlockingHit && IsValid(HitActor))
 		{

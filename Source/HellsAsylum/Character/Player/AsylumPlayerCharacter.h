@@ -9,6 +9,7 @@
 #include "Character/Interfaces/AsylumInteractInterface.h"
 #include "GameComponents/Character/AsylumSuitComponent.h"
 #include "Weapons/SuitAbilities/BaseOrb.h"
+#include "Components/SceneComponent.h"
 #include "GameComponents/AsylumSpringArmComponent.h"
 #include "Character/AsylumCharacter.h"
 #include "AsylumPlayerCharacter.generated.h"
@@ -151,6 +152,9 @@ public:
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player")
 		class UAsylumSpringArmComponent* ThirdPersonCameraBoom;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "Player")
+		class USceneComponent* MyScene;
 
 	//FTimerHandle LockOnHandle;
 
