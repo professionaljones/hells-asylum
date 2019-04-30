@@ -35,4 +35,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Mission")
 		void OnMissionFail();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Mission")
+		void OnCritStart(float NewMultiplierAmount, float MultiplierTimeLimit);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Mission")
+		void OnCritEnd();
+
 };

@@ -34,6 +34,7 @@ class UMapNamesBPLibrary : public UBlueprintFunctionLibrary
 		TArray<FString> MapFiles;
 
 		IFileManager::Get().FindFilesRecursive(MapFiles, *FPaths::ProjectContentDir(), TEXT("*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(MapFiles, *FPaths::ProjectPluginsDir(), TEXT("*.umap"), true, false, false);
 
 		for (int32 i = 0; i < MapFiles.Num(); i++)
 		{
@@ -63,6 +64,7 @@ class UMapNamesBPLibrary : public UBlueprintFunctionLibrary
 		TArray<FString> MapFiles;
 
 		IFileManager::Get().FindFilesRecursive(MapFiles, *FPaths::ProjectContentDir(), TEXT("*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(MapFiles, *FPaths::ProjectPluginsDir(), TEXT("*.umap"), true, false, false);
 
 		for (int32 i = 0; i < MapFiles.Num(); i++)
 		{
@@ -86,13 +88,13 @@ class UMapNamesBPLibrary : public UBlueprintFunctionLibrary
 		return MapFiles;
 	}
 
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get All Story Map Names", Keywords = "Get Maps"), Category = "Game Data")
-		static FORCEINLINE TArray<FString> GetAllStoryMapNames_p()
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Base Story Map Names", Keywords = "Get Story Maps"), Category = "Game Data")
+		static FORCEINLINE TArray<FString> GetBaseStoryMapNames_p()
 	{
 		TArray<FString> StoryMapFiles;
 
 		IFileManager::Get().FindFilesRecursive(StoryMapFiles, *FPaths::ProjectContentDir(), TEXT("CM_*.umap"), true, false, false);
-		IFileManager::Get().FindFilesRecursive(StoryMapFiles, *FPaths::ProjectPluginsDir(), TEXT("CM_*.umap"), true, false, false);
+		
 
 		for (int32 i = 0; i < StoryMapFiles.Num(); i++)
 		{
@@ -113,13 +115,43 @@ class UMapNamesBPLibrary : public UBlueprintFunctionLibrary
 		return StoryMapFiles;
 	}
 
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get All Mission Map Names", Keywords = "Get Mission Maps"), Category = "Game Data")
-		static FORCEINLINE TArray<FString> GetAllMissionMapNames_p()
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get DLC Story Map Names", Keywords = "Get DLC Maps"), Category = "Game Data")
+		static FORCEINLINE TArray<FString> GetDLCStoryMapNames_p()
+	{
+		TArray<FString> DLCStoryMapFiles;
+
+		IFileManager::Get().FindFilesRecursive(DLCStoryMapFiles, *FPaths::ProjectPluginsDir(), TEXT("CM_*.umap"), true, false, false);
+
+		for (int32 i = 0; i < DLCStoryMapFiles.Num(); i++)
+		{
+			int32 lastSlashIndex = -1;
+			if (DLCStoryMapFiles[i].FindLastChar('/', lastSlashIndex))
+			{
+				FString pureStoryMapName;
+
+				for (int32 j = lastSlashIndex + 1; j < DLCStoryMapFiles[i].Len() - 5; j++)
+				{
+					pureStoryMapName.AppendChar(DLCStoryMapFiles[i][j]);
+				}
+
+				DLCStoryMapFiles[i] = pureStoryMapName;
+			}
+		}
+
+		return DLCStoryMapFiles;
+	}
+
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Base Mission Map Names", Keywords = "Get Mission Maps"), Category = "Game Data")
+		static FORCEINLINE TArray<FString> GetBaseMissionMapNames_p()
 	{
 		TArray<FString> MissionMapFiles;
 
-		IFileManager::Get().FindFilesRecursive(MissionMapFiles, *FPaths::ProjectContentDir(), TEXT("AM_*.umap"), true, false, false);
-		IFileManager::Get().FindFilesRecursive(MissionMapFiles, *FPaths::ProjectPluginsDir(), TEXT("AM_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(MissionMapFiles, *FPaths::ProjectContentDir(), TEXT("ASTD_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(MissionMapFiles, *FPaths::ProjectContentDir(), TEXT("ASP_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(MissionMapFiles, *FPaths::ProjectContentDir(), TEXT("ASUR_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(MissionMapFiles, *FPaths::ProjectContentDir(), TEXT("AINF_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(MissionMapFiles, *FPaths::ProjectContentDir(), TEXT("ABR_*.umap"), true, false, false);
+		
 
 		for (int32 i = 0; i < MissionMapFiles.Num(); i++)
 		{
@@ -138,5 +170,182 @@ class UMapNamesBPLibrary : public UBlueprintFunctionLibrary
 		}
 
 		return MissionMapFiles;
+	}
+
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Standard Mission Map Names", Keywords = "Get Standard Maps"), Category = "Game Data")
+		static FORCEINLINE TArray<FString> GetBaseStandardMapNames_p()
+	{
+		TArray<FString> MissionMapFiles;
+
+		IFileManager::Get().FindFilesRecursive(MissionMapFiles, *FPaths::ProjectContentDir(), TEXT("ASTD_*.umap"), true, false, false);
+		
+
+		for (int32 i = 0; i < MissionMapFiles.Num(); i++)
+		{
+			int32 lastSlashIndex = -1;
+			if (MissionMapFiles[i].FindLastChar('/', lastSlashIndex))
+			{
+				FString pureMissionMapName;
+
+				for (int32 j = lastSlashIndex + 1; j < MissionMapFiles[i].Len() - 5; j++)
+				{
+					pureMissionMapName.AppendChar(MissionMapFiles[i][j]);
+				}
+
+				MissionMapFiles[i] = pureMissionMapName;
+			}
+		}
+
+		return MissionMapFiles;
+	}
+
+		UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Survival Mission Map Names", Keywords = "Get Survival Maps"), Category = "Game Data")
+		static FORCEINLINE TArray<FString> GetBaseSurvivalMapNames_p()
+	{
+		TArray<FString> MissionMapFiles;
+
+		IFileManager::Get().FindFilesRecursive(MissionMapFiles, *FPaths::ProjectContentDir(), TEXT("ASUR_*.umap"), true, false, false);
+		
+
+		for (int32 i = 0; i < MissionMapFiles.Num(); i++)
+		{
+			int32 lastSlashIndex = -1;
+			if (MissionMapFiles[i].FindLastChar('/', lastSlashIndex))
+			{
+				FString pureMissionMapName;
+
+				for (int32 j = lastSlashIndex + 1; j < MissionMapFiles[i].Len() - 5; j++)
+				{
+					pureMissionMapName.AppendChar(MissionMapFiles[i][j]);
+				}
+
+				MissionMapFiles[i] = pureMissionMapName;
+			}
+		}
+
+		return MissionMapFiles;
+	}
+
+		UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Stealth Mission Map Names", Keywords = "Get Stealth Maps"), Category = "Game Data")
+		static FORCEINLINE TArray<FString> GetStealthMissionMapNames_p()
+	{
+		TArray<FString> MissionMapFiles;
+
+		IFileManager::Get().FindFilesRecursive(MissionMapFiles, *FPaths::ProjectContentDir(), TEXT("AINF_*.umap"), true, false, false);
+		
+
+		for (int32 i = 0; i < MissionMapFiles.Num(); i++)
+		{
+			int32 lastSlashIndex = -1;
+			if (MissionMapFiles[i].FindLastChar('/', lastSlashIndex))
+			{
+				FString pureMissionMapName;
+
+				for (int32 j = lastSlashIndex + 1; j < MissionMapFiles[i].Len() - 5; j++)
+				{
+					pureMissionMapName.AppendChar(MissionMapFiles[i][j]);
+				}
+
+				MissionMapFiles[i] = pureMissionMapName;
+			}
+		}
+
+		return MissionMapFiles;
+	}
+
+		UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Boss Rush Mission Map Names", Keywords = "Get Boss Maps"), Category = "Game Data")
+		static FORCEINLINE TArray<FString> GetBossMissionMapNames_p()
+	{
+		TArray<FString> MissionMapFiles;
+
+		IFileManager::Get().FindFilesRecursive(MissionMapFiles, *FPaths::ProjectContentDir(), TEXT("ABR_*.umap"), true, false, false);
+		
+
+		for (int32 i = 0; i < MissionMapFiles.Num(); i++)
+		{
+			int32 lastSlashIndex = -1;
+			if (MissionMapFiles[i].FindLastChar('/', lastSlashIndex))
+			{
+				FString pureMissionMapName;
+
+				for (int32 j = lastSlashIndex + 1; j < MissionMapFiles[i].Len() - 5; j++)
+				{
+					pureMissionMapName.AppendChar(MissionMapFiles[i][j]);
+				}
+
+				MissionMapFiles[i] = pureMissionMapName;
+			}
+		}
+
+		return MissionMapFiles;
+	}
+
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get DLC Mission Map Names", Keywords = "Get DLC Maps"), Category = "Game Data")
+		static FORCEINLINE TArray<FString> GetDLCMissionMapNames_p()
+	{
+		TArray<FString> DLCMissionMapFiles;
+
+		IFileManager::Get().FindFilesRecursive(DLCMissionMapFiles, *FPaths::ProjectPluginsDir(), TEXT("ASTD_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(DLCMissionMapFiles, *FPaths::ProjectPluginsDir(), TEXT("ASP_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(DLCMissionMapFiles, *FPaths::ProjectPluginsDir(), TEXT("ASUR_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(DLCMissionMapFiles, *FPaths::ProjectPluginsDir(), TEXT("AINF_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(DLCMissionMapFiles, *FPaths::ProjectPluginsDir(), TEXT("ABR_*.umap"), true, false, false);
+
+		for (int32 i = 0; i < DLCMissionMapFiles.Num(); i++)
+		{
+			int32 lastSlashIndex = -1;
+			if (DLCMissionMapFiles[i].FindLastChar('/', lastSlashIndex))
+			{
+				FString pureMissionMapName;
+
+				for (int32 j = lastSlashIndex + 1; j < DLCMissionMapFiles[i].Len() - 5; j++)
+				{
+					pureMissionMapName.AppendChar(DLCMissionMapFiles[i][j]);
+				}
+
+				DLCMissionMapFiles[i] = pureMissionMapName;
+			}
+		}
+
+		return DLCMissionMapFiles;
+	}
+
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get All Game Map Names", Keywords = "Get All Maps"), Category = "Game Data")
+		static FORCEINLINE TArray<FString> GetAllGameMaps_p()
+	{
+		TArray<FString> GameMapFiles;
+
+		IFileManager::Get().FindFilesRecursive(GameMapFiles, *FPaths::ProjectContentDir(), TEXT("CM_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(GameMapFiles, *FPaths::ProjectPluginsDir(), TEXT("CM_*.umap"), true, false, false);
+
+		IFileManager::Get().FindFilesRecursive(GameMapFiles, *FPaths::ProjectContentDir(), TEXT("ASTD_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(GameMapFiles, *FPaths::ProjectContentDir(), TEXT("ASP_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(GameMapFiles, *FPaths::ProjectContentDir(), TEXT("ASUR_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(GameMapFiles, *FPaths::ProjectContentDir(), TEXT("AINF_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(GameMapFiles, *FPaths::ProjectContentDir(), TEXT("ABR_*.umap"), true, false, false);
+
+		IFileManager::Get().FindFilesRecursive(GameMapFiles, *FPaths::ProjectPluginsDir(), TEXT("ASTD_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(GameMapFiles, *FPaths::ProjectPluginsDir(), TEXT("ASP_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(GameMapFiles, *FPaths::ProjectPluginsDir(), TEXT("ASUR_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(GameMapFiles, *FPaths::ProjectPluginsDir(), TEXT("AINF_*.umap"), true, false, false);
+		IFileManager::Get().FindFilesRecursive(GameMapFiles, *FPaths::ProjectPluginsDir(), TEXT("ABR_*.umap"), true, false, false);
+
+		for (int32 i = 0; i < GameMapFiles.Num(); i++)
+		{
+			int32 lastSlashIndex = -1;
+			if (GameMapFiles[i].FindLastChar('/', lastSlashIndex))
+			{
+				FString pureGameMapName;
+
+				for (int32 j = lastSlashIndex + 1; j < GameMapFiles[i].Len() - 5; j++)
+				{
+					pureGameMapName.AppendChar(GameMapFiles[i][j]);
+				}
+
+				GameMapFiles[i] = pureGameMapName;
+			}
+		}
+
+		return GameMapFiles;
 	}
 };
