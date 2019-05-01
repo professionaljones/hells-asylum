@@ -126,6 +126,7 @@
 		"LinuxNoEditor",
 		"MacNoEditor",
 		"WindowsNoEditor",
-		"Android"
+		"Android",
+		"AllDesktop"
 	]
 }
