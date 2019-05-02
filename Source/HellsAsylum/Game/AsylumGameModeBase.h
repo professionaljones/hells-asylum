@@ -9,14 +9,14 @@
 UENUM(BlueprintType)
 enum EGameType
 {
-	GT_UserInterface UMETA(DisplayName = "Main Menu Mode"),
-	GT_Campaign UMETA(DisplayName = "Campaign Mode"),
-	GT_MissionStandard UMETA(DisplayName = "Standard Mission Mode"),
-	GT_MissionStealth UMETA(DisplayName = "Stealth Mission Mode"),
-	GT_MissionAttack UMETA(DisplayName = "Score Attack Mission Mode"),
-	GT_MissionSurvival UMETA(DisplayName = "Score Survival Mission Mode"),
-	GT_BossRush UMETA(DisplayName = "Boss Rush Mode"),
-	GT_Variety UMETA(DisplayName = "Variety Mission Mode")
+	MGT_UserInterface UMETA(DisplayName = "Main Menu Mode"),
+	MGT_Campaign UMETA(DisplayName = "Campaign Mode"),
+	MGT_MissionStandard UMETA(DisplayName = "Standard Mission Mode"),
+	MGT_MissionStealth UMETA(DisplayName = "Stealth Mission Mode"),
+	MGT_MissionAttack UMETA(DisplayName = "Score Attack Mission Mode"),
+	MGT_MissionSurvival UMETA(DisplayName = "Score Survival Mission Mode"),
+	MGT_BossRush UMETA(DisplayName = "Boss Rush Mode"),
+	MGT_Variety UMETA(DisplayName = "Variety Mission Mode")
 };
 
 

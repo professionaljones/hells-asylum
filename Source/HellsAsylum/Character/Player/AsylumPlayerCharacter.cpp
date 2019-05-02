@@ -222,12 +222,13 @@ void AAsylumPlayerCharacter::RechargeAragonTanks()
 	if (GoetheSuitComponent->bStartGaugeRecharge)
 	{
 		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge + GoetheSuitComponent->SuitStatsData.AragonRegenAmount;
-
+		CheckAragonStatus();
 	}
 	if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge >= GoetheSuitComponent->SuitStatsData.MaxAragonGauge)
 	{
 		GoetheSuitComponent->bStartGaugeRecharge = false;
 		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
+		GetWorldTimerManager().PauseTimer(RechargeAragonHandle);
 	}
 	
 }

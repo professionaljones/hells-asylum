@@ -5,7 +5,7 @@
 
 AAsylumGameModeBase::AAsylumGameModeBase()
 {
-	if (CurrentGameType != GT_Campaign || CurrentGameType != GT_UserInterface)
+	if (CurrentGameType != MGT_Campaign || CurrentGameType != MGT_UserInterface)
 	{
 		bIsMissionMode = true;
 	}
