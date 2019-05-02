@@ -119,6 +119,14 @@
 		{
 			"Name": "GetGameVersion",
 			"Enabled": false
+		},
+		{
+			"Name": "MissionPack01",
+			"Enabled": false
+		},
+		{
+			"Name": "DiscordRpc",
+			"Enabled": false
 		}
 	],
 	"TargetPlatforms": [
