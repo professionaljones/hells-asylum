@@ -119,6 +119,14 @@
 		{
 			"Name": "GetGameVersion",
 			"Enabled": false
+		},
+		{
+			"Name": "SubversionSourceControl",
+			"Enabled": false
+		},
+		{
+			"Name": "Ansel",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
