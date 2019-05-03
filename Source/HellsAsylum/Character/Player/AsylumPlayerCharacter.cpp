@@ -3,7 +3,7 @@
 
 #include "AsylumPlayerCharacter.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "AsylumPlayerController.h"
+
 #include "Kismet/KismetMathLibrary.h"
 
 AAsylumPlayerCharacter::AAsylumPlayerCharacter()
@@ -148,19 +148,9 @@ void AAsylumPlayerCharacter::DeactivateMainAbility(EGoetheMainAbilities PlayerSe
 
 void AAsylumPlayerCharacter::ActivateSelectedPower(EGoetheActivePowers PowerSelected)
 {
-	switch (PowerSelected)
+	if (PowerSelected == AP_DespairOrb)
 	{
-	case AP_DespairOrb :
-		//Spawn Actor
-		break;
-	case AP_HarmonyOrb :
-		//Spawn Actor
-		break;
-	case AP_Drain:
-			//Start Drain Timer
-			break;
-		case AP_None :
-				break;
+		SpawnDespairOrb(GoetheSuitComponent->SuitStatsData.DespairOrbCurrentLevel);
 	}
 }
 
@@ -168,22 +158,49 @@ void AAsylumPlayerCharacter::DeactivateSelectedPower(EGoetheActivePowers PowerUs
 {
 }
 
-void AAsylumPlayerCharacter::SpawnDiscordOrb(int DiscordPowerLevel)
+void AAsylumPlayerCharacter::SpawnDespairOrb(int DiscordPowerLevel)
 {
-	UWorld* World = GetWorld();
-	TSubclassOf<AActor> TestClass;
 	FActorSpawnParameters SpawnParameters;
-	AAsylumPlayerController* PCon = Cast<AAsylumPlayerController>(UGameplayStatics::GetPlayerController(World, 0));
+	
 	FRotator SpawnRotation = PCon->GetControlRotation();
 	if (World)
 	{
-		if (DiscordPowerLevel == 1)
+
+		switch (DiscordPowerLevel)
 		{
-			//World->SpawnActor<ABaseOrb>(DespairLVOne, GetActorTransform(), SpawnParameters);
+		case 1 :
 			World->SpawnActor<ABaseOrb>(DespairLVOne, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
+			break;
+		case 2 :
+			World->SpawnActor<ABaseOrb>(DespairLVTwo, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
+			break;
+		case 3:
+			World->SpawnActor<ABaseOrb>(DespairLVThree, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
+			break;
 		}
 	}
 	
+}
+
+void AAsylumPlayerCharacter::SpawnHarmonyOrb(int HarmonyPowerLevel)
+{
+	FActorSpawnParameters SpawnParameters;
+	FRotator SpawnRotation = PCon->GetControlRotation();
+	if (World)
+	{
+		switch (HarmonyPowerLevel)
+		{
+		case 1:
+			World->SpawnActor<ABaseOrb>(HarmonyLVOne, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
+			break;
+		case 2:
+			World->SpawnActor<ABaseOrb>(HarmonyLVTwo, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
+			break;
+		case 3:
+			World->SpawnActor<ABaseOrb>(HarmonyLVThree, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
+			break;
+		}
+	}
 }
 
 void AAsylumPlayerCharacter::ActivateQuicksilver()

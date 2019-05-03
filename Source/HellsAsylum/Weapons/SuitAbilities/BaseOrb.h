@@ -118,10 +118,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Orb")
 		class UParticleSystemComponent* ParticleSystem;
 
-	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Orb")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "Orb")
 		UParticleSystem* DespairDestroyPS;
 
-	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Orb")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "Orb")
 		UParticleSystem* HarmonyDestroyPS;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Orb")

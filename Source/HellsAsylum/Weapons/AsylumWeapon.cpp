@@ -14,6 +14,9 @@ AAsylumWeapon::AAsylumWeapon()
 	FireArrow = CreateDefaultSubobject<UArrowComponent>("FireLocationArrow");
 	FireArrow->SetupAttachment(WeaponMesh, ProjectileSocket);
 	WeaponAudioComponent = CreateDefaultSubobject<UAudioComponent>("WeaponAudioComponent");
+	WeaponModsComponent = CreateDefaultSubobject<UWeaponModComponent>("WeaponModsComponent");
+	CurrentModOne = WeaponModsComponent->ModSlotOne;
+	CurrentModTwo = WeaponModsComponent->ModSlotTwo;
 	RootComponent = WeaponMesh;
 	MyLocation = GetActorLocation();
 
@@ -44,6 +47,11 @@ void AAsylumWeapon::BeginPlay()
 void AAsylumWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+}
+
+void AAsylumWeapon::ActivateWeaponModInSlot(EWeaponModType ModSelected)
+{
 
 }
 

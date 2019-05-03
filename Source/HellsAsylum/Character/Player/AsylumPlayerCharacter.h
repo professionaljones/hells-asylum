@@ -7,6 +7,7 @@
 #include "HellsAsylum.h"
 #include "Items/ItemBase.h"
 #include "Character/Interfaces/AsylumInteractInterface.h"
+#include "AsylumPlayerController.h"
 #include "GameComponents/Character/AsylumSuitComponent.h"
 #include "Weapons/SuitAbilities/BaseOrb.h"
 #include "Components/SceneComponent.h"
@@ -97,6 +98,23 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Powers")
 		TSubclassOf<ABaseOrb> DespairLVOne;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Powers")
+		TSubclassOf<ABaseOrb> DespairLVTwo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Powers")
+		TSubclassOf<ABaseOrb> DespairLVThree;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Powers")
+		TSubclassOf<ABaseOrb> HarmonyLVOne;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Powers")
+		TSubclassOf<ABaseOrb> HarmonyLVTwo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Powers")
+		TSubclassOf<ABaseOrb> HarmonyLVThree;
+
+	
+
 	UFUNCTION(BlueprintCallable, Category = "Player|Powers")
 		void ItemTractorBeam();
 
@@ -131,6 +149,8 @@ protected:
 	virtual bool IsSelectingTarget() const override;
 	virtual AActor* GetCurrentTarget() const override;
 	virtual FVector2D GetCurrentTargetSelectionInput() const override;
+	AAsylumPlayerController* PCon = Cast<AAsylumPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	UWorld* World = GetWorld();
 
 public:
 
@@ -188,7 +208,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Player")
 		void GrantFullStats();
 
-
+	
 
 	/**
 	 * Called via input to activate the selected Main Ability
@@ -218,9 +238,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
 		void DeactivateSelectedPower(EGoetheActivePowers PowerUsed);
 
-	//Allows the player to activate the Quicksilver power
+	//Allows the player to spawn a Despair Orb
 	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
-		void SpawnDiscordOrb(int DiscordPowerLevel);
+		void SpawnDespairOrb(int DiscordPowerLevel);
+
+	//Allows the player to spawn a Harmony Orb
+	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
+		void SpawnHarmonyOrb(int HarmonyPowerLevel);
 
 	//Allows the player to activate the Quicksilver power
 	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")

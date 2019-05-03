@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "AsylumDamageType.h"
 #include "HellsAsylum.h"
+#include "WeaponModComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/AudioComponent.h"
 #include "AsylumWeaponInterface.h"
@@ -404,6 +405,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Weapon Data")
 		bool bSacrificeEnable = false;
 
+	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Weapon Mods")
+		class UWeaponModComponent* WeaponModsComponent;
+
+	TEnumAsByte<EWeaponModType> CurrentModOne;
+	TEnumAsByte<EWeaponModType> CurrentModTwo;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -412,9 +419,14 @@ protected:
 	UPROPERTY()
 		float ChargeDamageModifer;
 
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void ActivateWeaponModInSlot(EWeaponModType ModSelected);
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Weapon|Cheats")
 		bool bEnableInfiniteAmmo = false;
