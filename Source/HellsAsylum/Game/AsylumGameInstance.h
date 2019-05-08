@@ -7,6 +7,7 @@
 #include "AsylumDataCommInterface.h"
 #include "Character/Player/AsylumPlayerCharacter.h"
 #include "AsylumGameStateBase.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "AsylumGameInstance.generated.h"
 
 
@@ -28,6 +29,9 @@ struct FSaveGameData : public FTableRowBase
 public:
 	/*FSaveGameData()
 	{}*/
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Save Data")
+		struct FDateTime SaveDate;
 
 	//What act is the player currently on?
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data|Campaign")
