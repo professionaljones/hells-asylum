@@ -77,6 +77,38 @@ public:
 		float PlayerLifetimePoints_Mission;
 
 };
+
+USTRUCT(BlueprintType)
+struct FGameOptionsStruct : public FTableRowBase
+{
+	GENERATED_USTRUCT_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data", meta = (ClampMin = "0", ClampMax = "1"))
+		float SavedMasterVolume = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data", meta = (ClampMin = "0", ClampMax = "1"))
+		float SavedMusicVolume = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data", meta = (ClampMin = "0", ClampMax = "1"))
+		float SavedWeaponVolume = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data", meta = (ClampMin = "0", ClampMax = "1"))
+		float SavedDialogueVolume = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data", meta = (ClampMin = "0", ClampMax = "1"))
+		float SavedEffectsVolume = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data", meta = (ClampMin = "0", ClampMax = "1"))
+		float SavedFootstepVolume = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data", meta = (ClampMin = "0", ClampMax = "1"))
+		float SavedUIVolume = 0.0f;
+
+	
+
+};
 UCLASS()
 class HELLSASYLUM_API UAsylumGameInstance : public UGameInstance, public IAsylumDataCommInterface
 {
@@ -86,6 +118,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Save Data")
 		struct FSaveGameData SaveDataStruct;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Save Data")
+		struct FGameOptionsStruct SaveOptionsStruct;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Save Data")
 		FString CurrentSave;

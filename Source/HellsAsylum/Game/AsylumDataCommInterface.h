@@ -2,8 +2,9 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+//#include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "HellsAsylum.h"
 #include "AsylumDataCommInterface.generated.h"
 
 // This class does not need to be modified.
@@ -43,4 +44,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Game")
 		void OnLevelExit();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Settings")
+		void AdjustSoundClassVolume(USoundMix* SoundMixInUse, USoundClass* SoundClassInUse, float NewValue, bool bApplyToChildren);
 };
