@@ -37,10 +37,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Powers")
 		FVector OrbSpawnLocation;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		TMap<int32, TSubclassOf<AItemBase>> ItemInventory;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		TMap<int32, TSubclassOf<AAsylumWeapon>> PlayerWeaponInventory;
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
@@ -199,6 +199,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player")
 		bool bStartLockOn = false;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player")
+		bool bStartDodge = false;
+
 	UFUNCTION(BlueprintCallable, Category = "Player")
 		void GrantFullHealth();
 
@@ -207,6 +210,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
 		void GrantFullStats();
+
+	UFUNCTION(BlueprintCallable, Category = "Player")
+		void PlayerJumpEvent();
+
+	UFUNCTION(BlueprintCallable, Category = "Player")
+		void PlayerEndJump();
 
 	
 

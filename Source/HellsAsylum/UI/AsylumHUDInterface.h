@@ -39,6 +39,9 @@ public:
 		void ShowPlayerHUD(bool bShowHUD);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")
+		void ShowPlayerPowerBar(bool bShowWidget);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")
 		void OnMissionStart();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|UI")

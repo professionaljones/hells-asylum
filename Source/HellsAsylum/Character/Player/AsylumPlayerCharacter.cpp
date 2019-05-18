@@ -106,6 +106,30 @@ void AAsylumPlayerCharacter::GrantFullStats()
 	GrantFullShield();
 }
 
+void AAsylumPlayerCharacter::PlayerJumpEvent()
+{
+	if (!bIsInCombat)
+	{
+		Jump();
+	}
+	else
+	{
+		bStartDodge = true;
+	}
+}
+
+void AAsylumPlayerCharacter::PlayerEndJump()
+{
+	if (!bIsInCombat)
+	{
+		StopJumping();
+	}
+	else
+	{
+		bStartDodge = false;
+	}
+}
+
 void AAsylumPlayerCharacter::ActivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility)
 {
 	if (GoetheSuitComponent->bEnableMainAbility)
@@ -382,8 +406,8 @@ void AAsylumPlayerCharacter::SetupPlayerInputComponent(UInputComponent * PlayerI
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AAsylumPlayerCharacter::PlayerJumpEvent);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AAsylumPlayerCharacter::PlayerEndJump);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AAsylumPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AAsylumPlayerCharacter::MoveRight);

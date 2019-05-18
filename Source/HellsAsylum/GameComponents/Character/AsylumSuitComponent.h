@@ -403,8 +403,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Abilities")
 		float AbilityThreeCooldown;
 
+	//This data table will hold info for when the player starts a new game 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-		UDataTable *SuitStatsDataTable;
+		UDataTable *NewGameSuitDataTable;
+
+	//This data table will hold info for when the player collects a new suit
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+		UDataTable* SuitUpgradeDataTable;
 
 protected:
 	// Called when the game starts
