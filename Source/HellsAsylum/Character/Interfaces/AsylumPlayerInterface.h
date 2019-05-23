@@ -58,4 +58,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Cheats")
 		void OnPlayerRecoverStats();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Interact")
+		void OnInteractVisible();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Interact")
+		void OnInteractNotVisible();
 };

@@ -95,6 +95,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Targets")
 		TArray<TEnumAsByte<EObjectTypeQuery>> Items;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Interact")
+		TArray<TEnumAsByte<EObjectTypeQuery>> InteractableItems;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Interact")
+		TArray<TEnumAsByte<EObjectTypeQuery>> DrainEnemyArray;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Powers")
 		TSubclassOf<ABaseOrb> DespairLVOne;
 
@@ -117,6 +123,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Player|Powers")
 		void ItemTractorBeam();
+
+	UFUNCTION(BlueprintCallable, Category = "Player|Powers")
+		void PlayerEnergyDrain();
 
 protected:
 	/** Called for forwards/backward input */
@@ -176,14 +185,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "Player")
 		class USceneComponent* MyScene;
 
-	//FTimerHandle LockOnHandle;
-
-
-	//UFUNCTION(BlueprintCallable, Category = "Player|Actions")
-	//	void LockOnToTarget();
-
-
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Weapon")
 		class AAsylumWeapon* WeaponSlotOne;
 
@@ -209,6 +210,9 @@ public:
 		void GrantFullShield();
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
+		void GrantFullAragon();
+
+	UFUNCTION(BlueprintCallable, Category = "Player")
 		void GrantFullStats();
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
@@ -216,6 +220,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
 		void PlayerEndJump();
+
+	UFUNCTION(BlueprintCallable, Category = "Player")
+		void PlayerInteractRaycast();
 
 	
 
@@ -280,7 +287,8 @@ public:
 		void OnSacrificeConsumption();
 
 
-
+	//This function will subtract Aragon from the player's Aragon guage
+	//@param AmountToConsume How much do we want to subtract from the player per unit of time
 	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
 		void ConsumeAragon(float AmountToConsume);
 
@@ -308,6 +316,8 @@ public:
 	FTimerHandle RechargeAragonHandle;
 	FTimerHandle QuickSilverHandle;
 	FTimerHandle SacrificeHandle;
+	FTimerHandle InteractHandle;
+	FTimerHandle TractorHandle;
 private:
 	bool bGotForwardInput;
 	bool bGotRightInput;

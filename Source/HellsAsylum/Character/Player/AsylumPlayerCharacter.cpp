@@ -100,6 +100,15 @@ void AAsylumPlayerCharacter::GrantFullShield()
 	PlayerStatsComponent->CharacterStatsDataStruct.fCurrentShield = PlayerStatsComponent->CharacterStatsDataStruct.fMaxShield;
 }
 
+void AAsylumPlayerCharacter::GrantFullAragon()
+{
+	if (GoetheSuitComponent)
+	{
+		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
+		GoetheSuitComponent->SuitStatsData.CurrentAragonTanks = GoetheSuitComponent->SuitStatsData.MaxAragonTanks;
+	}
+}
+
 void AAsylumPlayerCharacter::GrantFullStats()
 {
 	GrantFullHealth();
@@ -128,6 +137,30 @@ void AAsylumPlayerCharacter::PlayerEndJump()
 	{
 		bStartDodge = false;
 	}
+}
+
+void AAsylumPlayerCharacter::PlayerInteractRaycast()
+{
+	FVector EndLocation = GetActorLocation() + (GetActorLocation() * 800.0f);
+	FHitResult InteractHitResult;
+	
+	TSubclassOf<UAsylumInteractInterface> InteractInterface;
+	AActor* HitActor = InteractHitResult.GetActor();
+	TArray<AActor*> ActorsToIgnore;
+	if (UKismetSystemLibrary::LineTraceSingleForObjects(this, GetActorLocation(), EndLocation, InteractableItems, false, ActorsToIgnore, EDrawDebugTrace::ForOneFrame, InteractHitResult, true, FLinearColor::Blue, FLinearColor::White, 5.0f))
+	{
+		
+		if (HitActor)
+		{
+			//PCon->Execute_OnInteractVisible(PCon);
+			this->Execute_OnInteractVisible(this);
+		}
+	}
+	else
+	{
+		//this->Execute_
+	}
+	
 }
 
 void AAsylumPlayerCharacter::ActivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility)
@@ -176,10 +209,22 @@ void AAsylumPlayerCharacter::ActivateSelectedPower(EGoetheActivePowers PowerSele
 	{
 		SpawnDespairOrb(GoetheSuitComponent->SuitStatsData.DespairOrbCurrentLevel);
 	}
+	if (PowerSelected == AP_HarmonyOrb)
+	{
+		SpawnHarmonyOrb(GoetheSuitComponent->SuitStatsData.HarmonyOrbCurrentLevel);
+	}
+	if (PowerSelected == AP_Tractor)
+	{
+		GetWorldTimerManager().SetTimer(TractorHandle, this, &AAsylumPlayerCharacter::ItemTractorBeam, UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), true);
+	}
 }
 
 void AAsylumPlayerCharacter::DeactivateSelectedPower(EGoetheActivePowers PowerUsed)
 {
+	if (PowerUsed == AP_Tractor)
+	{
+		GetWorldTimerManager().ClearTimer(TractorHandle);
+	}
 }
 
 void AAsylumPlayerCharacter::SpawnDespairOrb(int DiscordPowerLevel)
@@ -326,11 +371,32 @@ void AAsylumPlayerCharacter::ItemTractorBeam()
 	FHitResult ItemHitResult;
 	AActor* HitActor = ItemHitResult.GetActor();
 	TArray<AActor*> ActorsToIgnore;
-	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetActorLocation(), EndLocation, GoetheSuitComponent->SuitStatsData.ScanRadius, Items, false, ActorsToIgnore, EDrawDebugTrace::None, ItemHitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0f))
+	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetActorLocation(), EndLocation, GoetheSuitComponent->SuitStatsData.ScanRadius, Items, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, ItemHitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0f))
 	{
-		if (ItemHitResult.bBlockingHit && IsValid(HitActor))
+		if(HitActor)
 		{
-			HitActor->SetActorLocation(UKismetMathLibrary::VInterpTo(HitActor->GetActorLocation(), GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f),false,nullptr,ETeleportType::None);
+			HitActor->SetActorLocation(UKismetMathLibrary::VInterpTo(HitActor->GetActorLocation, GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), 5.0f), true, nullptr, ETeleportType::None);
+		}
+	}
+}
+
+void AAsylumPlayerCharacter::PlayerEnergyDrain()
+{
+	FVector EndLocation = GetActorLocation() + (GetActorLocation() * 3000.0f);
+	TArray<FHitResult> DrainHitResults;
+	//int32 DrainHitLength = DrainHitResults.Max();
+//	AActor* HitActor = DrainHitResult.GetActor();
+	TArray<AActor*> ActorsToIgnore;
+
+	if (UKismetSystemLibrary::SphereTraceMultiForObjects(this, GetActorLocation(), EndLocation, GoetheSuitComponent->SuitStatsData.EnemySearchRadius, DrainEnemyArray, true, ActorsToIgnore, EDrawDebugTrace::ForDuration, DrainHitResults, true, FLinearColor::Red, FLinearColor::Blue, 5.0f))
+	{
+		for (int32 i = 0; i < DrainHitResults.Max(); i++)
+		{
+			if (DrainHitResults[i].GetActor())
+			{
+				UGameplayStatics::ApplyDamage(DrainHitResults[i].GetActor(), 5.0f, PCon, this, NULL);
+				this->Execute_OnRecoverHealth(this, UGameplayStatics::ApplyDamage(DrainHitResults[i].GetActor(), 5.0f, PCon, this, NULL));
+			}
 		}
 	}
 }
