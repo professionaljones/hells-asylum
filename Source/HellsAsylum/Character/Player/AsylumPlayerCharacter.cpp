@@ -93,11 +93,17 @@ void AAsylumPlayerCharacter::EnableGodModeToggle()
 void AAsylumPlayerCharacter::GrantFullHealth()
 {
 	PlayerStatsComponent->CharacterStatsDataStruct.fCurrentHealth = PlayerStatsComponent->CharacterStatsDataStruct.fMaxHealth;
+	this->Execute_PlayerUIUpdate(this);
 }
 
 void AAsylumPlayerCharacter::GrantFullShield()
 {
 	PlayerStatsComponent->CharacterStatsDataStruct.fCurrentShield = PlayerStatsComponent->CharacterStatsDataStruct.fMaxShield;
+	if (!PlayerStatsComponent->CharacterStatsDataStruct.bHasShield)
+	{
+		PlayerStatsComponent->CharacterStatsDataStruct.bHasShield = true;
+	}
+	this->Execute_PlayerUIUpdate(this);
 }
 
 void AAsylumPlayerCharacter::GrantFullAragon()
@@ -106,6 +112,7 @@ void AAsylumPlayerCharacter::GrantFullAragon()
 	{
 		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
 		GoetheSuitComponent->SuitStatsData.CurrentAragonTanks = GoetheSuitComponent->SuitStatsData.MaxAragonTanks;
+		this->Execute_PlayerUIUpdate(this);
 	}
 }
 
@@ -141,13 +148,14 @@ void AAsylumPlayerCharacter::PlayerEndJump()
 
 void AAsylumPlayerCharacter::PlayerInteractRaycast()
 {
-	FVector EndLocation = GetActorLocation() + (GetActorLocation() * 800.0f);
+	FVector StartLocation = FollowCamera->GetComponentLocation();
+	FVector EndLocation = FollowCamera->GetComponentLocation() + (FollowCamera->GetComponentLocation() * 800.0f);
 	FHitResult InteractHitResult;
 	
 	TSubclassOf<UAsylumInteractInterface> InteractInterface;
 	AActor* HitActor = InteractHitResult.GetActor();
 	TArray<AActor*> ActorsToIgnore;
-	if (UKismetSystemLibrary::LineTraceSingleForObjects(this, GetActorLocation(), EndLocation, InteractableItems, false, ActorsToIgnore, EDrawDebugTrace::ForOneFrame, InteractHitResult, true, FLinearColor::Blue, FLinearColor::White, 5.0f))
+	if (UKismetSystemLibrary::LineTraceSingleForObjects(this, StartLocation, EndLocation, InteractableItems, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, InteractHitResult, true, FLinearColor::Blue, FLinearColor::White, 5.0f))
 	{
 		
 		if (HitActor)
@@ -307,14 +315,20 @@ void AAsylumPlayerCharacter::RechargeAragonTanks()
 {
 	if (GoetheSuitComponent->bStartGaugeRecharge)
 	{
-		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge + GoetheSuitComponent->SuitStatsData.AragonRegenAmount;
 		CheckAragonStatus();
-	}
-	if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge >= GoetheSuitComponent->SuitStatsData.MaxAragonGauge)
-	{
-		GoetheSuitComponent->bStartGaugeRecharge = false;
-		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
-		GetWorldTimerManager().PauseTimer(RechargeAragonHandle);
+		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge + GoetheSuitComponent->SuitStatsData.AragonRegenAmount;
+		if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge >= GoetheSuitComponent->SuitStatsData.MaxAragonGauge)
+		{
+
+			if (GoetheSuitComponent->SuitStatsData.CurrentAragonTanks < GoetheSuitComponent->SuitStatsData.MaxAragonTanks)
+			{
+				GoetheSuitComponent->SuitStatsData.CurrentAragonTanks++;
+			}
+
+			GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
+			
+		}
+		
 	}
 	
 }
@@ -375,7 +389,8 @@ void AAsylumPlayerCharacter::ItemTractorBeam()
 	{
 		if(HitActor)
 		{
-			HitActor->SetActorLocation(UKismetMathLibrary::VInterpTo(HitActor->GetActorLocation, GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), 5.0f), true, nullptr, ETeleportType::None);
+			//this->SetActorLocation(UKismetMathLibrary::VInterpTo(GetActorLocation(), HitActor->GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f), false, nullptr, ETeleportType::None);
+			HitActor->SetActorLocation(UKismetMathLibrary::VInterpTo(HitActor->GetActorLocation(), GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), 5.0f), true, nullptr, ETeleportType::None);
 		}
 	}
 }
@@ -570,7 +585,16 @@ void AAsylumPlayerCharacter::CheckAragonStatus()
 	if (GoetheSuitComponent->SuitStatsData.CurrentAragonTanks <= 0)
 	{
 		GoetheSuitComponent->bStartGaugeRecharge = false;
+		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = 0.0f;
+		GoetheSuitComponent->SuitStatsData.CurrentAragonTanks = 0.0f;
 	}
+	if (GoetheSuitComponent->SuitStatsData.CurrentAragonTanks >= GoetheSuitComponent->SuitStatsData.MaxAragonTanks)
+	{
+		GetWorldTimerManager().PauseTimer(RechargeAragonHandle);
+		GoetheSuitComponent->bStartGaugeRecharge = false;
+	}
+
+
 }
 
 void AAsylumPlayerCharacter::UpdateSacrificeStatus()

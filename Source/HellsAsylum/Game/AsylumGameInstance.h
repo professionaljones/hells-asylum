@@ -14,11 +14,15 @@
 UENUM(BlueprintType)
 enum ECampaignModeActs
 {
+	CM_NoAct UMETA(DisplayName = "No Act"),
 	CM_ActOne UMETA(DisplayName = "Act One"),
 	CM_ActTwo UMETA(DisplayName = "Act Two"),
 	CM_ActThree UMETA(DisplayName = "Act Three"),
 	CM_ActFour UMETA(DisplayName = "Act Four"),
-	CM_ActFive UMETA(DisplayName = "Act Five")
+	CM_ActFive UMETA(DisplayName = "Act Five"),
+	CM_Ending UMETA(DisplayName = "Epilogue"),
+	CM_Bonus UMETA(DisplayName = "Aragon")
+
 
 };
 
@@ -35,7 +39,7 @@ public:
 
 	//What act is the player currently on?
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data|Campaign")
-		TEnumAsByte<ECampaignModeActs> CurrentCampaignModeAct;
+		TEnumAsByte<ECampaignModeActs> CurrentCampaignModeAct = CM_NoAct;
 
 	//What difficulty setting did the player select?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Save Data")
@@ -60,7 +64,7 @@ public:
 		TMap<FString, FMissionLevelStats> SaveableMissionDataMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player Data|Campaign")
-		FString SavedLevelName;
+		FString SavedLevelName = "";
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player Data|Campaign")
 		FTransform PlayerStartLocation;
@@ -70,11 +74,11 @@ public:
 
 	//How many points has the player gained throughout (Campaign)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data|Campaign")
-		float PlayerLifetimePoints_Campaign;
+		float PlayerLifetimePoints_Campaign = 0.0f;
 
 	//How many points has the player gained throughout (Mission)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data|Mission")
-		float PlayerLifetimePoints_Mission;
+		float PlayerLifetimePoints_Mission = 0.0f;
 
 };
 
@@ -123,7 +127,7 @@ public:
 		struct FGameOptionsStruct SaveOptionsStruct;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Save Data")
-		FString CurrentSave;
+		FString CurrentSave = "";
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Load Data")
 		bool bWasSaveLoaded = false;

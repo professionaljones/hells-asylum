@@ -57,7 +57,16 @@ public:
 		void OnGodModeToggle();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Cheats")
-		void OnPlayerRecoverStats();
+		void OnPlayerRecoverFullStats();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
+		void OnPlayerRecoverFullHealth();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
+		void OnPlayerRecoverFullShield();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
+		void OnPlayerRecoverFullAragon();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Interact")
 		void OnInteractVisible();

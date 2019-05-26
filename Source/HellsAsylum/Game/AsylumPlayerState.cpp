@@ -23,6 +23,8 @@ void AAsylumPlayerState::CachePlayerStats()
 		CachedCharacterStats.fMovementMaxRange = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fMovementMaxRange;
 		CachedCharacterStats.fCrouchMovementLoudness = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fCrouchMovementLoudness;
 		CachedCharacterStats.fCrouchMovementMaxRange = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fCrouchMovementMaxRange;
+		CachedPlayerWeaponInventory = PlayerCharacter->PlayerWeaponInventory;
+		CachedPlayerItemInventory = PlayerCharacter->ItemInventory;
 	}
 	
 }

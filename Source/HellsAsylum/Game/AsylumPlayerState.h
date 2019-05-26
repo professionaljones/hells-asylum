@@ -21,6 +21,12 @@ public:
 		FCharacterStatsData CachedCharacterStats;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data")
+		TMap<int32, TSubclassOf<AAsylumWeapon>> CachedPlayerWeaponInventory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data")
+		TMap<int32, TSubclassOf<AItemBase>>  CachedPlayerItemInventory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data")
 		FTransform PlayerStartLocation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data")
