@@ -391,10 +391,10 @@ void AAsylumPlayerCharacter::ItemTractorBeam()
 	{
 		if(HitActor)
 		{
-			if (HitActor->SetActorLocation(UKismetMathLibrary::VInterpTo(GetActorLocation(), HitActor->GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f), false, nullptr, ETeleportType::None))
+			/*if (HitActor->SetActorLocation(UKismetMathLibrary::VInterpTo(GetActorLocation(), HitActor->GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f), false, nullptr, ETeleportType::None))
 			{
 				GLog->Log("Does it work");
-			}
+			}*/
 			
 			
 		}
