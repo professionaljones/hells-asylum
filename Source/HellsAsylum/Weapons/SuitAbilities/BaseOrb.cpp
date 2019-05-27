@@ -8,7 +8,7 @@
 // Sets default values
 ABaseOrb::ABaseOrb()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	OrbRoot = CreateDefaultSubobject<USceneComponent>(TEXT("OrbRoot"));
@@ -27,7 +27,7 @@ ABaseOrb::ABaseOrb()
 	ProjMovementComponent->bRotationFollowsVelocity = true;
 	ProjMovementComponent->ProjectileGravityScale = 0.0f;
 	//ProjMovementComponent->Velocity = OrbVelocity;
-	
+
 	EndLocation = GetActorLocation() + (GetActorLocation() * ForwardVectorMod);
 }
 
@@ -50,7 +50,7 @@ void ABaseOrb::BeginPlay()
 		SearchForPlayer();
 		GetWorldTimerManager().SetTimer(HarmonyOrbTimer, this, &ABaseOrb::SearchForPlayer, HarmonyHealRate, true);
 	}
-	
+
 }
 
 // Called every frame
@@ -64,25 +64,29 @@ void ABaseOrb::SearchForEnemies()
 {
 
 	AActor* HitActor = DespairHitResult.GetActor();
-	
+
 	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetActorLocation(), EndLocation, DespairTraceRadius, DespairTargets, false, HarmonyActorsToIgnore, EDrawDebugTrace::ForDuration, DespairHitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0f))
 	{
 		if (DespairHitResult.bBlockingHit && IsValid(HitActor))
 		{
 			if (bShouldAttractEnemies)
 			{
-				if (HitActor->GetClass()->ImplementsInterface(UAsylumEnemyInterface::StaticClass()))
+				if (this->SetActorLocation(UKismetMathLibrary::VInterpTo(GetActorLocation(), HitActor->GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f), false, nullptr, ETeleportType::None))
 				{
-					this->SetActorLocation(UKismetMathLibrary::VInterpTo(GetActorLocation(), HitActor->GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f), false, nullptr, ETeleportType::None);
+					UGameplayStatics::ApplyDamage(HitActor, DamageAmount, UGameplayStatics::GetPlayerController(GetWorld(), 0), this, NULL);
 				}
-				
+
+			}
+			else
+			{
+				UGameplayStatics::ApplyDamage(HitActor, DamageAmount, UGameplayStatics::GetPlayerController(GetWorld(), 0), this, NULL);
 			}
 			if (ProjMovementComponent)
 			{
 				ProjMovementComponent->Velocity = (GetActorLocation() * ProjMovementComponent->InitialSpeed);
 				ProjMovementComponent->UpdateComponentVelocity();
 			}
-			UGameplayStatics::ApplyDamage(HitActor, DamageAmount, UGameplayStatics::GetPlayerController(GetWorld(), 0), this, NULL);
+			
 		}
 	}
 }
@@ -95,11 +99,13 @@ void ABaseOrb::SearchForPlayer()
 	{
 		if (HarmonyHitResult.bBlockingHit && IsValid(HitActor))
 		{
-			
-			if (PC->GetClass()->ImplementsInterface(UAsylumPlayerInterface::StaticClass()))
+			if (this->SetActorLocation(UKismetMathLibrary::VInterpTo(GetActorLocation(), HitActor->GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f), false, nullptr, ETeleportType::None))
 			{
-				PC->Execute_OnRecoverHealth(PC, HealAmount);
-				this->SetActorLocation(UKismetMathLibrary::VInterpTo(GetActorLocation(), HitActor->GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f), false, nullptr, ETeleportType::None);
+				if (PC->GetClass()->ImplementsInterface(UAsylumPlayerInterface::StaticClass()))
+				{
+					PC->Execute_OnRecoverHealth(PC, HealAmount);
+
+				}
 			}
 		}
 	}

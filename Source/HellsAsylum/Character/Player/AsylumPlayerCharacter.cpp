@@ -291,7 +291,8 @@ void AAsylumPlayerCharacter::ActivateQuicksilver()
 			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), GoetheSuitComponent->SuitStatsData.QuicksilverSlowDownAmount);
 			if (IsValid(CurrentEquippedWeapon))
 			{
-				CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = CurrentEquippedWeapon->WeaponStatsData.SpecialDamageMultiplier;
+				//CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = CurrentEquippedWeapon->WeaponStatsData.SpecialDamageMultiplier;
+				CurrentEquippedWeapon->Execute_OnDamageModify(CurrentEquippedWeapon);
 				GetWorldTimerManager().SetTimer(QuickSilverHandle, this, &AAsylumPlayerCharacter::OnQuicksilverConsumption, 0.01f, true);
 			}
 		}
@@ -323,9 +324,10 @@ void AAsylumPlayerCharacter::RechargeAragonTanks()
 			if (GoetheSuitComponent->SuitStatsData.CurrentAragonTanks < GoetheSuitComponent->SuitStatsData.MaxAragonTanks)
 			{
 				GoetheSuitComponent->SuitStatsData.CurrentAragonTanks++;
+				GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = 0.0f;
 			}
 
-			GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
+			//GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
 			
 		}
 		
@@ -389,8 +391,12 @@ void AAsylumPlayerCharacter::ItemTractorBeam()
 	{
 		if(HitActor)
 		{
-			//this->SetActorLocation(UKismetMathLibrary::VInterpTo(GetActorLocation(), HitActor->GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f), false, nullptr, ETeleportType::None);
-			HitActor->SetActorLocation(UKismetMathLibrary::VInterpTo(HitActor->GetActorLocation(), GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), 5.0f), true, nullptr, ETeleportType::None);
+			if (HitActor->SetActorLocation(UKismetMathLibrary::VInterpTo(GetActorLocation(), HitActor->GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f), false, nullptr, ETeleportType::None))
+			{
+				GLog->Log("Does it work");
+			}
+			
+			
 		}
 	}
 }
@@ -534,7 +540,7 @@ void AAsylumPlayerCharacter::DeactivateQuicksilver()
 		GetWorldTimerManager().ClearTimer(QuickSilverHandle);
 		if (IsValid(CurrentEquippedWeapon))
 		{
-			CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = CurrentEquippedWeapon->WeaponStatsData.OriginalDamageModifier;
+			CurrentEquippedWeapon->Execute_RecalculateBaseWeaponDamage(CurrentEquippedWeapon);
 			
 		}
 	}
@@ -587,6 +593,10 @@ void AAsylumPlayerCharacter::CheckAragonStatus()
 		GoetheSuitComponent->bStartGaugeRecharge = false;
 		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = 0.0f;
 		GoetheSuitComponent->SuitStatsData.CurrentAragonTanks = 0.0f;
+		if (GoetheSuitComponent->bStartMainAbility)
+		{
+			DeactivateMainAbility(GoetheSuitComponent->SuitStatsData.GoetheSelectedMainAbility);
+		}
 	}
 	if (GoetheSuitComponent->SuitStatsData.CurrentAragonTanks >= GoetheSuitComponent->SuitStatsData.MaxAragonTanks)
 	{
