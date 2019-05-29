@@ -39,6 +39,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Campaign")
 		void OnAddEnemyToDatabase(bool bFirstTimeDeath);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Campaign")
+		void OnShardPickup();
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Campaign|Codex")
 		void OnAddToCodex();
 

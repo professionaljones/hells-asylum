@@ -76,10 +76,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data|Campaign")
 		float PlayerLifetimePoints_Campaign = 0.0f;
 
+
+
 	//How many points has the player gained throughout (Mission)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data|Mission")
 		float PlayerLifetimePoints_Mission = 0.0f;
 
+
+	//How many Aragon Shards does the player have (Campaign)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data|Campaign")
+		int PlayerCurrentShardCount = 0;
+
+	//How many Aragon Shards has the player gained throughout (Campaign)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data|Campaign")
+		int PlayerLifetimeShardCount = 0;
 };
 
 USTRUCT(BlueprintType)

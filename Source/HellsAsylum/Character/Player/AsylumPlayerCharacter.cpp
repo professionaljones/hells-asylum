@@ -120,6 +120,7 @@ void AAsylumPlayerCharacter::GrantFullStats()
 {
 	GrantFullHealth();
 	GrantFullShield();
+	GrantFullAragon();
 }
 
 void AAsylumPlayerCharacter::PlayerJumpEvent()
