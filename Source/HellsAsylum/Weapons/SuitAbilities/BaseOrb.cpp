@@ -65,7 +65,7 @@ void ABaseOrb::SearchForEnemies()
 
 	AActor* HitActor = DespairHitResult.GetActor();
 
-	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetActorLocation(), EndLocation, DespairTraceRadius, DespairTargets, false, HarmonyActorsToIgnore, EDrawDebugTrace::ForDuration, DespairHitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0f))
+	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetActorLocation(), EndLocation, DespairTraceRadius, DespairTargets, false, HarmonyActorsToIgnore, EDrawDebugTrace::None, DespairHitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0f))
 	{
 		if (DespairHitResult.bBlockingHit && IsValid(HitActor))
 		{

@@ -267,7 +267,7 @@ public:
 
 };
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class HELLSASYLUM_API UAsylumSuitComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -276,7 +276,7 @@ class HELLSASYLUM_API UAsylumSuitComponent : public UActorComponent
 
 public:
 
-		UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Suit")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit")
 		struct FGoetheSuitStatsData SuitStatsData;
 
 	//Start/Stop recharge for aragon
@@ -405,7 +405,7 @@ public:
 
 	//This data table will hold info for when the player starts a new game 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-		UDataTable *NewGameSuitDataTable;
+		UDataTable* NewGameSuitDataTable;
 
 	//This data table will hold info for when the player collects a new suit
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
@@ -419,12 +419,12 @@ protected:
 
 public:
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 
 
 
 
 
-		
+
 };
