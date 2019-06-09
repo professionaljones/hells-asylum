@@ -196,6 +196,7 @@ void AAsylumPlayerCharacter::DeactivateMainAbility(EGoetheMainAbilities PlayerSe
 {
 	if (GoetheSuitComponent->bEnableMainAbility)
 	{
+		CheckAragonStatus();
 		if (PlayerSelectedAbility == MA_Quicksilver)
 		{
 			DeactivateQuicksilver();
@@ -315,7 +316,7 @@ void AAsylumPlayerCharacter::ActivateSacrifice()
 
 void AAsylumPlayerCharacter::RechargeAragonTanks()
 {
-	if (GoetheSuitComponent->bStartGaugeRecharge)
+	if (GoetheSuitComponent->bStartGaugeRecharge && !GoetheSuitComponent->bStartMainAbility)
 	{
 		CheckAragonStatus();
 		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge + GoetheSuitComponent->SuitStatsData.AragonRegenAmount;
@@ -347,7 +348,7 @@ void AAsylumPlayerCharacter::OnOverdriveConsumption()
 	if (GoetheSuitComponent->bStartMainAbility)
 	{
 		ConsumeAragon(GoetheSuitComponent->SuitStatsData.OverdriveConsumptionRate);
-		CheckAragonStatus();
+		//CheckAragonStatus();
 	}
 }
 
@@ -592,14 +593,16 @@ void AAsylumPlayerCharacter::CheckAragonStatus()
 		if (GoetheSuitComponent->bStartMainAbility)
 		{
 			DeactivateMainAbility(GoetheSuitComponent->SuitStatsData.GoetheSelectedMainAbility);
+			GoetheSuitComponent->bStartMainAbility = false;
+			GetWorldTimerManager().ClearTimer(RechargeAragonHandle);
 		}
 	}
-	if (GoetheSuitComponent->SuitStatsData.CurrentAragonTanks >= GoetheSuitComponent->SuitStatsData.MaxAragonTanks)
+	if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge >= GoetheSuitComponent->SuitStatsData.MaxAragonGauge && GoetheSuitComponent->SuitStatsData.CurrentAragonTanks >= GoetheSuitComponent->SuitStatsData.MaxAragonTanks)
 	{
-		GetWorldTimerManager().PauseTimer(RechargeAragonHandle);
 		GoetheSuitComponent->bStartGaugeRecharge = false;
-		GoetheSuitComponent->SuitStatsData.CurrentAragonTanks = GoetheSuitComponent->SuitStatsData.MaxAragonTanks;
+		GetWorldTimerManager().ClearTimer(RechargeAragonHandle);
 	}
+	
 
 
 }
