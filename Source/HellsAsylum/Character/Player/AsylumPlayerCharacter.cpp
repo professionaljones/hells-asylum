@@ -55,7 +55,7 @@ bool AAsylumPlayerCharacter::IsSelectingTarget() const
 	return false;
 }
 
-AActor * AAsylumPlayerCharacter::GetCurrentTarget() const
+AActor* AAsylumPlayerCharacter::GetCurrentTarget() const
 {
 	return nullptr;
 }
@@ -152,13 +152,13 @@ void AAsylumPlayerCharacter::PlayerInteractRaycast()
 	FVector StartLocation = FollowCamera->GetComponentLocation();
 	FVector EndLocation = FollowCamera->GetComponentLocation() + (FollowCamera->GetComponentLocation() * 800.0f);
 	FHitResult InteractHitResult;
-	
+
 	TSubclassOf<UAsylumInteractInterface> InteractInterface;
 	AActor* HitActor = InteractHitResult.GetActor();
 	TArray<AActor*> ActorsToIgnore;
 	if (UKismetSystemLibrary::LineTraceSingleForObjects(this, StartLocation, EndLocation, InteractableItems, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, InteractHitResult, true, FLinearColor::Blue, FLinearColor::White, 5.0f))
 	{
-		
+
 		if (HitActor)
 		{
 			//PCon->Execute_OnInteractVisible(PCon);
@@ -169,11 +169,12 @@ void AAsylumPlayerCharacter::PlayerInteractRaycast()
 	{
 		//this->Execute_
 	}
-	
+
 }
 
 void AAsylumPlayerCharacter::ActivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility)
 {
+	CheckAragonStatus();
 	if (GoetheSuitComponent->bEnableMainAbility)
 	{
 		if (PlayerSelectedAbility == MA_Quicksilver)
@@ -196,7 +197,7 @@ void AAsylumPlayerCharacter::DeactivateMainAbility(EGoetheMainAbilities PlayerSe
 {
 	if (GoetheSuitComponent->bEnableMainAbility)
 	{
-		CheckAragonStatus();
+		//CheckAragonStatus();
 		if (PlayerSelectedAbility == MA_Quicksilver)
 		{
 			DeactivateQuicksilver();
@@ -210,7 +211,7 @@ void AAsylumPlayerCharacter::DeactivateMainAbility(EGoetheMainAbilities PlayerSe
 			DeactivateSacrifice();
 		}
 	}
-	
+
 }
 
 void AAsylumPlayerCharacter::ActivateSelectedPower(EGoetheActivePowers PowerSelected)
@@ -240,17 +241,17 @@ void AAsylumPlayerCharacter::DeactivateSelectedPower(EGoetheActivePowers PowerUs
 void AAsylumPlayerCharacter::SpawnDespairOrb(int DiscordPowerLevel)
 {
 	FActorSpawnParameters SpawnParameters;
-	
+
 	FRotator SpawnRotation = PCon->GetControlRotation();
 	if (World)
 	{
 
 		switch (DiscordPowerLevel)
 		{
-		case 1 :
+		case 1:
 			World->SpawnActor<ABaseOrb>(DespairLVOne, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
 			break;
-		case 2 :
+		case 2:
 			World->SpawnActor<ABaseOrb>(DespairLVTwo, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
 			break;
 		case 3:
@@ -258,7 +259,7 @@ void AAsylumPlayerCharacter::SpawnDespairOrb(int DiscordPowerLevel)
 			break;
 		}
 	}
-	
+
 }
 
 void AAsylumPlayerCharacter::SpawnHarmonyOrb(int HarmonyPowerLevel)
@@ -293,7 +294,6 @@ void AAsylumPlayerCharacter::ActivateQuicksilver()
 			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), GoetheSuitComponent->SuitStatsData.QuicksilverSlowDownAmount);
 			if (IsValid(CurrentEquippedWeapon))
 			{
-				//CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = CurrentEquippedWeapon->WeaponStatsData.SpecialDamageMultiplier;
 				CurrentEquippedWeapon->Execute_OnDamageModify(CurrentEquippedWeapon);
 				GetWorldTimerManager().SetTimer(QuickSilverHandle, this, &AAsylumPlayerCharacter::OnQuicksilverConsumption, 0.01f, true);
 			}
@@ -318,19 +318,29 @@ void AAsylumPlayerCharacter::RechargeAragonTanks()
 {
 	if (GoetheSuitComponent->bStartGaugeRecharge && !GoetheSuitComponent->bStartMainAbility)
 	{
-		CheckAragonStatus();
+		this->Execute_UpdateAragonUI(this);
 		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge + GoetheSuitComponent->SuitStatsData.AragonRegenAmount;
 		if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge >= GoetheSuitComponent->SuitStatsData.MaxAragonGauge)
 		{
+			
 			if (GoetheSuitComponent->SuitStatsData.CurrentAragonTanks < GoetheSuitComponent->SuitStatsData.MaxAragonTanks)
 			{
-				GoetheSuitComponent->SuitStatsData.CurrentAragonTanks++;
 				GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = 0.0f;
+				GoetheSuitComponent->SuitStatsData.CurrentAragonTanks++;
+			}
+			if (GoetheSuitComponent->SuitStatsData.CurrentAragonTanks >= GoetheSuitComponent->SuitStatsData.MaxAragonTanks)
+			{
+				GoetheSuitComponent->SuitStatsData.CurrentAragonTanks = GoetheSuitComponent->SuitStatsData.MaxAragonTanks;
+				GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
+				GetWorldTimerManager().ClearTimer(RechargeAragonHandle);
+				GoetheSuitComponent->bStartMainAbility = false;
+				GoetheSuitComponent->bStartGaugeRecharge = false;
+				this->Execute_UpdateAragonUI(this);
 			}
 		}
-		
+
 	}
-	
+
 }
 
 void AAsylumPlayerCharacter::OnQuicksilverConsumption()
@@ -338,7 +348,7 @@ void AAsylumPlayerCharacter::OnQuicksilverConsumption()
 	if (GoetheSuitComponent->bStartMainAbility)
 	{
 		ConsumeAragon(GoetheSuitComponent->SuitStatsData.QuicksilverConsumptionRate);
-		CheckAragonStatus();
+		//CheckAragonStatus();
 
 	}
 }
@@ -348,7 +358,7 @@ void AAsylumPlayerCharacter::OnOverdriveConsumption()
 	if (GoetheSuitComponent->bStartMainAbility)
 	{
 		ConsumeAragon(GoetheSuitComponent->SuitStatsData.OverdriveConsumptionRate);
-		//CheckAragonStatus();
+		CheckAragonStatus();
 	}
 }
 
@@ -387,10 +397,10 @@ void AAsylumPlayerCharacter::ItemTractorBeam()
 	TArray<AActor*> ActorsToIgnore;
 	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetActorLocation(), EndLocation, GoetheSuitComponent->SuitStatsData.ScanRadius, Items, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, ItemHitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0f))
 	{
-		if(HitActor)
+		if (HitActor)
 		{
 
-			
+
 		}
 	}
 }
@@ -483,7 +493,7 @@ void AAsylumPlayerCharacter::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
-void AAsylumPlayerCharacter::SetupPlayerInputComponent(UInputComponent * PlayerInputComponent)
+void AAsylumPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
@@ -515,11 +525,12 @@ void AAsylumPlayerCharacter::ActivateOverdrive()
 	if (!GoetheSuitComponent->bStartMainAbility)
 	{
 		GoetheSuitComponent->bStartMainAbility = true;
-		CustomTimeDilation = GoetheSuitComponent->SuitStatsData.OverdriveSpeedBoost;
+		CustomTimeDilation = GoetheSuitComponent->SuitStatsData.QuicksilverPlayerSpeed;
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), GoetheSuitComponent->SuitStatsData.QuicksilverSlowDownAmount);
 		if (IsValid(CurrentEquippedWeapon))
 		{
 			CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = CurrentEquippedWeapon->WeaponStatsData.SpecialDamageMultiplier;
-			GetWorldTimerManager().SetTimer(OverdriveHandle, this, &AAsylumPlayerCharacter::OnOverdriveConsumption, 0.01f, true);
+			GetWorldTimerManager().SetTimer(QuickSilverHandle, this, &AAsylumPlayerCharacter::OnOverdriveConsumption, GoetheSuitComponent->SuitStatsData.QuicksilverConsumptionRate, true);
 		}
 	}
 }
@@ -528,6 +539,7 @@ void AAsylumPlayerCharacter::DeactivateQuicksilver()
 {
 	if (GoetheSuitComponent->bStartMainAbility)
 	{
+		//CheckAragonStatus();
 		GoetheSuitComponent->bStartMainAbility = false;
 		CustomTimeDilation = 1;
 		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
@@ -535,7 +547,7 @@ void AAsylumPlayerCharacter::DeactivateQuicksilver()
 		if (IsValid(CurrentEquippedWeapon))
 		{
 			CurrentEquippedWeapon->Execute_RecalculateBaseWeaponDamage(CurrentEquippedWeapon);
-			
+
 		}
 	}
 }
@@ -565,7 +577,7 @@ void AAsylumPlayerCharacter::DeactivateSacrifice()
 			CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = CurrentEquippedWeapon->WeaponStatsData.OriginalDamageModifier;
 			CurrentEquippedWeapon->bSacrificeEnable = false;
 		}
-		
+
 	}
 }
 
@@ -579,30 +591,42 @@ void AAsylumPlayerCharacter::CheckAragonStatus()
 			GoetheSuitComponent->bStartGaugeRecharge = true;
 			GetWorldTimerManager().SetTimer(RechargeAragonHandle, this, &AAsylumPlayerCharacter::RechargeAragonTanks, GoetheSuitComponent->SuitStatsData.AragonRegenSpeed, true);
 		}
+		if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge <= 0.0f && GoetheSuitComponent->SuitStatsData.CurrentAragonTanks > 0.0f)
+		{
+			GoetheSuitComponent->SuitStatsData.CurrentAragonTanks--;
+			GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
+		}
+
 	}
-	if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge <= 0.0f)
+	if (GoetheSuitComponent->SuitStatsData.CurrentAragonTanks <= 0.0f)
 	{
-		GoetheSuitComponent->SuitStatsData.CurrentAragonTanks--;
-		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
-	}
-	if (GoetheSuitComponent->SuitStatsData.CurrentAragonTanks <= 0)
-	{
-		GoetheSuitComponent->bStartGaugeRecharge = false;
+		///Maybe on harder difficulties we turn off the automatic recharge? - B. Jones
+		/*GoetheSuitComponent->bStartGaugeRecharge = false;
+		GetWorldTimerManager().ClearTimer(RechargeAragonHandle);*/
+		if (!GoetheSuitComponent->bStartGaugeRecharge)
+		{
+			GoetheSuitComponent->bStartGaugeRecharge = true;
+			GetWorldTimerManager().SetTimer(RechargeAragonHandle, this, &AAsylumPlayerCharacter::RechargeAragonTanks, GoetheSuitComponent->SuitStatsData.AragonRegenSpeed, true);
+		}
 		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = 0.0f;
 		GoetheSuitComponent->SuitStatsData.CurrentAragonTanks = 0.0f;
 		if (GoetheSuitComponent->bStartMainAbility)
 		{
 			DeactivateMainAbility(GoetheSuitComponent->SuitStatsData.GoetheSelectedMainAbility);
-			GoetheSuitComponent->bStartMainAbility = false;
-			GetWorldTimerManager().ClearTimer(RechargeAragonHandle);
+			//GoetheSuitComponent->bStartMainAbility = false;
+
 		}
 	}
+	/*if (GoetheSuitComponent->bStartMainAbility)
+	{
+		GoetheSuitComponent->bStartGaugeRecharge = false;
+	}*/
 	if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge >= GoetheSuitComponent->SuitStatsData.MaxAragonGauge && GoetheSuitComponent->SuitStatsData.CurrentAragonTanks >= GoetheSuitComponent->SuitStatsData.MaxAragonTanks)
 	{
 		GoetheSuitComponent->bStartGaugeRecharge = false;
 		GetWorldTimerManager().ClearTimer(RechargeAragonHandle);
 	}
-	
+
 
 
 }
