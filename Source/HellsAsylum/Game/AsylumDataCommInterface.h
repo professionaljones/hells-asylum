@@ -42,6 +42,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Campaign")
 		void OnShardPickup();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Campaign")
+		void OnDFragPickup();
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Campaign|Codex")
 		void OnAddToCodex();
 
