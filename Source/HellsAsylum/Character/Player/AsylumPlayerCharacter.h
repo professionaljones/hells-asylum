@@ -119,13 +119,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Powers")
 		TSubclassOf<ABaseOrb> HarmonyLVThree;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Combat")
+		AActor* LockOnTarget = nullptr;
 
 	UFUNCTION(BlueprintCallable, Category = "Player|Powers")
 		void ItemTractorBeam();
 
 	UFUNCTION(BlueprintCallable, Category = "Player|Powers")
 		void PlayerEnergyDrain();
+
+	UFUNCTION(BlueprintCallable, Category = "Player|Combat")
+		virtual AActor* GetCurrentTarget() const override;
 
 protected:
 	/** Called for forwards/backward input */
@@ -156,7 +160,7 @@ protected:
 	virtual bool GotMovementInput() const override;
 
 	virtual bool IsSelectingTarget() const override;
-	virtual AActor* GetCurrentTarget() const override;
+
 	virtual FVector2D GetCurrentTargetSelectionInput() const override;
 	AAsylumPlayerController* PCon = Cast<AAsylumPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	UWorld* World = GetWorld();
@@ -224,7 +228,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Player")
 		void PlayerInteractRaycast();
 
-	
+
 
 	/**
 	 * Called via input to activate the selected Main Ability

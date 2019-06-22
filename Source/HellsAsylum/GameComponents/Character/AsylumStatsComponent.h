@@ -48,6 +48,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats|Health")
 		float fMaxHealth = 200.0f;
 
+	//How much stamina does the character currently have?
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats|Health")
+		float fCurrentStamina = 100.0f;
+
+
+	//How much stamina can the player have?
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats|Health")
+		float fMaxStamina = 100.0f;
+
 
 	//How much shield does the character currently have?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats|Shield")
@@ -137,4 +146,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 		UDataTable *CharacterDataTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+		FDataTableRowHandle StatsDataHandle;
+
+	UFUNCTION(BlueprintCallable)
+		void SetStartValuesFromTable();
 };

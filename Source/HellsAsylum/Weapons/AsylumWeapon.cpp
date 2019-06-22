@@ -7,7 +7,7 @@
 // Sets default values
 AAsylumWeapon::AAsylumWeapon()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>("WeaponMesh");
@@ -164,7 +164,7 @@ void AAsylumWeapon::Fire()
 
 
 		//Create temp variable for Actor we hit
-		AActor *HitActor = SingleHit.GetActor();
+		AActor* HitActor = SingleHit.GetActor();
 
 		//Length of the ray in Unreal units
 		float WeaponRange = WeaponStatsData.WeaponDistanceRange;
@@ -203,11 +203,19 @@ void AAsylumWeapon::Fire()
 			//If we hit something and said target is what we are looking for
 			if (SingleHit.bBlockingHit && IsValid(HitActor))
 			{
+
 				//Apply damage
-				UGameplayStatics::ApplyPointDamage(HitActor, WeaponStatsData.DamageAmountSum, SingleHit.ImpactPoint, SingleHit, UGameplayStatics::GetPlayerController(GetWorld(), 0), this, NULL);
+				UGameplayStatics::ApplyPointDamage(HitActor, WeaponStatsData.DamageAmountSum, SingleHit.ImpactPoint, SingleHit, UGameplayStatics::GetPlayerController(GetWorld(), 0), this, WeaponStatsData.C_WeaponDamageType);
+
+
 				if (this->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
 				{
 					IAsylumWeaponInterface::Execute_OnHitTarget(this);
+				}
+				if (WeaponStatsData.WeaponAmmoType == AT_Stun)
+				{
+					//Apply stamina damage - different characters will react differently to stamina loss
+
 				}
 			}
 			CheckAmmo();

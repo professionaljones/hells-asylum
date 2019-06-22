@@ -12,42 +12,46 @@ bool UCameraModInCombatState::ModifyCamera(float DeltaTime, FMinimalViewInfo & I
 	Super::ModifyCamera(DeltaTime, InOutPOV);
 
 	// Get player character.
+	
 	AAsylumPlayerCharacter* PlayerCharacter = Cast<AAsylumPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-
-	if (PlayerCharacter->GetClass()->ImplementsInterface(UCombatActorInterface::StaticClass()))
+	if (IsValid(PlayerCharacter))
 	{
-
-		
-		if (PlayerCharacter->bIsInCombat)
+		if (PlayerCharacter->GetClass()->ImplementsInterface(UCombatActorInterface::StaticClass()))
 		{
-			if (!PlayerCharacter->bIsCrouchButtonDown)
+
+
+			if (PlayerCharacter->bIsInCombat)
+			{
+				if (!PlayerCharacter->bIsCrouchButtonDown)
+				{
+					// Apply modifier.
+					AppyCameraTransition(PlayerCharacter->IsInCombat() ? Modifiers : FAsylumCameraInfo(), TransitionTime, InOutPOV,
+						DeltaTime);
+
+					return true;
+				}
+				else
+				{
+					// Apply modifier.
+					AppyCameraTransition(PlayerCharacter->IsInCombat() ? Modifiers : FAsylumCameraInfo(), TransitionTime, InOutPOV,
+						DeltaTime);
+
+					return true;
+				}
+
+			}
+			if (!PlayerCharacter->bIsInCombat)
 			{
 				// Apply modifier.
 				AppyCameraTransition(PlayerCharacter->IsInCombat() ? Modifiers : FAsylumCameraInfo(), TransitionTime, InOutPOV,
 					DeltaTime);
-				//PlayerCharacter->ThirdPersonCameraBoom->bUsePawnControlRotation = false;
-				return true;
-			}
-			else
-			{
-				// Apply modifier.
-				AppyCameraTransition(PlayerCharacter->IsInCombat() ? Modifiers : FAsylumCameraInfo(), TransitionTime, InOutPOV,
-					DeltaTime);
-				//PlayerCharacter->ThirdPersonCameraBoom->bUsePawnControlRotation = false;
-				return true;
+
+				return false;
 			}
 
 		}
-		if (!PlayerCharacter->bIsInCombat)
-		{
-			// Apply modifier.
-			AppyCameraTransition(PlayerCharacter->IsInCombat() ? Modifiers : FAsylumCameraInfo(), TransitionTime, InOutPOV,
-				DeltaTime);
-			//PlayerCharacter->ThirdPersonCameraBoom->bUsePawnControlRotation = true;
-			return false;
-		}
-
 	}
+	
 	else
 	{
 		return false;

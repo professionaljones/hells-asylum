@@ -57,7 +57,12 @@ bool AAsylumPlayerCharacter::IsSelectingTarget() const
 
 AActor* AAsylumPlayerCharacter::GetCurrentTarget() const
 {
-	return nullptr;
+	if (IsValid(LockOnTarget))
+	{
+		return LockOnTarget;
+	}
+	else
+		return nullptr;
 }
 
 FVector2D AAsylumPlayerCharacter::GetCurrentTargetSelectionInput() const

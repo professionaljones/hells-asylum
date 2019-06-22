@@ -68,61 +68,68 @@ public:
 
 	//What level is this weapon at?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-		int32 CurrentWeaponLevel;
+		int32 CurrentWeaponLevel = 1;
 
 
 	//What is the maximum level of this weapon?
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-		int32 MaxWeaponLevel;
+		int32 MaxWeaponLevel = 10;
 
 	///// Damage
 
 
 	//How much damage does this weapon do, without any modifiers
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		float BaseDamageAmount;
+		float BaseDamageAmount = 0.0f;
 	//Are there any bonus to damage before Quicksilver or Overdrive? Otherwise, leave at 1
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		float DamageMultiplierAmount;
+		float DamageMultiplierAmount = 0.0f;
 
+	//Damage Type Object Reference
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+		UAsylumDamageType* OR_WeaponDamageType = NULL;
+
+	//Our Damage Type - Class Reference
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+		TSubclassOf<UAsylumDamageType> C_WeaponDamageType;
 
 	//When in Quicksilver or Overdrive, how much should the damage be multiplied by ?
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		float DamageModifierAmount;
+		float DamageModifierAmount = 0.0f;
 
 	//Give us the sum/product of BaseDamage and DamageMultiplier
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		float DamageAmountSum;
+		float DamageAmountSum = 0.0f;
 
 	//When in Quicksilver or Overdrive, how much should the damage be multiplied by?
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Modifiers")
-		float SpecialDamageMultiplier;
+		float SpecialDamageMultiplier = 0.0f;
 
 	//When the player hits an enemy at a weak point (IE Headshot), how much additional damage should the player deal
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Modifiers")
-		float CriticalHitMultiplier;
+		float CriticalHitMultiplier = 0.0f;
 
 	//Store the original damage amount for resetting
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Reset")
-		float OriginalBaseDamageAmount;
+		float OriginalBaseDamageAmount = 0.0f;
 
 	//Store the original DamageMultiplier for resetting
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Reset")
-		float OriginalDamageMultiplier;
+		float OriginalDamageMultiplier = 0.0f;
 
 	//Store the original DamageModifier for resetting
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Reset")
-		float OriginalDamageModifier;
+		float OriginalDamageModifier = 0.0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Feedback")
-		float WeaponFireLoudness;
+		float WeaponFireLoudness = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Feedback")
-		float WeaponFireSoundRange;
+		float WeaponFireSoundRange = 0.0f;
 
 	//How far does this weapon's "projectile" extend to?
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Range")
-		float WeaponDistanceRange;
+		float WeaponDistanceRange = 0.0f;
 
 
 
@@ -131,9 +138,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
 		float FireRate;
 
-	//Our Damage Type
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		TSubclassOf<UAsylumDamageType> WeaponDamageType;
+	
 
 
 	////End Damage

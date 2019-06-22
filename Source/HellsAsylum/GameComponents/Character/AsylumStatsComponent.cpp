@@ -32,3 +32,11 @@ void UAsylumStatsComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
+void UAsylumStatsComponent::SetStartValuesFromTable()
+{
+	/*if (IsValid(CharacterDataTable))
+	{
+		CharacterDataTable->FindRow("NG", "", true);
+	}*/
+}
+

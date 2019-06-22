@@ -13,5 +13,9 @@ UCLASS()
 class HELLSASYLUM_API UAsylumDamageType : public UDamageType
 {
 	GENERATED_BODY()
+
+
+public:
+	
 	
 };

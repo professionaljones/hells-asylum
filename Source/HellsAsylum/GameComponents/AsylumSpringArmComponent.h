@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class HELLSASYLUM_API UAsylumSpringArmComponent : public USpringArmComponent
 {
 	GENERATED_BODY()
