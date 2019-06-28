@@ -20,7 +20,6 @@ AAsylumWeapon::AAsylumWeapon()
 	RootComponent = WeaponMesh;
 	MyLocation = GetActorLocation();
 
-	CurrentWeaponSlotType = WeaponStatsData.WeaponSlotType;
 
 	ObjectsToTarget.Add(UEngineTypes::ConvertToObjectType(ECC_WorldDynamic));
 	ObjectsToTarget.Add(UEngineTypes::ConvertToObjectType(ECC_Pawn));
@@ -78,7 +77,7 @@ void AAsylumWeapon::CheckAmmo()
 		{
 			bCanWeaponFire = true;
 		}
-		if (WeaponStatsData.CurrentMagazineAmmo < WeaponStatsData.OriginalCurrentMagazineAmmo)
+		if (WeaponStatsData.CurrentMagazineAmmo < WeaponStatsData.MaxMagazineAmmo)
 		{
 			bCanReload = true;
 
@@ -261,13 +260,13 @@ void AAsylumWeapon::Charge()
 	if (bIsCharging)
 	{
 		//bCanWeaponFire = false;
-		WeaponStatsData.CurrentWeaponCharge = WeaponStatsData.CurrentWeaponCharge + WeaponStatsData.AmountToCharge;
+		CurrentWeaponCharge = CurrentWeaponCharge + AmountToCharge;
 
 		//This is temporary, will need to modify for balancing
-		WeaponStatsData.DamageModifierAmount = WeaponStatsData.CurrentWeaponCharge;
-		if (WeaponStatsData.CurrentWeaponCharge >= WeaponStatsData.WeaponChargeLimit)
+		WeaponStatsData.DamageModifierAmount = CurrentWeaponCharge;
+		if (CurrentWeaponCharge >= WeaponStatsData.WeaponChargeLimit)
 		{
-			WeaponStatsData.CurrentWeaponCharge = WeaponStatsData.WeaponChargeLimit;
+			CurrentWeaponCharge = WeaponStatsData.WeaponChargeLimit;
 		}
 	}
 }
@@ -278,7 +277,7 @@ void AAsylumWeapon::FinishCharge()
 	GetWorldTimerManager().ClearTimer(ChargeTimer);
 	bIsCharging = false;
 	//Reset Charge value
-	WeaponStatsData.CurrentWeaponCharge = 0.f;
+	CurrentWeaponCharge = 0.f;
 	//Reset Damage modifier
 	WeaponStatsData.DamageModifierAmount = ChargeDamageModifer;
 	//Attempt to apply damage
@@ -299,15 +298,15 @@ void AAsylumWeapon::Reload()
 	{
 		//Prevent firing
 		bCanWeaponFire = false;
-		WeaponStatsData.CurrentReloadTime = WeaponStatsData.CurrentReloadTime + WeaponStatsData.ReloadSpeed;
+		CurrentReloadTime = CurrentReloadTime + WeaponStatsData.ReloadSpeed;
 
 		//Actually reload ammo
-		if (WeaponStatsData.CurrentReloadTime >= WeaponStatsData.MaxReloadTime)
+		if (CurrentReloadTime >= WeaponStatsData.MaxReloadTime)
 		{
-			WeaponStatsData.CurrentMagazineAmmo = WeaponStatsData.OriginalCurrentMagazineAmmo;
+			WeaponStatsData.CurrentMagazineAmmo = WeaponStatsData.MaxMagazineAmmo;
 			WeaponStatsData.CurrentWeaponClips--;
 			FinishReload();
-			//GLog->Log("Reload complete");
+			
 		}
 	}
 }
@@ -334,7 +333,7 @@ void AAsylumWeapon::FinishReload()
 		bIsReloading = false;
 		bCanWeaponFire = true;
 		GetWorldTimerManager().ClearTimer(ReloadTimer);
-		WeaponStatsData.CurrentReloadTime = 0.0f;
+		CurrentReloadTime = 0.0f;
 
 		if (this->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
 		{
@@ -354,13 +353,13 @@ float AAsylumWeapon::GetAmmoPercentage()
 
 float AAsylumWeapon::GetReloadPercentage()
 {
-	float Percentage = WeaponStatsData.CurrentReloadTime / WeaponStatsData.MaxReloadTime;
+	float Percentage = CurrentReloadTime / WeaponStatsData.MaxReloadTime;
 	return Percentage;
 }
 
 float AAsylumWeapon::GetChargePercentage()
 {
-	float Percentage = WeaponStatsData.CurrentWeaponCharge / WeaponStatsData.WeaponChargeLimit;
+	float Percentage = CurrentWeaponCharge / WeaponStatsData.WeaponChargeLimit;
 	return Percentage;
 }
 
@@ -410,6 +409,6 @@ void AAsylumWeapon::GodModeToggle()
 
 void AAsylumWeapon::GiveWeaponFullAmmo()
 {
-	WeaponStatsData.CurrentMagazineAmmo = WeaponStatsData.OriginalCurrentMagazineAmmo;
+	WeaponStatsData.CurrentMagazineAmmo = WeaponStatsData.MaxMagazineAmmo;
 	WeaponStatsData.CurrentWeaponClips = WeaponStatsData.MaxWeaponClips;
 }

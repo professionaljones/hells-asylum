@@ -59,91 +59,41 @@ struct FWeaponStatsData : public FTableRowBase
 	GENERATED_USTRUCT_BODY()
 public:
 	//We use this to determine the slot the weapon should fill in the inventory
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon|Data")
 		TEnumAsByte<EWeaponType> WeaponType;
 
 	//What is this weapon's slot type?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Type")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Data")
 		TEnumAsByte<EWeaponSlotType> WeaponSlotType;
 
+	//This weapon's Ammo Type
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo|Type")
+		TEnumAsByte<EAmmoType> WeaponAmmoType;
+
+	//Damage Type Object Reference
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Damage Type")
+		UAsylumDamageType* OR_WeaponDamageType = NULL;
+
+	//Our Damage Type - Class Reference
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Damage Type")
+		TSubclassOf<UAsylumDamageType> C_WeaponDamageType;
+
 	//What level is this weapon at?
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon|Stats|Level")
 		int32 CurrentWeaponLevel = 1;
 
 
 	//What is the maximum level of this weapon?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Stats|Level")
 		int32 MaxWeaponLevel = 10;
 
-	///// Damage
-
-
-	//How much damage does this weapon do, without any modifiers
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		float BaseDamageAmount = 0.0f;
-	//Are there any bonus to damage before Quicksilver or Overdrive? Otherwise, leave at 1
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		float DamageMultiplierAmount = 0.0f;
-
-	//Damage Type Object Reference
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		UAsylumDamageType* OR_WeaponDamageType = NULL;
-
-	//Our Damage Type - Class Reference
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		TSubclassOf<UAsylumDamageType> C_WeaponDamageType;
-
-	//When in Quicksilver or Overdrive, how much should the damage be multiplied by ?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		float DamageModifierAmount = 0.0f;
-
-	//Give us the sum/product of BaseDamage and DamageMultiplier
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		float DamageAmountSum = 0.0f;
-
-	//When in Quicksilver or Overdrive, how much should the damage be multiplied by?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Modifiers")
-		float SpecialDamageMultiplier = 0.0f;
-
-	//When the player hits an enemy at a weak point (IE Headshot), how much additional damage should the player deal
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Modifiers")
-		float CriticalHitMultiplier = 0.0f;
-
-	//Store the original damage amount for resetting
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Reset")
-		float OriginalBaseDamageAmount = 0.0f;
-
-	//Store the original DamageMultiplier for resetting
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Reset")
-		float OriginalDamageMultiplier = 0.0f;
-
-	//Store the original DamageModifier for resetting
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Reset")
-		float OriginalDamageModifier = 0.0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Feedback")
-		float WeaponFireLoudness = 0.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Feedback")
-		float WeaponFireSoundRange = 0.0f;
-
-	//How far does this weapon's "projectile" extend to?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Range")
-		float WeaponDistanceRange = 0.0f;
-
-
-
-	//How fast does this weapon fire
-
+	//How fast does this weapon fire - if it is automatic
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
 		float FireRate;
 
-	
-
-
-	////End Damage
-
 	///// Ammo
+
+	
 
 	//How much ammo should the player have in one clip/magazine
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo", meta = (ClampMin = "0"))
@@ -157,23 +107,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
 		float CurrentWeaponClips;
 
-
-
 	//Store the original MagAmmo for resetting
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo|Reset")
-		float OriginalCurrentMagazineAmmo;
+		float MaxMagazineAmmo;
 
 	//Store the original WeaponClips count for resetting
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo|Reset")
 		float MaxWeaponClips;
-
-	//This weapon's Ammo Type
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo|Type")
-		TEnumAsByte<EAmmoType> WeaponAmmoType;
-
-	//Current Reload Time
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reload")
-		float CurrentReloadTime;
 
 	//Max Reload Time
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reload")
@@ -184,21 +124,72 @@ public:
 		float ReloadSpeed;
 
 
+
+
 	////End Ammo
 
-	////Start Charge
+	///// Damage
 
-	//How much to charge the weapon by
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Charge")
-		float AmountToCharge;
+
+	//How much damage does this weapon do, without any modifiers
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Damage")
+		float BaseDamageAmount = 0.0f;
+	//Are there any bonus to damage before Quicksilver or Overdrive? Otherwise, leave at 1
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Damage")
+		float DamageMultiplierAmount = 0.0f;
+
+
+	//When in Quicksilver or Overdrive, how much should the damage be multiplied by ?
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Damage")
+		float DamageModifierAmount = 0.0f;
+
+	//Give us the sum/product of BaseDamage and DamageMultiplier
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Damage")
+		float DamageAmountSum = 0.0f;
+
+	//When in Quicksilver or Overdrive, how much should the damage be multiplied by?
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Damage|Modifiers")
+		float SpecialDamageMultiplier = 0.0f;
+
+	//When the player hits an enemy at a weak point (IE Headshot), how much additional damage should the player deal
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Damage|Modifiers")
+		float CriticalHitMultiplier = 0.0f;
+
+	//Store the original damage amount for resetting
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Damage|Reset")
+		float OriginalBaseDamageAmount = 0.0f;
+
+	//Store the original DamageMultiplier for resetting
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Damage|Reset")
+		float OriginalDamageMultiplier = 0.0f;
+
+	//Store the original DamageModifier for resetting
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Reset")
+		float OriginalDamageModifier = 0.0;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Feedback")
+		float WeaponFireLoudness = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Feedback")
+		float WeaponFireSoundRange = 0.0f;
+
+	//How far does this weapon's "projectile" extend to?
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage|Range")
+		float WeaponDistanceRange = 0.0f;
+
+
+	////End Damage
+
+	
+
+	////Start Charge
 
 	//How much can this weapon charge up to
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Charge")
 		float WeaponChargeLimit;
 
-	//Empty to hold weapon charge
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Charge")
-		float CurrentWeaponCharge;
+	
 
 
 };
@@ -268,40 +259,47 @@ public:
 	// Sets default values for this actor's properties
 	AAsylumWeapon();
 
+	//Current Reload Time
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reload")
+		float CurrentReloadTime;
 
-	//What is this weapon's slot type?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Type")
-		TEnumAsByte<EWeaponSlotType> CurrentWeaponSlotType;
+	//Empty to hold weapon charge
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Charge")
+		float CurrentWeaponCharge;
+
+	//How much to charge the weapon by
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Charge")
+		float AmountToCharge;
 
 	//What is the name of the socket that this weapon attaches to
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Data")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Data")
 		FName WeaponAttachPoint;
 
 	//What is the name of this weapon
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Data")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Data")
 		FName WeaponName;
 
 	//What is the image for the player's inventory
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Data")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Data")
 		UTexture2D* WeaponImage;
 
 	//Can this weapon charge?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Data")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Data")
 		bool bIsChargeWeapon;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Data")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Data")
 		bool bIsCharging;
 
 	//Can this weapon charge?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Data")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Data")
 		bool bCanWeaponFire;
 
 	//Is this weapon automatic?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Data")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Data")
 		bool bIsAutomatic;
 
 	//Mainly for VFX - can also be used to spawn projectiles
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Data")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Data")
 		FName ProjectileSocket;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
@@ -387,9 +385,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 		FVector MyLocation;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Data")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Data")
 		FVector StartLocation;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Data")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Data")
 		FVector EndLocation;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -398,16 +396,16 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Mesh")
 		USkeletalMeshComponent* WeaponMesh;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Weapon Data")
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Weapon|Data")
 		UAudioComponent* WeaponAudioComponent;
 
-	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Weapon Data")
+	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Weapon|Data")
 		UArrowComponent* FireArrow;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		ACharacter* WeaponOwner;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Weapon Data")
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Weapon|Data")
 		bool bSacrificeEnable = false;
 
 	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Weapon Mods")
