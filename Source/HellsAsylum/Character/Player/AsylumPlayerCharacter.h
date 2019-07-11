@@ -296,6 +296,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
 		void ConsumeAragon(float AmountToConsume);
 
+	//This function will activate the player's selected Passive Power(s)
+	//@param PowerToUse Which power do we want to use
+	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
+		void ActivatePassivePower(EGoethePassivePowers PowerToUse);
+
 
 	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
 		void ActivateOverdrive();

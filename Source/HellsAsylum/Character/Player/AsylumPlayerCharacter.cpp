@@ -198,6 +198,25 @@ void AAsylumPlayerCharacter::ActivateMainAbility(EGoetheMainAbilities PlayerSele
 
 }
 
+void AAsylumPlayerCharacter::ActivatePassivePower(EGoethePassivePowers PowerToUse)
+{
+	if (GoetheSuitComponent)
+	{
+		if (PowerToUse == PP_AHR)
+		{
+
+		}
+		if (PowerToUse == PP_Reload)
+		{
+
+		}
+		if (PowerToUse == PP_Cooler)
+		{
+
+		}
+	}
+}
+
 void AAsylumPlayerCharacter::DeactivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility)
 {
 	if (GoetheSuitComponent->bEnableMainAbility)

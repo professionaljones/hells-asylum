@@ -40,6 +40,7 @@ UENUM(BlueprintType)
 enum EGoethePassivePowers
 {
 	PP_None UMETA(DisplayName = "Unequipped"),
+	PP_AHR UMETA(DisplayName = "Aragon Health Regen"),
 	PP_Reload UMETA(DisplayName = "Reload Speed Upgrade"),
 	PP_Damage UMETA(DisplayName = "Damage Upgrade"),
 	PP_MainAbility UMETA(DisplayName = "Power Optimizer"),
@@ -168,6 +169,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Power Levels")
 		int WeaponPowersMaxLevel;
 
+	
+
 
 	////Start Stats
 
@@ -288,6 +291,39 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit")
 		bool bEnableMainAbility = false;
+
+	//Aragon Health Regen Current Level
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Abilities|Passive", meta = (ClampMin = "1"))
+		int AHRCurrentLevel;
+
+	//Aragon Health Regen Max Level
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Abilities|Passive")
+		int AHRMaxLevel;
+
+	//Reload Upgrade Current Level
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Abilities|Passive", meta = (ClampMin = "1"))
+		int WeaponSpeedUpCurrentLevel;
+
+	//Reload Upgrade Max Level
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Abilities|Passive")
+		int WeaponSpeedUpMaxLevel;
+
+	//Power Reducer Current Level
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Abilities|Passive", meta = (ClampMin = "1"))
+		int AragonReducerCurrentLevel;
+
+	//Reload Upgrade Max Level
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Abilities|Passive")
+		int AragonReducerMaxLevel;
+
+	//Suit Cooler Current Level
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Abilities|Passive", meta = (ClampMin = "1"))
+		int SuitCoolerCurrentLevel;
+
+	//Suit Cooler Max Level
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Suit|Abilities|Passive")
+		int SuitCoolerMaxLevel;
+
 
 	/**
 	* Enable Main Ability when pressed
