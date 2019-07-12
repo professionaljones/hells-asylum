@@ -398,19 +398,34 @@ void AAsylumPlayerCharacter::OnSacrificeConsumption()
 float AAsylumPlayerCharacter::GetPlayerHealthPercentage()
 {
 	float Percentage = PlayerStatsComponent->CharacterStatsDataStruct.fCurrentHealth / PlayerStatsComponent->CharacterStatsDataStruct.fMaxHealth;
-	return Percentage;
+	if (Percentage >= 0)
+	{
+		return Percentage;
+	}
+	else
+		return 0.0f;
 }
 
 float AAsylumPlayerCharacter::GetPlayerShieldPercentage()
 {
 	float Percentage = PlayerStatsComponent->CharacterStatsDataStruct.fCurrentShield / PlayerStatsComponent->CharacterStatsDataStruct.fMaxShield;
-	return Percentage;
+	if (Percentage >= 0)
+	{
+		return Percentage;
+	}
+	else
+		return 0.0f;
 }
 
 float AAsylumPlayerCharacter::GetPlayerAragonPercentage()
 {
 	float Percentage = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge / GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
-	return Percentage;
+	if (Percentage >= 0)
+	{
+		return Percentage;
+	}
+	else
+		return 0.0f;
 }
 
 void AAsylumPlayerCharacter::ItemTractorBeam()

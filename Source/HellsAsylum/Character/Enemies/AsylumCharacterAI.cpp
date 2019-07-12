@@ -49,13 +49,23 @@ void AAsylumCharacterAI::EnemyWeaponFire()
 float AAsylumCharacterAI::GetAIHealthPercentage()
 {
 	float StatPercentage = EnemyStatsComponent->CharacterStatsDataStruct.fCurrentHealth / EnemyStatsComponent->CharacterStatsDataStruct.fMaxHealth;
-	return StatPercentage;
+	if (StatPercentage >= 0)
+	{
+		return StatPercentage;
+	}
+	else
+		return 0.0f;
 }
 
 float AAsylumCharacterAI::GetAIShieldPercentage()
 {
 	float StatPercentage = EnemyStatsComponent->CharacterStatsDataStruct.fCurrentShield / EnemyStatsComponent->CharacterStatsDataStruct.fMaxShield;
-	return StatPercentage;
+	if (StatPercentage >= 0)
+	{
+		return StatPercentage;
+	}
+	else
+		return 0.0f;
 }
 
 float AAsylumCharacterAI::GetAIAragonPercentage()

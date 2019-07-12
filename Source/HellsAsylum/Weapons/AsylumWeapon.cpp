@@ -306,7 +306,7 @@ void AAsylumWeapon::Reload()
 			WeaponStatsData.CurrentMagazineAmmo = WeaponStatsData.MaxMagazineAmmo;
 			WeaponStatsData.CurrentWeaponClips--;
 			FinishReload();
-			
+
 		}
 	}
 }
@@ -348,19 +348,34 @@ void AAsylumWeapon::FinishReload()
 float AAsylumWeapon::GetAmmoPercentage()
 {
 	float Percentage = WeaponStatsData.CurrentMagazineAmmo / WeaponStatsData.CurrentWeaponClips;
-	return Percentage;
+	if (Percentage >= 0)
+	{
+		return Percentage;
+	}
+	else
+		return 0.0f;
 }
 
 float AAsylumWeapon::GetReloadPercentage()
 {
 	float Percentage = CurrentReloadTime / WeaponStatsData.MaxReloadTime;
-	return Percentage;
+	if (Percentage >= 0)
+	{
+		return Percentage;
+	}
+	else
+		return 0.0f;
 }
 
 float AAsylumWeapon::GetChargePercentage()
 {
 	float Percentage = CurrentWeaponCharge / WeaponStatsData.WeaponChargeLimit;
-	return Percentage;
+	if (Percentage >= 0)
+	{
+		return Percentage;
+	}
+	else
+		return 0.0f;
 }
 
 void AAsylumWeapon::InfiniteAmmoToggle()
