@@ -347,7 +347,7 @@ void AAsylumWeapon::FinishReload()
 
 float AAsylumWeapon::GetAmmoPercentage()
 {
-	float Percentage = WeaponStatsData.CurrentMagazineAmmo / WeaponStatsData.CurrentWeaponClips;
+	float Percentage = WeaponStatsData.CurrentMagazineAmmo / WeaponStatsData.MaxWeaponClips;
 	if (Percentage >= 0)
 	{
 		return Percentage;

@@ -43,6 +43,9 @@ AAsylumPlayerCharacter::AAsylumPlayerCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
 	GetCharacterMovement()->JumpZVelocity = 600.f;
+
+	TanksEmptySound = LoadObject<USoundBase>(nullptr, TEXT("SoundCue'/Game/Static/ArtAssets/SFX/Powers/Ar_TanksEmpty_Cue.Ar_TanksEmpty_Cue'"));
+	TanksRechargedSound = LoadObject<USoundBase>(nullptr, TEXT("SoundWave'/Game/Static/ArtAssets/SFX/Powers/Power_Bar_Refilled.Power_Bar_Refilled'"));
 }
 
 bool AAsylumPlayerCharacter::GotMovementInput() const
@@ -360,6 +363,11 @@ void AAsylumPlayerCharacter::RechargeAragonTanks()
 				GoetheSuitComponent->bStartMainAbility = false;
 				GoetheSuitComponent->bStartGaugeRecharge = false;
 				this->Execute_UpdateAragonUI(this);
+				if (PlayerSuitAudioComponent->Sound != TanksRechargedSound)
+				{
+					PlayerSuitAudioComponent->Sound = TanksRechargedSound;
+				}
+				PlayerSuitAudioComponent->Play(0.0f);
 			}
 		}
 
@@ -652,6 +660,11 @@ void AAsylumPlayerCharacter::CheckAragonStatus()
 		if (GoetheSuitComponent->bStartMainAbility)
 		{
 			DeactivateMainAbility(GoetheSuitComponent->SuitStatsData.GoetheSelectedMainAbility);
+			if (PlayerSuitAudioComponent->Sound != TanksEmptySound)
+			{
+				PlayerSuitAudioComponent->Sound = TanksEmptySound;
+			}
+			PlayerSuitAudioComponent->Play(0.0f);
 			//GoetheSuitComponent->bStartMainAbility = false;
 
 		}

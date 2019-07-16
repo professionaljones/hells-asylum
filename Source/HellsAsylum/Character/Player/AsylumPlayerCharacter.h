@@ -165,6 +165,12 @@ protected:
 	AAsylumPlayerController* PCon = Cast<AAsylumPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	UWorld* World = GetWorld();
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SFX)
+		class USoundBase* TanksEmptySound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SFX)
+		class USoundBase* TanksRechargedSound;
+
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "Cheats")
@@ -320,6 +326,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
 		void UpdateSacrificeStatus();
+
+	
+	
 
 	FTimerHandle OverdriveHandle;
 	FTimerHandle RechargeAragonHandle;
