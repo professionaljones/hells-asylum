@@ -471,6 +471,7 @@ public:
 
 	UFUNCTION()
 		void Reload();
+
 	UFUNCTION(BlueprintCallable, Category = "Weapon Reload")
 		void StartReload();
 	UFUNCTION(BlueprintCallable, Category = "Weapon Reload")

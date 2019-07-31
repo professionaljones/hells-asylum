@@ -17,8 +17,7 @@ AAsylumWeapon::AAsylumWeapon()
 	WeaponModsComponent = CreateDefaultSubobject<UWeaponModComponent>("WeaponModsComponent");
 	CurrentModOne = WeaponModsComponent->ModSlotOne;
 	CurrentModTwo = WeaponModsComponent->ModSlotTwo;
-	RootComponent = WeaponMesh;
-	MyLocation = GetActorLocation();
+	
 
 
 	ObjectsToTarget.Add(UEngineTypes::ConvertToObjectType(ECC_WorldDynamic));
