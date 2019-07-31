@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/DamageType.h"
+#include "Classes/Particles/ParticleSystemComponent.h"
 #include "AsylumDamageType.generated.h"
 
 /**
@@ -16,6 +17,9 @@ class HELLSASYLUM_API UAsylumDamageType : public UDamageType
 
 
 public:
+
+	UAsylumDamageType();
 	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UParticleSystemComponent* PSC;
 };

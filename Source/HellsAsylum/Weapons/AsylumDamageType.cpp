@@ -3,3 +3,7 @@
 
 #include "AsylumDamageType.h"
 
+UAsylumDamageType::UAsylumDamageType()
+{
+	PSC = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("PSC"));
+}

@@ -48,7 +48,7 @@ void AAsylumWeapon::Tick(float DeltaTime)
 
 }
 
-void AAsylumWeapon::ActivateWeaponModInSlot(EWeaponModType ModSelected)
+void AAsylumWeapon::ActivateWeaponModInSlot(EWeaponOffenseModType ModSelected)
 {
 
 }
@@ -122,6 +122,10 @@ void AAsylumWeapon::StartFire()
 	{
 		this->Execute_OnEmptyWeaponFire(this);
 	}
+}
+
+void AAsylumWeapon::ActivateWeaponMod()
+{
 }
 
 void AAsylumWeapon::WeaponDryFire()

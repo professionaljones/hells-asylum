@@ -411,8 +411,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Weapon Mods")
 		class UWeaponModComponent* WeaponModsComponent;
 
-	TEnumAsByte<EWeaponModType> CurrentModOne;
-	TEnumAsByte<EWeaponModType> CurrentModTwo;
+	TEnumAsByte<EWeaponOffenseModType> CurrentModOne;
+	TEnumAsByte<EWeaponSupportModType> CurrentModTwo;
 
 
 protected:
@@ -429,7 +429,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-		void ActivateWeaponModInSlot(EWeaponModType ModSelected);
+		void ActivateWeaponModInSlot(EWeaponOffenseModType ModSelected);
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Weapon|Cheats")
 		bool bEnableInfiniteAmmo = false;
@@ -450,6 +450,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon Attack")
 		void StartFire();
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon Attack")
+		void ActivateWeaponMod();
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon Attack")
 		void WeaponDryFire();

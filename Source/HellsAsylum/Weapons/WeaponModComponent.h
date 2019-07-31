@@ -8,14 +8,21 @@
 
 
 UENUM(BlueprintType)
-enum EWeaponModType
+enum EWeaponOffenseModType
 {
-	WM_None UMETA(DisplayName = "No Mod"),
-	WM_FireAmmo UMETA(DisplayName = "Fire Ammo"),
-	WM_IceAmmo UMETA(DisplayName = "Ice Ammo"),
-	WM_Explosive UMETA(DisplayName = "Charged Reload"),
-	WM_Corosivve UMETA(DisplayName = "Poison Ammo"),
-	WM_Regen UMETA(DisplayName = "Regenerative Magazine")
+	WOM_None UMETA(DisplayName = "No Mod"),
+	WOM_FireAmmo UMETA(DisplayName = "Fire Ammo"),
+	WOM_IceAmmo UMETA(DisplayName = "Ice Ammo"),
+	WOM_Explosive UMETA(DisplayName = "Charged Reload"),
+	WOM_Corosivve UMETA(DisplayName = "Poison Ammo"),
+};
+
+UENUM(BlueprintType)
+enum EWeaponSupportModType
+{
+	WSM_None UMETA(DisplayName = "No Mod"),
+	WSM_Regen UMETA(DisplayName = "Regenerative Magazine"),
+
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -44,10 +51,10 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Mod Slots")
-		TEnumAsByte<EWeaponModType> ModSlotOne = WM_None;
+		TEnumAsByte<EWeaponOffenseModType> ModSlotOne = WOM_None;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Mod Slots")
-		TEnumAsByte<EWeaponModType> ModSlotTwo = WM_None;
+		TEnumAsByte<EWeaponSupportModType> ModSlotTwo = WSM_None;
 
 		
 };
