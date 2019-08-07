@@ -38,6 +38,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
 		void OnPlayerSuitEnable();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Experience")
+		void OnPlayerUpdateXP(float XPMod);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Experience")
+		void OnPlayerLevelUpEvent();
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
 		void PlayerUIUpdate();
 

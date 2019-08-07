@@ -377,7 +377,7 @@ public:
 		TEnumAsByte<EAmmoType> OriginalWeaponAmmoType;
 
 	//What is the price of this upgrade?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Upgrade|Reload")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Upgrade")
 		float NewWeaponUpgradePrice;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -411,8 +411,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Weapon Mods")
 		class UWeaponModComponent* WeaponModsComponent;
 
-	TEnumAsByte<EWeaponOffenseModType> CurrentModOne;
-	TEnumAsByte<EWeaponSupportModType> CurrentModTwo;
+	
 
 
 protected:
@@ -422,7 +421,23 @@ protected:
 	UPROPERTY()
 		float ChargeDamageModifer;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon|Damage")
+		UAsylumDamageType* OriginalDamageType;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon|Damage")
+		TSubclassOf<UAsylumDamageType> C_OriginalDamageType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon|Damage")
+		UAsylumDamageType* O_FireDamageType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon|Damage")
+		UAsylumDamageType* O_IceDamageType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon|Damage")
+		TSubclassOf<UAsylumDamageType> C_FireDamageType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon|Damage")
+		TSubclassOf<UAsylumDamageType> C_IceDamageType;
 
 public:	
 	// Called every frame
@@ -430,6 +445,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 		void ActivateWeaponModInSlot(EWeaponOffenseModType ModSelected);
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void DeactivateWeaponModInSlot(EWeaponOffenseModType ModSelected);
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Weapon|Cheats")
 		bool bEnableInfiniteAmmo = false;
@@ -450,9 +468,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon Attack")
 		void StartFire();
-
-	UFUNCTION(BlueprintCallable, Category = "Weapon Attack")
-		void ActivateWeaponMod();
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon Attack")
 		void WeaponDryFire();

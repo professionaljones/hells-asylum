@@ -132,6 +132,10 @@ public:
 		virtual AActor* GetCurrentTarget() const override;
 
 protected:
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
@@ -170,6 +174,24 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SFX)
 		class USoundBase* TanksRechargedSound;
+
+	UFUNCTION(BlueprintCallable, Category = "Player|Experience")
+		void OnPlayerLevelUp();
+
+	UFUNCTION(BlueprintCallable, Category = "Player|Experience")
+		void OnPlayerModXP(float XPMod);
+
+	//These points determine player strength - power recharge limits, strengths, etc
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Upgrade")
+		int32 CurrentSuitPowerPoints = 0;
+
+	//These points determine player capacity - weapon slots, max ammo
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Upgrade")
+		int32 CurrentSuitCapacityPoints;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Upgrade")
+		//These points determine misc player stats - movement noise
+		int32 CurrentSuitAuxPoints;
 
 public:
 
@@ -327,8 +349,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Suit|Usage")
 		void UpdateSacrificeStatus();
 
-	
-	
+
+
 
 	FTimerHandle OverdriveHandle;
 	FTimerHandle RechargeAragonHandle;

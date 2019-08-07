@@ -18,15 +18,21 @@ public:
 
 	//What is the new level of this character
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Upgrade|Level")
-		int NewCharacterLevel;
+		int32 NewCharacterLevel;
 
-	//How much additional health gained at this level
+	//These points determine player strength - power recharge limits, strengths, etc
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Upgrade|Stats")
-		float HealthUpgradeAmount;
+	int32 SuitPowerPoints;
+	//These points determine player capacity - weapon slots, max ammo
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Upgrade|Stats")
+	int32 SuitCapacityPoints;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Upgrade|Stats")
+	//These points determine misc player stats - movement noise
+	int32 SuitAuxPoints;
 
-	//How much additional Shield gained at this level
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Upgrade|Stats")
-		float ShieldUpgradeAmount;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character Upgrade|Level")
+		float NewXPLimit = 1000.0f;
+	
 
 };
 
@@ -124,6 +130,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats")
 		struct FCharacterStatsData CharacterStatsDataStruct;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats")
+		struct FCharacterUpgradeData CharacterUpgradeDataStruct;
+
 
 	//// Start Weapon
 
@@ -135,6 +144,12 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats|Player")
 		FTransform PlayerCheckpointTransform;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats|Experience")
+		float CurrentXPLimit = 1000.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats|Experience")
+		float CurrentXP = 0.0f;
 
 protected:
 	// Called when the game starts
@@ -148,7 +163,10 @@ public:
 		UDataTable *CharacterDataTable;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-		FDataTableRowHandle StatsDataHandle;
+		UDataTable* CharacterUpgradeDataTable;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	//	FDataTableRowHandle StatsDataHandle;
 
 	UFUNCTION(BlueprintCallable)
 		void SetStartValuesFromTable();

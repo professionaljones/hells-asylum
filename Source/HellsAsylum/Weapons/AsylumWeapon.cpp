@@ -11,12 +11,12 @@ AAsylumWeapon::AAsylumWeapon()
 	PrimaryActorTick.bCanEverTick = true;
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>("WeaponMesh");
+	//WeaponMesh = RootComponent;
 	FireArrow = CreateDefaultSubobject<UArrowComponent>("FireLocationArrow");
 	FireArrow->SetupAttachment(WeaponMesh, ProjectileSocket);
 	WeaponAudioComponent = CreateDefaultSubobject<UAudioComponent>("WeaponAudioComponent");
 	WeaponModsComponent = CreateDefaultSubobject<UWeaponModComponent>("WeaponModsComponent");
-	CurrentModOne = WeaponModsComponent->ModSlotOne;
-	CurrentModTwo = WeaponModsComponent->ModSlotTwo;
+	
 	
 
 
@@ -50,7 +50,35 @@ void AAsylumWeapon::Tick(float DeltaTime)
 
 void AAsylumWeapon::ActivateWeaponModInSlot(EWeaponOffenseModType ModSelected)
 {
+	if (WeaponModsComponent->bIsSlotOneEnabled && !WeaponModsComponent->bIsModOneActive)
+	{
+		WeaponModsComponent->bIsModOneActive = true;
+		if (ModSelected == WOM_FireAmmo)
+		{
+			WeaponStatsData.C_WeaponDamageType = C_FireDamageType;
+			WeaponStatsData.DamageModifierAmount = WeaponStatsData.DamageModifierAmount + O_FireDamageType->fDamageModAmount;
+		}
+		if (ModSelected == WOM_IceAmmo)
+		{
+			WeaponStatsData.C_WeaponDamageType = C_IceDamageType;
+			WeaponStatsData.DamageModifierAmount = WeaponStatsData.DamageModifierAmount + O_IceDamageType->fDamageModAmount;
+		}
+	}
+	
+}
 
+void AAsylumWeapon::DeactivateWeaponModInSlot(EWeaponOffenseModType ModSelected)
+{
+	if (WeaponModsComponent->bIsSlotOneEnabled && WeaponModsComponent->bIsModOneActive)
+	{
+		WeaponModsComponent->bIsModOneActive = false;
+		if (ModSelected == WOM_FireAmmo || ModSelected == WOM_IceAmmo)
+		{
+			WeaponStatsData.C_WeaponDamageType = C_OriginalDamageType;
+			WeaponStatsData.DamageModifierAmount = WeaponStatsData.OriginalDamageModifier;
+		}
+	}
+	
 }
 
 void AAsylumWeapon::CheckAmmo()
@@ -124,9 +152,6 @@ void AAsylumWeapon::StartFire()
 	}
 }
 
-void AAsylumWeapon::ActivateWeaponMod()
-{
-}
 
 void AAsylumWeapon::WeaponDryFire()
 {
@@ -201,7 +226,7 @@ void AAsylumWeapon::Fire()
 		//Single line trace
 		if (GetWorld()->LineTraceSingleByObjectType(SingleHit, StartLocation, EndLocation, ObjectsToTarget, CollisionParameters))
 		{
-
+			//DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, true, 5.0f, 5, 5.0f);
 			//If we hit something and said target is what we are looking for
 			if (SingleHit.bBlockingHit && IsValid(HitActor))
 			{

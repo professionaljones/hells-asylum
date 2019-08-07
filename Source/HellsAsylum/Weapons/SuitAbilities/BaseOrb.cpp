@@ -101,11 +101,15 @@ void ABaseOrb::SearchForPlayer()
 		{
 			if (this->SetActorLocation(UKismetMathLibrary::VInterpTo(GetActorLocation(), HitActor->GetActorLocation(), UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f), false, nullptr, ETeleportType::None))
 			{
-				if (PC->GetClass()->ImplementsInterface(UAsylumPlayerInterface::StaticClass()))
+				if (this->SetActorRotation(UKismetMathLibrary::RInterpTo(GetActorRotation(), HitActor->GetActorRotation(), UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f), ETeleportType::None))
 				{
-					PC->Execute_OnRecoverHealth(PC, HealAmount);
+					if (PC->GetClass()->ImplementsInterface(UAsylumPlayerInterface::StaticClass()))
+					{
+						PC->Execute_OnRecoverHealth(PC, HealAmount);
 
+					}
 				}
+				
 			}
 		}
 	}

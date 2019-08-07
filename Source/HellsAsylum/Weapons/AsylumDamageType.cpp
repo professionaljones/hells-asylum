@@ -5,5 +5,5 @@
 
 UAsylumDamageType::UAsylumDamageType()
 {
-	PSC = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("PSC"));
+	//PSC = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("PSC"));
 }

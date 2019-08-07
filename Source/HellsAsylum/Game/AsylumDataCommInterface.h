@@ -33,6 +33,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Campaign")
 		void OnCampaignEnemyDeath(float f_PointsToAdd);
 
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Mission")
 		void OnMissionEnemyDeath(float f_PointsToAdd);
 

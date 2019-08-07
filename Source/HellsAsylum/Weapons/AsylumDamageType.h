@@ -20,6 +20,9 @@ public:
 
 	UAsylumDamageType();
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UParticleSystemComponent* PSC;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+		UParticleSystem* HitFX;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+		float fDamageModAmount = 0.0f;
 };

@@ -44,18 +44,36 @@ AAsylumPlayerCharacter::AAsylumPlayerCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
 	GetCharacterMovement()->JumpZVelocity = 600.f;
 
-	TanksEmptySound = LoadObject<USoundBase>(nullptr, TEXT("SoundCue'/Game/Static/ArtAssets/SFX/Powers/Ar_TanksEmpty_Cue.Ar_TanksEmpty_Cue'"));
-	TanksRechargedSound = LoadObject<USoundBase>(nullptr, TEXT("SoundWave'/Game/Static/ArtAssets/SFX/Powers/Power_Bar_Refilled.Power_Bar_Refilled'"));
+	/*TanksEmptySound = LoadObject<USoundBase>(nullptr, TEXT("SoundCue'/Game/Static/ArtAssets/SFX/Powers/Ar_TanksEmpty_Cue.Ar_TanksEmpty_Cue'"));
+	TanksRechargedSound = LoadObject<USoundBase>(nullptr, TEXT("SoundWave'/Game/Static/ArtAssets/SFX/Powers/Power_Bar_Refilled.Power_Bar_Refilled'"));*/
+
+
 }
 
 bool AAsylumPlayerCharacter::GotMovementInput() const
 {
-	return false;
+	if (bGotForwardInput || bGotRightInput)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+	
 }
 
 bool AAsylumPlayerCharacter::IsSelectingTarget() const
 {
-	return false;
+	if (bStartLockOn)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+	
 }
 
 AActor* AAsylumPlayerCharacter::GetCurrentTarget() const
@@ -73,18 +91,43 @@ FVector2D AAsylumPlayerCharacter::GetCurrentTargetSelectionInput() const
 	return FVector2D();
 }
 
+void AAsylumPlayerCharacter::OnPlayerLevelUp()
+{
+	this->Execute_OnPlayerLevelUpEvent(this);
+}
+
+void AAsylumPlayerCharacter::OnPlayerModXP(float XPMod)
+{
+	if (PlayerStatsComponent)
+	{
+		//Update player XP amount
+		PlayerStatsComponent->CurrentXP = PlayerStatsComponent->CurrentXP + XPMod;
+		//Update UI
+		this->Execute_PlayerUIUpdate(this);
+		if (PlayerStatsComponent->CurrentXP >= PlayerStatsComponent->CurrentXPLimit)
+		{
+			OnPlayerLevelUp();
+		}
+	}
+}
+
 void AAsylumPlayerCharacter::EnableGodModeToggle()
 {
 	if (!bEnableGodMode)
 	{
+		//Set toggle bool to true
 		bEnableGodMode = true;
+		//Prevent player from taking damage
 		this->bCanBeDamaged = false;
+		//This is temporary - multiply movement by 3
 		GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed * 3;
+		//Additionally, give player infinite ammo
 		if (IsValid(CurrentEquippedWeapon))
 		{
 			CurrentEquippedWeapon->GodModeToggle();
 		}
 	}
+	//Disable above
 	else
 	{
 		bEnableGodMode = false;
@@ -100,17 +143,24 @@ void AAsylumPlayerCharacter::EnableGodModeToggle()
 
 void AAsylumPlayerCharacter::GrantFullHealth()
 {
+	//This can be used as a check for healing items or as a cheat
 	PlayerStatsComponent->CharacterStatsDataStruct.fCurrentHealth = PlayerStatsComponent->CharacterStatsDataStruct.fMaxHealth;
+	//Update UI
 	this->Execute_PlayerUIUpdate(this);
 }
 
 void AAsylumPlayerCharacter::GrantFullShield()
 {
-	PlayerStatsComponent->CharacterStatsDataStruct.fCurrentShield = PlayerStatsComponent->CharacterStatsDataStruct.fMaxShield;
-	if (!PlayerStatsComponent->CharacterStatsDataStruct.bHasShield)
+	if (PlayerStatsComponent->CharacterStatsDataStruct.fMaxShield > 0.0f)
 	{
-		PlayerStatsComponent->CharacterStatsDataStruct.bHasShield = true;
+		PlayerStatsComponent->CharacterStatsDataStruct.fCurrentShield = PlayerStatsComponent->CharacterStatsDataStruct.fMaxShield;
+		if (!PlayerStatsComponent->CharacterStatsDataStruct.bHasShield)
+		{
+			PlayerStatsComponent->CharacterStatsDataStruct.bHasShield = true;
+		}
 	}
+	
+	//Update UI
 	this->Execute_PlayerUIUpdate(this);
 }
 
@@ -473,6 +523,14 @@ void AAsylumPlayerCharacter::PlayerEnergyDrain()
 	}
 }
 
+void AAsylumPlayerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	TanksEmptySound = LoadObject<USoundBase>(nullptr, TEXT("SoundCue'/Game/Static/ArtAssets/SFX/Powers/Ar_TanksEmpty_Cue.Ar_TanksEmpty_Cue'"));
+	TanksRechargedSound = LoadObject<USoundBase>(nullptr, TEXT("SoundWave'/Game/Static/ArtAssets/SFX/Powers/Power_Bar_Refilled.Power_Bar_Refilled'"));
+}
+
 void AAsylumPlayerCharacter::MoveForward(float Value)
 {
 	bGotForwardInput = (Controller != NULL) && (Value != 0.0f);
@@ -542,6 +600,7 @@ void AAsylumPlayerCharacter::LookUpAtRate(float Rate)
 
 void AAsylumPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AAsylumPlayerCharacter::PlayerJumpEvent);

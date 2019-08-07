@@ -22,6 +22,8 @@ enum EWeaponSupportModType
 {
 	WSM_None UMETA(DisplayName = "No Mod"),
 	WSM_Regen UMETA(DisplayName = "Regenerative Magazine"),
+	WSM_Reload UMETA(DisplayName = "Reload Speed Boost"),
+	WSM_Target UMETA(DisplayName = "Aim Assistant")
 
 };
 
@@ -34,13 +36,16 @@ public:
 	// Sets default values for this component's properties
 	UWeaponModComponent();
 
+	//Is Slot One able to be used?
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Mods")
 		bool bIsSlotOneEnabled = false;
 
+	//Is Slot Two able to be used?
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Mods")
 		bool bIsSlotTwoEnabled = false;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Mods")
+		bool bIsModOneActive = false;
 
 protected:
 	// Called when the game starts

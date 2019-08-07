@@ -24,8 +24,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player|Stats")
 		class UAsylumStatsComponent* EnemyStatsComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Campaign|AI|Feedback")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Campaign|AI")
 		float f_CampaignPointsToAdd;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Campaign|AI")
+		float PlayerExpMod = 25.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character|AI|")
 		float MaxVisionDistance;
@@ -33,7 +36,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character|AI|")
 		float VisionFOV;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Campaign|AI|Feedback")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mission|AI|")
 		float f_MissionPointsToAdd;
 
 	UFUNCTION(BlueprintCallable, Category = "AI|Attack")
