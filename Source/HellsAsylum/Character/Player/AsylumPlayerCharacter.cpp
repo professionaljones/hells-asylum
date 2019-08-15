@@ -91,6 +91,20 @@ FVector2D AAsylumPlayerCharacter::GetCurrentTargetSelectionInput() const
 	return FVector2D();
 }
 
+void AAsylumPlayerCharacter::ActivateFlashlight()
+{
+	if (!bActivateFlashlight)
+	{
+		bActivateFlashlight = true;
+		SuitLight->SetVisibility(bActivateFlashlight, false);
+	}
+	else
+	{
+		bActivateFlashlight = false;
+		SuitLight->SetVisibility(bActivateFlashlight, false);
+	}
+}
+
 void AAsylumPlayerCharacter::OnPlayerLevelUp()
 {
 	this->Execute_OnPlayerLevelUpEvent(this);
@@ -605,6 +619,10 @@ void AAsylumPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AAsylumPlayerCharacter::PlayerJumpEvent);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AAsylumPlayerCharacter::PlayerEndJump);
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AAsylumPlayerCharacter::OnWeaponAttack);
+	PlayerInputComponent->BindAction("Attack", IE_Released, this, &AAsylumPlayerCharacter::OnWeaponStop);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AAsylumPlayerCharacter::OnWeaponReload);
+	PlayerInputComponent->BindAction("Flashlight", IE_Pressed, this, &AAsylumPlayerCharacter::ActivateFlashlight);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AAsylumPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AAsylumPlayerCharacter::MoveRight);
@@ -751,5 +769,38 @@ void AAsylumPlayerCharacter::UpdateSacrificeStatus()
 		{
 			CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = GoetheSuitComponent->SuitStatsData.SacrificePowerLimit;
 		}
+	}
+}
+
+void AAsylumPlayerCharacter::SetupFlashLight()
+{
+	SuitLight->AttenuationRadius = 800.0f;
+	SuitLight->InnerConeAngle = 22.0f;
+}
+
+void AAsylumPlayerCharacter::OnWeaponAttack()
+{
+	if (CurrentEquippedWeapon)
+	{
+		CurrentEquippedWeapon->StartFire();
+		this->Execute_PlayerUIUpdate(this);
+	}
+}
+
+void AAsylumPlayerCharacter::OnWeaponStop()
+{
+	if (CurrentEquippedWeapon)
+	{
+		CurrentEquippedWeapon->FinishFire();
+		CurrentEquippedWeapon->Execute_OnFinishFire(CurrentEquippedWeapon);
+		this->Execute_PlayerUIUpdate(this);
+	}
+}
+
+void AAsylumPlayerCharacter::OnWeaponReload()
+{
+	if (CurrentEquippedWeapon)
+	{
+		CurrentEquippedWeapon->StartReload();
 	}
 }

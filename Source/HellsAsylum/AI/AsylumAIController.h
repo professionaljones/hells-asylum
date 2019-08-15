@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "GenericTeamAgentInterface.h"
 #include "AsylumAIController.generated.h"
 
 /**
@@ -15,6 +16,9 @@ class HELLSASYLUM_API AAsylumAIController : public AAIController
 	GENERATED_BODY()
 
 public:
+
+	//Constructor
+	AAsylumAIController();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Keys")
 		FName AttackerKey = "Attacker";
@@ -52,5 +56,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
 		UBlackboardComponent* CurrentBlackboardComponent;
 
-	
+public:
+	ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
 };

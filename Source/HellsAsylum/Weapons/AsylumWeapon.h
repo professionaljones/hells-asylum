@@ -13,6 +13,7 @@
 #include "Components/ArrowComponent.h"
 #include "AsylumWeapon.generated.h"
 
+//What kind of weapon is this
 UENUM(BlueprintType)
 enum EWeaponType
 {
@@ -27,6 +28,7 @@ enum EWeaponType
 	WT_Sniper UMETA(DisplayName = "Sniper Rifle")
 };
 
+//What slot should this weapon occupy
 UENUM(BlueprintType)
 enum EWeaponSlotType
 {
@@ -37,6 +39,7 @@ enum EWeaponSlotType
 	ST_Quaternary UMETA(DisplayName = "Special Slot")
 };
 
+//What ammo does this weapon use
 UENUM(BlueprintType)
 enum EAmmoType
 {

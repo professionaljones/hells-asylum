@@ -7,6 +7,7 @@
 #include "HellsAsylum.h"
 #include "Items/ItemBase.h"
 #include "Character/Interfaces/AsylumInteractInterface.h"
+#include "Components/SpotLightComponent.h"
 #include "AsylumPlayerController.h"
 #include "GameComponents/Character/AsylumSuitComponent.h"
 #include "Weapons/SuitAbilities/BaseOrb.h"
@@ -169,6 +170,12 @@ protected:
 	AAsylumPlayerController* PCon = Cast<AAsylumPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	UWorld* World = GetWorld();
 
+	UFUNCTION(BlueprintCallable, Category = "Player|Suit")
+		void ActivateFlashlight();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Input|Aux")
+		bool bActivateFlashlight = false;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SFX)
 		class USoundBase* TanksEmptySound;
 
@@ -216,6 +223,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "Player")
 		class USceneComponent* MyScene;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player")
+		class USpotLightComponent* SuitLight;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Weapon")
 		class AAsylumWeapon* WeaponSlotOne;
@@ -359,7 +369,14 @@ public:
 	FTimerHandle InteractHandle;
 	FTimerHandle TractorHandle;
 private:
+
+	void SetupFlashLight();
+
 	bool bGotForwardInput;
 	bool bGotRightInput;
+
+	void OnWeaponAttack();
+	void OnWeaponStop();
+	void OnWeaponReload();
 
 };
