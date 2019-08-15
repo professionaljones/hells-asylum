@@ -8,6 +8,7 @@
 #include "HellsAsylum.h"
 #include "WeaponModComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "AsylumWeaponAnimInstance.h"
 #include "Components/AudioComponent.h"
 #include "AsylumWeaponInterface.h"
 #include "Components/ArrowComponent.h"
@@ -96,7 +97,7 @@ public:
 
 	///// Ammo
 
-	
+
 
 	//How much ammo should the player have in one clip/magazine
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo", meta = (ClampMin = "0"))
@@ -184,7 +185,7 @@ public:
 
 	////End Damage
 
-	
+
 
 	////Start Charge
 
@@ -192,7 +193,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Charge")
 		float WeaponChargeLimit;
 
-	
+
 
 
 };
@@ -257,8 +258,8 @@ UCLASS()
 class HELLSASYLUM_API AAsylumWeapon : public AActor, public IAsylumWeaponInterface
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AAsylumWeapon();
 
@@ -414,7 +415,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly, Category = "Weapon Mods")
 		class UWeaponModComponent* WeaponModsComponent;
 
-	
+
 
 
 protected:
@@ -442,7 +443,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon|Damage")
 		TSubclassOf<UAsylumDamageType> C_IceDamageType;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -520,5 +521,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon|Cheats")
 		void GodModeToggle();
+
+private:
+
+	UAnimInstance* WeaponABP;
+	UAsylumWeaponAnimInstance* NewABP;
 
 };

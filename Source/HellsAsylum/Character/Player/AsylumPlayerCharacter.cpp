@@ -25,10 +25,17 @@ AAsylumPlayerCharacter::AAsylumPlayerCharacter()
 	//Camera remains in its original position at all time, does not rotate relative to boom
 	FollowCamera->bUsePawnControlRotation = false;
 
+	//Create stats component (contains health, shield and level values)
 	PlayerStatsComponent = CreateDefaultSubobject<UAsylumStatsComponent>(TEXT("PlayerStatsComponent"));
+	//Create suit component (contains suit data and powers)
 	GoetheSuitComponent = CreateDefaultSubobject<UAsylumSuitComponent>(TEXT("GoetheSuitComponent"));
+	//Create one audio component for character dialogue
 	PlayerDialogueAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PlayerDialogueAudioComponent"));
+	//Create one audio component for hurt sounds
 	PlayerSuitAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PlayerSuitAudioComponent"));
+
+	//Create spot light component as flashlight
+	SuitLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("SuitFlashLight"));
 
 	// set our turn rates for input
 	BaseTurnRate = 45.0f;
@@ -784,6 +791,7 @@ void AAsylumPlayerCharacter::OnWeaponAttack()
 	{
 		CurrentEquippedWeapon->StartFire();
 		this->Execute_PlayerUIUpdate(this);
+		
 	}
 }
 

@@ -16,13 +16,12 @@ AAsylumWeapon::AAsylumWeapon()
 	FireArrow->SetupAttachment(WeaponMesh, ProjectileSocket);
 	WeaponAudioComponent = CreateDefaultSubobject<UAudioComponent>("WeaponAudioComponent");
 	WeaponModsComponent = CreateDefaultSubobject<UWeaponModComponent>("WeaponModsComponent");
-	
-	
-
 
 	ObjectsToTarget.Add(UEngineTypes::ConvertToObjectType(ECC_WorldDynamic));
 	ObjectsToTarget.Add(UEngineTypes::ConvertToObjectType(ECC_Pawn));
 	ObjectsToTarget.Add(UEngineTypes::ConvertToObjectType(ECC_Destructible));
+
+
 
 	if (WeaponStatsData.FireRate > 0)
 	{
@@ -39,6 +38,8 @@ void AAsylumWeapon::BeginPlay()
 		ChargeDamageModifer = WeaponStatsData.DamageModifierAmount;
 	}
 	CheckAmmo();
+
+	WeaponABP = WeaponMesh->GetAnimInstance();
 }
 
 // Called every frame
@@ -64,7 +65,7 @@ void AAsylumWeapon::ActivateWeaponModInSlot(EWeaponOffenseModType ModSelected)
 			WeaponStatsData.DamageModifierAmount = WeaponStatsData.DamageModifierAmount + O_IceDamageType->fDamageModAmount;
 		}
 	}
-	
+
 }
 
 void AAsylumWeapon::DeactivateWeaponModInSlot(EWeaponOffenseModType ModSelected)
@@ -78,7 +79,7 @@ void AAsylumWeapon::DeactivateWeaponModInSlot(EWeaponOffenseModType ModSelected)
 			WeaponStatsData.DamageModifierAmount = WeaponStatsData.OriginalDamageModifier;
 		}
 	}
-	
+
 }
 
 void AAsylumWeapon::CheckAmmo()
@@ -148,6 +149,7 @@ void AAsylumWeapon::StartFire()
 	}
 	if (!bCanWeaponFire)
 	{
+		WeaponDryFire();
 		this->Execute_OnEmptyWeaponFire(this);
 	}
 }
@@ -212,18 +214,21 @@ void AAsylumWeapon::Fire()
 				WeaponAudioComponent->Play();
 			}
 		}
-
+		if (WeaponABP->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
 		{
-			AAsylumPlayerCharacter* PChar = Cast<AAsylumPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-			//The StartLocation of the raycast
-			StartLocation = PChar->FollowCamera->GetComponentLocation();
-
-			//The EndLocation of the raycast
-			EndLocation = StartLocation + (PChar->FollowCamera->GetForwardVector() * WeaponRange);
-			//UE_LOG(LogTemp, Warning, TEXT("Using Third Person Camera"));
+			IAsylumWeaponInterface::Execute_OnFire(WeaponABP);
 		}
 
-		//Single line trace
+		AAsylumPlayerCharacter* PChar = Cast<AAsylumPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		//The StartLocation of the raycast
+		StartLocation = PChar->FollowCamera->GetComponentLocation();
+
+		//The EndLocation of the raycast
+		EndLocation = StartLocation + (PChar->FollowCamera->GetForwardVector() * WeaponRange);
+		//UE_LOG(LogTemp, Warning, TEXT("Using Third Person Camera"));
+
+
+	//Single line trace
 		if (GetWorld()->LineTraceSingleByObjectType(SingleHit, StartLocation, EndLocation, ObjectsToTarget, CollisionParameters))
 		{
 			//DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, true, 5.0f, 5, 5.0f);
@@ -351,6 +356,10 @@ void AAsylumWeapon::StartReload()
 		}
 		bIsReloading = true;
 		GetWorldTimerManager().SetTimer(ReloadTimer, this, &AAsylumWeapon::Reload, WeaponStatsData.ReloadSpeed, true);
+		if (WeaponABP->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
+		{
+			IAsylumWeaponInterface::Execute_OnStartReload(WeaponABP);
+		}
 	}
 }
 
