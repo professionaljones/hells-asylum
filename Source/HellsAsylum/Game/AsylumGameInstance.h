@@ -207,6 +207,9 @@ protected:
 
 public:
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game|Campaign Data")
+		FName GetCampaignDifficulty();
+
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game|Save Data")
 		float GetSavedCurrentXP();
 

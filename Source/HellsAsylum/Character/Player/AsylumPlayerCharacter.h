@@ -9,7 +9,7 @@
 #include "Character/Interfaces/AsylumInteractInterface.h"
 #include "Components/SpotLightComponent.h"
 #include "AsylumPlayerController.h"
-#include "GameComponents/Character/AsylumSuitComponent.h"
+
 #include "Weapons/SuitAbilities/BaseOrb.h"
 #include "Components/SceneComponent.h"
 #include "GameComponents/AsylumSpringArmComponent.h"
@@ -19,6 +19,9 @@
 /**
  *
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerUpdateDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FUpdateUIBarDelegate, FName, BarID, float, NewPercentage);
+
 UCLASS()
 class HELLSASYLUM_API AAsylumPlayerCharacter : public AAsylumCharacter, public IAsylumPlayerInterface, public IAsylumInteractInterface
 {
@@ -26,6 +29,12 @@ class HELLSASYLUM_API AAsylumPlayerCharacter : public AAsylumCharacter, public I
 
 public:
 	AAsylumPlayerCharacter();
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, EditAnywhere, BlueprintReadWrite, Category = "Player")
+		FPlayerUpdateDelegate UpdatePlayerData;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Player")
+		FUpdateUIBarDelegate UpdateStatBar;
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
@@ -84,14 +93,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Cheats")
 		bool bEnableGodMode = false;
 
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Player Health Percentage", Keywords = "Health"), Category = "Character|Stats")
-		float GetPlayerHealthPercentage();
 
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Player Shield Percentage", Keywords = "Shield"), Category = "Character|Stats")
-		float GetPlayerShieldPercentage();
-
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Player Aragon Percentage", Keywords = "Shield"), Category = "Character|Stats")
-		float GetPlayerAragonPercentage();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Targets")
 		TArray<TEnumAsByte<EObjectTypeQuery>> Items;
@@ -133,6 +135,8 @@ public:
 		virtual AActor* GetCurrentTarget() const override;
 
 protected:
+
+	virtual void HolsterWeapon() override;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -211,13 +215,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player")
 		class UAudioComponent* PlayerSuitAudioComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player|Stats")
-		class UAsylumStatsComponent* PlayerStatsComponent;
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player|Stats")
+		class UAsylumStatsComponent* PlayerStatsComponent;*/
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player|Stats")
-		class UAsylumSuitComponent* GoetheSuitComponent;
 
-	/** Camera boom positioning the camera behind the character */
+
+		/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player")
 		class UAsylumSpringArmComponent* ThirdPersonCameraBoom;
 

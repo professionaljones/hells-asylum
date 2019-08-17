@@ -5,8 +5,8 @@
 
 UAsylumGameInstance::UAsylumGameInstance()
 {
-	ManualSaveArray = { "Save01","Save02","Save03","Save04","Save05","Save06","Save07","Save08","Save09","Save10" };
-	AutoSaveArray = { "AutoSave01","AutoSave02","AutoSave03","AutoSave04" };
+	ManualSaveArray = { "NOTASAVE","Save01","Save02","Save03","Save04","Save05","Save06","Save07","Save08","Save09","Save10" };
+	AutoSaveArray = { "NOTASAVE","AutoSave01","AutoSave02","AutoSave03","AutoSave04" };
 }
 
 float UAsylumGameInstance::GetSavedCurrentXP()
@@ -42,4 +42,45 @@ FGoetheSuitStatsData UAsylumGameInstance::GetSavedSuitStats()
 bool UAsylumGameInstance::GetCurrentSaveStatus()
 {
 	return bWasSaveLoaded;
+}
+
+FName UAsylumGameInstance::GetCampaignDifficulty()
+{
+	switch (SaveDataStruct.SavedGameDifficulty_Campaign)
+	{
+	case 1:
+		return "Easy";
+		break;
+	case 2:
+		return "Normal";
+		break;
+	case 3:
+		return "Hard";
+		break;
+	case 4:
+		return "Extreme";
+		break;
+	case 5:
+		return "Huntress";
+		break;
+	case 6:
+		return "Easy+";
+		break;
+	case 7:
+		return "Normal+";
+		break;
+	case 8:
+		return "Hard+";
+		break;
+	case 9:
+		return "Extreme+";
+		break;
+	case 10:
+		return "Huntress+";
+		break;
+	default:
+		return "No Difficulty";
+		UE_LOG(LogTemp,Warning,TEXT("No difficulty has been selected!"));
+		break;
+	}
 }

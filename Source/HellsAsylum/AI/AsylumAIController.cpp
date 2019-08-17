@@ -5,7 +5,7 @@
 
 AAsylumAIController::AAsylumAIController()
 {
-	SetGenericTeamId(FGenericTeamId(10));
+	SetGenericTeamId(FGenericTeamId(13));
 }
 
 ETeamAttitude::Type AAsylumAIController::GetTeamAttitudeTowards(const AActor& Other) const

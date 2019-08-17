@@ -57,7 +57,10 @@ public:
 		void OnPlayerReloadFinish();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
-		void OnPlayerUseItem(TSubclassOf<AItemBase> ItemInUse);
+		void OnItemPickup(TSubclassOf<AItemBase> NewItem, int32 NewItemKey);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
+		void OnPlayerUseItem(AItemBase* ItemInUse);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Player")
 		void OnPlayerConsumeItem(int32 ItemAtIndexToRemove);

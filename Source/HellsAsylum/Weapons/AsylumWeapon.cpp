@@ -42,6 +42,36 @@ void AAsylumWeapon::BeginPlay()
 	WeaponABP = WeaponMesh->GetAnimInstance();
 }
 
+void AAsylumWeapon::AttachToOwner()
+{
+	if (MyPawn)
+	{
+		USkeletalMeshComponent* PawnMesh = MyPawn->GetMesh();
+		if (PawnMesh)
+		{
+			WeaponMesh->AttachToComponent(PawnMesh, FAttachmentTransformRules::KeepRelativeTransform, WeaponAttachPoint);
+			if (bHidden)
+			{
+				this->SetActorHiddenInGame(false);
+			}
+			else
+			{
+				this->SetActorHiddenInGame(true);
+			}
+		}
+	}
+}
+
+void AAsylumWeapon::SetWeaponOwner(AAsylumCharacter* NewOwner)
+{
+	if (MyPawn != NewOwner)
+	{
+		Instigator = NewOwner;
+		MyPawn = NewOwner;
+		SetOwner(NewOwner);
+	}
+}
+
 // Called every frame
 void AAsylumWeapon::Tick(float DeltaTime)
 {
@@ -350,7 +380,6 @@ void AAsylumWeapon::StartReload()
 	{
 		if (WeaponReloadSound != NULL)
 		{
-			//UGameplayStatics::PlaySoundAtLocation(this, WeaponReloadSound, GetActorLocation(), 1.0f, 1.0f, 0.0f);
 			WeaponAudioComponent->SetSound(WeaponReloadSound);
 			WeaponAudioComponent->Play();
 		}
@@ -371,12 +400,16 @@ void AAsylumWeapon::FinishReload()
 		bCanWeaponFire = true;
 		GetWorldTimerManager().ClearTimer(ReloadTimer);
 		CurrentReloadTime = 0.0f;
-
-		if (this->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
+		this->Execute_OnFinishReload(this);
+		if(MyPawn->GetClass()->ImplementsInterface(UAsylumPlayerInterface::StaticClass()))
 		{
-			IAsylumWeaponInterface::Execute_OnFinishReload(this);
-			//GLog->Log("Reload UI update");
+			IAsylumPlayerInterface::Execute_OnPlayerReloadFinish(MyPawn);
 		}
+		// if (this->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
+		// {
+		// 	IAsylumWeaponInterface::Execute_OnFinishReload(this);
+			
+		// }
 
 
 	}

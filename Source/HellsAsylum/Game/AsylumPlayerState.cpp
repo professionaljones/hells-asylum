@@ -9,20 +9,20 @@ void AAsylumPlayerState::CachePlayerStats()
 	AAsylumPlayerCharacter* PlayerCharacter = Cast<AAsylumPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (PlayerCharacter)
 	{
-		CachedCharacterStats.bHasShield = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.bHasShield;
-		CachedCharacterStats.fCurrentHealth = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fCurrentHealth;
-		CachedCharacterStats.fCurrentShield = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fCurrentShield;
-		CachedCharacterStats.fMaxHealth = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fMaxHealth;
-		CachedCharacterStats.fMaxShield = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fMaxShield;
-		CachedCharacterStats.iCurrentCharacterLevel = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.iCurrentCharacterLevel;
-		CachedCharacterStats.iMaxCharacterLevel = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.iMaxCharacterLevel;
-		CachedCharacterStats.fFireResist = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fFireResist;
-		CachedCharacterStats.fIceResist = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fIceResist;
-		CachedCharacterStats.fShockResist = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fShockResist;
-		CachedCharacterStats.fMovementLoudness = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fMovementLoudness;
-		CachedCharacterStats.fMovementMaxRange = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fMovementMaxRange;
-		CachedCharacterStats.fCrouchMovementLoudness = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fCrouchMovementLoudness;
-		CachedCharacterStats.fCrouchMovementMaxRange = PlayerCharacter->PlayerStatsComponent->CharacterStatsDataStruct.fCrouchMovementMaxRange;
+		CachedCharacterStats.bHasShield = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.bHasShield;
+		CachedCharacterStats.fCurrentHealth = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.fCurrentHealth;
+		CachedCharacterStats.fCurrentShield = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.fCurrentShield;
+		CachedCharacterStats.fMaxHealth = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.fMaxHealth;
+		CachedCharacterStats.fMaxShield = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.fMaxShield;
+		CachedCharacterStats.iCurrentCharacterLevel = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.iCurrentCharacterLevel;
+		CachedCharacterStats.iMaxCharacterLevel = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.iMaxCharacterLevel;
+		CachedCharacterStats.fFireResist = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.fFireResist;
+		CachedCharacterStats.fIceResist = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.fIceResist;
+		CachedCharacterStats.fShockResist = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.fShockResist;
+		CachedCharacterStats.fMovementLoudness = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.fMovementLoudness;
+		CachedCharacterStats.fMovementMaxRange = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.fMovementMaxRange;
+		CachedCharacterStats.fCrouchMovementLoudness = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.fCrouchMovementLoudness;
+		CachedCharacterStats.fCrouchMovementMaxRange = PlayerCharacter->CharacterStatsComponent->CharacterStatsDataStruct.fCrouchMovementMaxRange;
 		CachedPlayerWeaponInventory = PlayerCharacter->PlayerWeaponInventory;
 		CachedPlayerItemInventory = PlayerCharacter->ItemInventory;
 	}

@@ -26,7 +26,7 @@ AAsylumPlayerCharacter::AAsylumPlayerCharacter()
 	FollowCamera->bUsePawnControlRotation = false;
 
 	//Create stats component (contains health, shield and level values)
-	PlayerStatsComponent = CreateDefaultSubobject<UAsylumStatsComponent>(TEXT("PlayerStatsComponent"));
+	CharacterStatsComponent = CreateDefaultSubobject<UAsylumStatsComponent>(TEXT("PlayerStatsComponent"));
 	//Create suit component (contains suit data and powers)
 	GoetheSuitComponent = CreateDefaultSubobject<UAsylumSuitComponent>(TEXT("GoetheSuitComponent"));
 	//Create one audio component for character dialogue
@@ -119,13 +119,13 @@ void AAsylumPlayerCharacter::OnPlayerLevelUp()
 
 void AAsylumPlayerCharacter::OnPlayerModXP(float XPMod)
 {
-	if (PlayerStatsComponent)
+	if (CharacterStatsComponent)
 	{
 		//Update player XP amount
-		PlayerStatsComponent->CurrentXP = PlayerStatsComponent->CurrentXP + XPMod;
+		CharacterStatsComponent->CurrentXP = CharacterStatsComponent->CurrentXP + XPMod;
 		//Update UI
 		this->Execute_PlayerUIUpdate(this);
-		if (PlayerStatsComponent->CurrentXP >= PlayerStatsComponent->CurrentXPLimit)
+		if (CharacterStatsComponent->CurrentXP >= CharacterStatsComponent->CurrentXPLimit)
 		{
 			OnPlayerLevelUp();
 		}
@@ -165,19 +165,19 @@ void AAsylumPlayerCharacter::EnableGodModeToggle()
 void AAsylumPlayerCharacter::GrantFullHealth()
 {
 	//This can be used as a check for healing items or as a cheat
-	PlayerStatsComponent->CharacterStatsDataStruct.fCurrentHealth = PlayerStatsComponent->CharacterStatsDataStruct.fMaxHealth;
+	CharacterStatsComponent->CharacterStatsDataStruct.fCurrentHealth = CharacterStatsComponent->CharacterStatsDataStruct.fMaxHealth;
 	//Update UI
 	this->Execute_PlayerUIUpdate(this);
 }
 
 void AAsylumPlayerCharacter::GrantFullShield()
 {
-	if (PlayerStatsComponent->CharacterStatsDataStruct.fMaxShield > 0.0f)
+	if (CharacterStatsComponent->CharacterStatsDataStruct.fMaxShield > 0.0f)
 	{
-		PlayerStatsComponent->CharacterStatsDataStruct.fCurrentShield = PlayerStatsComponent->CharacterStatsDataStruct.fMaxShield;
-		if (!PlayerStatsComponent->CharacterStatsDataStruct.bHasShield)
+		CharacterStatsComponent->CharacterStatsDataStruct.fCurrentShield = CharacterStatsComponent->CharacterStatsDataStruct.fMaxShield;
+		if (!CharacterStatsComponent->CharacterStatsDataStruct.bHasShield)
 		{
-			PlayerStatsComponent->CharacterStatsDataStruct.bHasShield = true;
+			CharacterStatsComponent->CharacterStatsDataStruct.bHasShield = true;
 		}
 	}
 	
@@ -469,43 +469,11 @@ void AAsylumPlayerCharacter::OnSacrificeConsumption()
 {
 	if (GoetheSuitComponent->bStartMainAbility)
 	{
-		PlayerStatsComponent->CharacterStatsDataStruct.fCurrentHealth = PlayerStatsComponent->CharacterStatsDataStruct.fCurrentHealth - GoetheSuitComponent->SuitStatsData.SacrificeConsumptionRate;
+		CharacterStatsComponent->CharacterStatsDataStruct.fCurrentHealth = CharacterStatsComponent->CharacterStatsDataStruct.fCurrentHealth - GoetheSuitComponent->SuitStatsData.SacrificeConsumptionRate;
 		UpdateSacrificeStatus();
 	}
 }
 
-float AAsylumPlayerCharacter::GetPlayerHealthPercentage()
-{
-	float Percentage = PlayerStatsComponent->CharacterStatsDataStruct.fCurrentHealth / PlayerStatsComponent->CharacterStatsDataStruct.fMaxHealth;
-	if (Percentage >= 0)
-	{
-		return Percentage;
-	}
-	else
-		return 0.0f;
-}
-
-float AAsylumPlayerCharacter::GetPlayerShieldPercentage()
-{
-	float Percentage = PlayerStatsComponent->CharacterStatsDataStruct.fCurrentShield / PlayerStatsComponent->CharacterStatsDataStruct.fMaxShield;
-	if (Percentage >= 0)
-	{
-		return Percentage;
-	}
-	else
-		return 0.0f;
-}
-
-float AAsylumPlayerCharacter::GetPlayerAragonPercentage()
-{
-	float Percentage = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge / GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
-	if (Percentage >= 0)
-	{
-		return Percentage;
-	}
-	else
-		return 0.0f;
-}
 
 void AAsylumPlayerCharacter::ItemTractorBeam()
 {
@@ -544,6 +512,12 @@ void AAsylumPlayerCharacter::PlayerEnergyDrain()
 	}
 }
 
+void AAsylumPlayerCharacter::HolsterWeapon()
+{
+	Super::HolsterWeapon();
+	this->Execute_PlayerUIUpdate(this);
+}
+
 void AAsylumPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -568,11 +542,11 @@ void AAsylumPlayerCharacter::MoveForward(float Value)
 			AddMovementInput(Direction, Value);
 			if (!bIsCrouched)
 			{
-				MakeNoise(PlayerStatsComponent->CharacterStatsDataStruct.fMovementLoudness, UGameplayStatics::GetPlayerPawn(GetWorld(), 0), GetActorLocation(), PlayerStatsComponent->CharacterStatsDataStruct.fMovementMaxRange, PlayerTag);
+				MakeNoise(CharacterStatsComponent->CharacterStatsDataStruct.fMovementLoudness, UGameplayStatics::GetPlayerPawn(GetWorld(), 0), GetActorLocation(), CharacterStatsComponent->CharacterStatsDataStruct.fMovementMaxRange, PlayerTag);
 			}
 			else
 			{
-				MakeNoise(PlayerStatsComponent->CharacterStatsDataStruct.fCrouchMovementLoudness, UGameplayStatics::GetPlayerPawn(GetWorld(), 0), GetActorLocation(), PlayerStatsComponent->CharacterStatsDataStruct.fCrouchMovementMaxRange, PlayerTag);
+				MakeNoise(CharacterStatsComponent->CharacterStatsDataStruct.fCrouchMovementLoudness, UGameplayStatics::GetPlayerPawn(GetWorld(), 0), GetActorLocation(), CharacterStatsComponent->CharacterStatsDataStruct.fCrouchMovementMaxRange, PlayerTag);
 			}
 		}
 
@@ -596,11 +570,11 @@ void AAsylumPlayerCharacter::MoveRight(float Value)
 			AddMovementInput(Direction, Value);
 			if (!bIsCrouched)
 			{
-				MakeNoise(PlayerStatsComponent->CharacterStatsDataStruct.fMovementLoudness, UGameplayStatics::GetPlayerPawn(GetWorld(), 0), GetActorLocation(), PlayerStatsComponent->CharacterStatsDataStruct.fMovementMaxRange, PlayerTag);
+				MakeNoise(CharacterStatsComponent->CharacterStatsDataStruct.fMovementLoudness, UGameplayStatics::GetPlayerPawn(GetWorld(), 0), GetActorLocation(), CharacterStatsComponent->CharacterStatsDataStruct.fMovementMaxRange, PlayerTag);
 			}
 			else
 			{
-				MakeNoise(PlayerStatsComponent->CharacterStatsDataStruct.fCrouchMovementLoudness, UGameplayStatics::GetPlayerPawn(GetWorld(), 0), GetActorLocation(), PlayerStatsComponent->CharacterStatsDataStruct.fCrouchMovementMaxRange, PlayerTag);
+				MakeNoise(CharacterStatsComponent->CharacterStatsDataStruct.fCrouchMovementLoudness, UGameplayStatics::GetPlayerPawn(GetWorld(), 0), GetActorLocation(), CharacterStatsComponent->CharacterStatsDataStruct.fCrouchMovementMaxRange, PlayerTag);
 			}
 		}
 
@@ -790,7 +764,9 @@ void AAsylumPlayerCharacter::OnWeaponAttack()
 	if (CurrentEquippedWeapon)
 	{
 		CurrentEquippedWeapon->StartFire();
+		this->Execute_OnWeaponFire(this, CurrentEquippedWeapon->WeaponStatsData.WeaponType);
 		this->Execute_PlayerUIUpdate(this);
+		
 		
 	}
 }
@@ -810,5 +786,6 @@ void AAsylumPlayerCharacter::OnWeaponReload()
 	if (CurrentEquippedWeapon)
 	{
 		CurrentEquippedWeapon->StartReload();
+		this->Execute_OnPlayerReload(this);
 	}
 }

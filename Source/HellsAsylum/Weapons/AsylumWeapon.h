@@ -443,7 +443,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon|Damage")
 		TSubclassOf<UAsylumDamageType> C_IceDamageType;
 
+	
+
+	class AAsylumCharacter* MyPawn;
+
 public:
+
+	
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -521,6 +528,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon|Cheats")
 		void GodModeToggle();
+
+	void AttachToOwner();
+	void SetWeaponOwner(AAsylumCharacter* NewOwner);
 
 private:
 

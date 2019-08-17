@@ -8,18 +8,83 @@
 // Sets default values
 AAsylumCharacter::AAsylumCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	LockOnActorsToIgnore.Add(this);
 	//TValidLockOnObjects.Add(UEngineTypes::ConvertToObjectType(ECC_Pawn));
 }
 
+float AAsylumCharacter::GetHealthPercentage()
+{
+	if (CharacterStatsComponent)
+	{
+		return CharacterStatsComponent->CharacterStatsDataStruct.fCurrentHealth / CharacterStatsComponent->CharacterStatsDataStruct.fMaxHealth;
+	}
+	else
+	{
+		return 0.0f;
+	}
+}
+
+float AAsylumCharacter::GetShieldPercentage()
+{
+	if (CharacterStatsComponent)
+	{
+		return CharacterStatsComponent->CharacterStatsDataStruct.fCurrentShield / CharacterStatsComponent->CharacterStatsDataStruct.fMaxShield;
+	}
+	else
+	{
+		return 0.0f;
+	}
+}
+
+float AAsylumCharacter::GetAragonPercentage()
+{
+	if (GoetheSuitComponent)
+	{
+		return GoetheSuitComponent->SuitStatsData.CurrentAragonGauge / GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
+	}
+	else
+	{
+		return 0.0f;
+	}
+}
+
 // Called when the game starts or when spawned
 void AAsylumCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+}
+
+
+void AAsylumCharacter::EquipWeapon(AAsylumWeapon* NewWeapon)
+{
+	if (NewWeapon != NULL)
+	{
+		if (CurrentEquippedWeapon)
+		{
+			CurrentEquippedWeapon->SetActorHiddenInGame(false);
+			CurrentEquippedWeapon = NULL;
+
+		}
+		CurrentEquippedWeapon = NewWeapon;
+		CurrentEquippedWeapon->SetWeaponOwner(this);
+		CurrentEquippedWeapon->AttachToOwner();
+		this->Execute_OnWeaponEquip(this, CurrentEquippedWeapon->WeaponStatsData.WeaponType);
+		bIsInCombat = true;
+	}
+}
+
+void AAsylumCharacter::HolsterWeapon()
+{
+	if (CurrentEquippedWeapon)
+	{
+		CurrentEquippedWeapon->SetActorHiddenInGame(false);
+		CurrentEquippedWeapon = NULL;
+		bIsInCombat = false;
+	}
 }
 
 // Called every frame
@@ -52,9 +117,9 @@ bool AAsylumCharacter::IsInCombat() const
 		}
 
 	}
-	
-		return false;
-	
+
+	return false;
+
 }
 
 bool AAsylumCharacter::IsSelectingTarget() const
@@ -62,7 +127,7 @@ bool AAsylumCharacter::IsSelectingTarget() const
 	return false;
 }
 
-AActor * AAsylumCharacter::GetCurrentTarget() const
+AActor* AAsylumCharacter::GetCurrentTarget() const
 {
 	return nullptr;
 }

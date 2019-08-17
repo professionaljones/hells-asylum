@@ -58,6 +58,15 @@ public:
 		void OnMissionMode(bool bIsMissionMode);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Weapon")
+		void OnWeaponEquip(EWeaponType NewWeaponType);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Weapon")
+		void OnWeaponFire(EWeaponType CurrentWeaponType);
+
+		UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Weapon")
+		void OnWeaponHolster(EWeaponType NewWeaponType);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Weapon")
 		void OnAI_Fire();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Weapon")
