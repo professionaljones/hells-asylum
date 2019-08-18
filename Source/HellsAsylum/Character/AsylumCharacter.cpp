@@ -79,11 +79,25 @@ void AAsylumCharacter::EquipWeapon(AAsylumWeapon* NewWeapon)
 
 void AAsylumCharacter::HolsterWeapon()
 {
+	bIsInCombat = false;
 	if (CurrentEquippedWeapon)
-	{
-		CurrentEquippedWeapon->SetActorHiddenInGame(false);
+	{	
+		CurrentEquippedWeapon->SetActorHiddenInGame(true);
 		CurrentEquippedWeapon = NULL;
-		bIsInCombat = false;
+	}
+}
+
+void AAsylumCharacter::CharacterSprint()
+{
+	//bIsRunning = !bIsRunning;
+
+	if (bIsRunning)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = CharacterRunSpeed;
+	}
+	else
+	{
+		GetCharacterMovement()->MaxWalkSpeed = CharacterWalkSpeed;
 	}
 }
 

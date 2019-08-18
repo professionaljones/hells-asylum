@@ -18,8 +18,6 @@ bool UCameraModInCombatState::ModifyCamera(float DeltaTime, FMinimalViewInfo & I
 	{
 		if (PlayerCharacter->GetClass()->ImplementsInterface(UCombatActorInterface::StaticClass()))
 		{
-
-
 			if (PlayerCharacter->bIsInCombat)
 			{
 				if (!PlayerCharacter->bIsCrouchButtonDown)

@@ -34,8 +34,7 @@ AAsylumPlayerCharacter::AAsylumPlayerCharacter()
 	//Create one audio component for hurt sounds
 	PlayerSuitAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PlayerSuitAudioComponent"));
 
-	//Create spot light component as flashlight
-	SuitLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("SuitFlashLight"));
+
 
 	// set our turn rates for input
 	BaseTurnRate = 45.0f;
@@ -51,10 +50,6 @@ AAsylumPlayerCharacter::AAsylumPlayerCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
 	GetCharacterMovement()->JumpZVelocity = 600.f;
 
-	/*TanksEmptySound = LoadObject<USoundBase>(nullptr, TEXT("SoundCue'/Game/Static/ArtAssets/SFX/Powers/Ar_TanksEmpty_Cue.Ar_TanksEmpty_Cue'"));
-	TanksRechargedSound = LoadObject<USoundBase>(nullptr, TEXT("SoundWave'/Game/Static/ArtAssets/SFX/Powers/Power_Bar_Refilled.Power_Bar_Refilled'"));*/
-
-
 }
 
 bool AAsylumPlayerCharacter::GotMovementInput() const
@@ -67,7 +62,7 @@ bool AAsylumPlayerCharacter::GotMovementInput() const
 	{
 		return false;
 	}
-	
+
 }
 
 bool AAsylumPlayerCharacter::IsSelectingTarget() const
@@ -80,7 +75,7 @@ bool AAsylumPlayerCharacter::IsSelectingTarget() const
 	{
 		return false;
 	}
-	
+
 }
 
 AActor* AAsylumPlayerCharacter::GetCurrentTarget() const
@@ -100,7 +95,7 @@ FVector2D AAsylumPlayerCharacter::GetCurrentTargetSelectionInput() const
 
 void AAsylumPlayerCharacter::ActivateFlashlight()
 {
-	if (!bActivateFlashlight)
+	/*if (!bActivateFlashlight)
 	{
 		bActivateFlashlight = true;
 		SuitLight->SetVisibility(bActivateFlashlight, false);
@@ -109,7 +104,7 @@ void AAsylumPlayerCharacter::ActivateFlashlight()
 	{
 		bActivateFlashlight = false;
 		SuitLight->SetVisibility(bActivateFlashlight, false);
-	}
+	}*/
 }
 
 void AAsylumPlayerCharacter::OnPlayerLevelUp()
@@ -180,7 +175,7 @@ void AAsylumPlayerCharacter::GrantFullShield()
 			CharacterStatsComponent->CharacterStatsDataStruct.bHasShield = true;
 		}
 	}
-	
+
 	//Update UI
 	this->Execute_PlayerUIUpdate(this);
 }
@@ -251,8 +246,9 @@ void AAsylumPlayerCharacter::PlayerInteractRaycast()
 
 }
 
-void AAsylumPlayerCharacter::ActivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility)
+void AAsylumPlayerCharacter::ActivateMainAbility()
 {
+	EGoetheMainAbilities PlayerSelectedAbility = GoetheSuitComponent->SuitStatsData.GoetheSelectedMainAbility;
 	CheckAragonStatus();
 	if (GoetheSuitComponent->bEnableMainAbility)
 	{
@@ -268,8 +264,8 @@ void AAsylumPlayerCharacter::ActivateMainAbility(EGoetheMainAbilities PlayerSele
 		{
 			ActivateSacrifice();
 		}
-	}
 
+	}
 }
 
 void AAsylumPlayerCharacter::ActivatePassivePower(EGoethePassivePowers PowerToUse)
@@ -291,11 +287,11 @@ void AAsylumPlayerCharacter::ActivatePassivePower(EGoethePassivePowers PowerToUs
 	}
 }
 
-void AAsylumPlayerCharacter::DeactivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility)
+void AAsylumPlayerCharacter::DeactivateMainAbility()
 {
+	EGoetheMainAbilities PlayerSelectedAbility = GoetheSuitComponent->SuitStatsData.GoetheSelectedMainAbility;
 	if (GoetheSuitComponent->bEnableMainAbility)
 	{
-		//CheckAragonStatus();
 		if (PlayerSelectedAbility == MA_Quicksilver)
 		{
 			DeactivateQuicksilver();
@@ -325,6 +321,62 @@ void AAsylumPlayerCharacter::ActivateSelectedPower(EGoetheActivePowers PowerSele
 	if (PowerSelected == AP_Tractor)
 	{
 		GetWorldTimerManager().SetTimer(TractorHandle, this, &AAsylumPlayerCharacter::ItemTractorBeam, UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), true);
+	}
+}
+
+void AAsylumPlayerCharacter::ActivatePowerOne()
+{
+	if (GoetheSuitComponent)
+	{
+		EGoetheActivePowers PowerSelected = AP_None;
+		if (PowerSelected == AP_DespairOrb)
+		{
+			SpawnDespairOrb(GoetheSuitComponent->SuitStatsData.DespairOrbCurrentLevel);
+		}
+		if (PowerSelected == AP_HarmonyOrb)
+		{
+			SpawnHarmonyOrb(GoetheSuitComponent->SuitStatsData.HarmonyOrbCurrentLevel);
+		}
+	}
+}
+
+void AAsylumPlayerCharacter::ActivatePowerTwo()
+{
+	if (GoetheSuitComponent)
+	{
+		EGoetheActivePowers PowerSelected = AP_None;
+		if (PowerSelected == AP_DespairOrb)
+		{
+			SpawnDespairOrb(GoetheSuitComponent->SuitStatsData.DespairOrbCurrentLevel);
+		}
+		if (PowerSelected == AP_HarmonyOrb)
+		{
+			SpawnHarmonyOrb(GoetheSuitComponent->SuitStatsData.HarmonyOrbCurrentLevel);
+		}
+	}
+}
+
+void AAsylumPlayerCharacter::ActivatePowerThree()
+{
+	if (GoetheSuitComponent)
+	{
+		EGoetheActivePowers PowerSelected = AP_None;
+		if (PowerSelected == AP_Tractor)
+		{
+			GetWorldTimerManager().SetTimer(TractorHandle, this, &AAsylumPlayerCharacter::ItemTractorBeam, UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), true);
+		}
+	}
+}
+
+void AAsylumPlayerCharacter::DeactivatePowerThree()
+{
+	if (GoetheSuitComponent)
+	{
+		EGoetheActivePowers PowerSelected = AP_None;
+		if (PowerSelected == AP_Tractor)
+		{
+			GetWorldTimerManager().SetTimer(TractorHandle, this, &AAsylumPlayerCharacter::ItemTractorBeam, UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), true);
+		}
 	}
 }
 
@@ -420,7 +472,7 @@ void AAsylumPlayerCharacter::RechargeAragonTanks()
 		GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.CurrentAragonGauge + GoetheSuitComponent->SuitStatsData.AragonRegenAmount;
 		if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge >= GoetheSuitComponent->SuitStatsData.MaxAragonGauge)
 		{
-			
+
 			if (GoetheSuitComponent->SuitStatsData.CurrentAragonTanks < GoetheSuitComponent->SuitStatsData.MaxAragonTanks)
 			{
 				GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = 0.0f;
@@ -451,8 +503,6 @@ void AAsylumPlayerCharacter::OnQuicksilverConsumption()
 	if (GoetheSuitComponent->bStartMainAbility)
 	{
 		ConsumeAragon(GoetheSuitComponent->SuitStatsData.QuicksilverConsumptionRate);
-		//CheckAragonStatus();
-
 	}
 }
 
@@ -485,8 +535,7 @@ void AAsylumPlayerCharacter::ItemTractorBeam()
 	{
 		if (HitActor)
 		{
-
-
+			//TODO: Update function 
 		}
 	}
 }
@@ -512,18 +561,53 @@ void AAsylumPlayerCharacter::PlayerEnergyDrain()
 	}
 }
 
+void AAsylumPlayerCharacter::EquipWeaponOne()
+{
+	if (WeaponSlotOne)
+	{
+		EquipWeapon(WeaponSlotOne);
+	}
+}
+
+void AAsylumPlayerCharacter::EquipWeaponTwo()
+{
+	if (WeaponSlotTwo)
+	{
+		EquipWeapon(WeaponSlotTwo);
+	}
+}
+
+void AAsylumPlayerCharacter::EquipWeaponThree()
+{
+	if (WeaponSlotThree)
+	{
+		EquipWeapon(WeaponSlotThree);
+	}
+}
+
 void AAsylumPlayerCharacter::HolsterWeapon()
 {
 	Super::HolsterWeapon();
 	this->Execute_PlayerUIUpdate(this);
+	this->Execute_OnWeaponEquip(this, WT_Unequipped);
+}
+
+void AAsylumPlayerCharacter::CharacterSprint()
+{
+	bIsRunning = bIsSprintButtonDown;
+	Super::CharacterSprint();
+	if (bIsRunning && bIsSprintingToggle)
+	{
+		Super::CharacterSprint();
+	}
 }
 
 void AAsylumPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	TanksEmptySound = LoadObject<USoundBase>(nullptr, TEXT("SoundCue'/Game/Static/ArtAssets/SFX/Powers/Ar_TanksEmpty_Cue.Ar_TanksEmpty_Cue'"));
-	TanksRechargedSound = LoadObject<USoundBase>(nullptr, TEXT("SoundWave'/Game/Static/ArtAssets/SFX/Powers/Power_Bar_Refilled.Power_Bar_Refilled'"));
+	//SetupFlashLight();
+	//TanksEmptySound = LoadObject<USoundBase>(nullptr, TEXT("SoundCue'/Game/Static/ArtAssets/SFX/Powers/Ar_TanksEmpty_Cue.Ar_TanksEmpty_Cue'"));
+	//TanksRechargedSound = LoadObject<USoundBase>(nullptr, TEXT("SoundWave'/Game/Static/ArtAssets/SFX/Powers/Power_Bar_Refilled.Power_Bar_Refilled'"));
 }
 
 void AAsylumPlayerCharacter::MoveForward(float Value)
@@ -549,7 +633,6 @@ void AAsylumPlayerCharacter::MoveForward(float Value)
 				MakeNoise(CharacterStatsComponent->CharacterStatsDataStruct.fCrouchMovementLoudness, UGameplayStatics::GetPlayerPawn(GetWorld(), 0), GetActorLocation(), CharacterStatsComponent->CharacterStatsDataStruct.fCrouchMovementMaxRange, PlayerTag);
 			}
 		}
-
 	}
 }
 
@@ -577,7 +660,6 @@ void AAsylumPlayerCharacter::MoveRight(float Value)
 				MakeNoise(CharacterStatsComponent->CharacterStatsDataStruct.fCrouchMovementLoudness, UGameplayStatics::GetPlayerPawn(GetWorld(), 0), GetActorLocation(), CharacterStatsComponent->CharacterStatsDataStruct.fCrouchMovementMaxRange, PlayerTag);
 			}
 		}
-
 	}
 }
 
@@ -603,7 +685,19 @@ void AAsylumPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AAsylumPlayerCharacter::OnWeaponAttack);
 	PlayerInputComponent->BindAction("Attack", IE_Released, this, &AAsylumPlayerCharacter::OnWeaponStop);
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AAsylumPlayerCharacter::OnWeaponReload);
-	PlayerInputComponent->BindAction("Flashlight", IE_Pressed, this, &AAsylumPlayerCharacter::ActivateFlashlight);
+	PlayerInputComponent->BindAction("Holster", IE_Pressed, this, &AAsylumPlayerCharacter::HolsterWeapon);
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AAsylumPlayerCharacter::CharacterSprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AAsylumPlayerCharacter::CharacterSprint);
+	//PlayerInputComponent->BindAction("Flashlight", IE_Pressed, this, &AAsylumPlayerCharacter::ActivateFlashlight);
+	PlayerInputComponent->BindAction("Activate Main Ability", IE_Pressed, this, &AAsylumPlayerCharacter::ActivateMainAbility);
+	//PlayerInputComponent->BindAction("Activate Main Ability", IE_Released, this, &AAsylumPlayerCharacter::DeactivateMainAbility);
+	PlayerInputComponent->BindAction("Activate Power One", IE_Pressed, this, &AAsylumPlayerCharacter::ActivatePowerOne);
+	PlayerInputComponent->BindAction("Activate Power Two", IE_Pressed, this, &AAsylumPlayerCharacter::ActivatePowerTwo);
+	PlayerInputComponent->BindAction("Activate Power Three", IE_Pressed, this, &AAsylumPlayerCharacter::ActivatePowerThree);
+	PlayerInputComponent->BindAction("Activate Power Three", IE_Released, this, &AAsylumPlayerCharacter::DeactivatePowerThree);
+	PlayerInputComponent->BindAction("Select Primary Weapon One", IE_Pressed, this, &AAsylumPlayerCharacter::EquipWeaponOne);
+	PlayerInputComponent->BindAction("Select Primary Weapon Two", IE_Pressed, this, &AAsylumPlayerCharacter::EquipWeaponTwo);
+	PlayerInputComponent->BindAction("Select Secondary Weapon", IE_Pressed, this, &AAsylumPlayerCharacter::EquipWeaponThree);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AAsylumPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AAsylumPlayerCharacter::MoveRight);
@@ -644,7 +738,6 @@ void AAsylumPlayerCharacter::DeactivateQuicksilver()
 {
 	if (GoetheSuitComponent->bStartMainAbility)
 	{
-		//CheckAragonStatus();
 		GoetheSuitComponent->bStartMainAbility = false;
 		CustomTimeDilation = 1;
 		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
@@ -652,7 +745,6 @@ void AAsylumPlayerCharacter::DeactivateQuicksilver()
 		if (IsValid(CurrentEquippedWeapon))
 		{
 			CurrentEquippedWeapon->Execute_RecalculateBaseWeaponDamage(CurrentEquippedWeapon);
-
 		}
 	}
 }
@@ -682,13 +774,12 @@ void AAsylumPlayerCharacter::DeactivateSacrifice()
 			CurrentEquippedWeapon->WeaponStatsData.DamageModifierAmount = CurrentEquippedWeapon->WeaponStatsData.OriginalDamageModifier;
 			CurrentEquippedWeapon->bSacrificeEnable = false;
 		}
-
 	}
 }
 
 void AAsylumPlayerCharacter::CheckAragonStatus()
 {
-	this->Execute_PlayerUIUpdate(this);
+	this->Execute_UpdateAragonUI(this);
 	if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge <= GoetheSuitComponent->SuitStatsData.MaxAragonGauge)
 	{
 		if (!GoetheSuitComponent->bStartGaugeRecharge)
@@ -701,7 +792,6 @@ void AAsylumPlayerCharacter::CheckAragonStatus()
 			GoetheSuitComponent->SuitStatsData.CurrentAragonTanks--;
 			GoetheSuitComponent->SuitStatsData.CurrentAragonGauge = GoetheSuitComponent->SuitStatsData.MaxAragonGauge;
 		}
-
 	}
 	if (GoetheSuitComponent->SuitStatsData.CurrentAragonTanks <= 0.0f)
 	{
@@ -717,7 +807,7 @@ void AAsylumPlayerCharacter::CheckAragonStatus()
 		GoetheSuitComponent->SuitStatsData.CurrentAragonTanks = 0.0f;
 		if (GoetheSuitComponent->bStartMainAbility)
 		{
-			DeactivateMainAbility(GoetheSuitComponent->SuitStatsData.GoetheSelectedMainAbility);
+			DeactivateMainAbility();
 			if (PlayerSuitAudioComponent->Sound != TanksEmptySound)
 			{
 				PlayerSuitAudioComponent->Sound = TanksEmptySound;
@@ -727,18 +817,11 @@ void AAsylumPlayerCharacter::CheckAragonStatus()
 
 		}
 	}
-	/*if (GoetheSuitComponent->bStartMainAbility)
-	{
-		GoetheSuitComponent->bStartGaugeRecharge = false;
-	}*/
 	if (GoetheSuitComponent->SuitStatsData.CurrentAragonGauge >= GoetheSuitComponent->SuitStatsData.MaxAragonGauge && GoetheSuitComponent->SuitStatsData.CurrentAragonTanks >= GoetheSuitComponent->SuitStatsData.MaxAragonTanks)
 	{
 		GoetheSuitComponent->bStartGaugeRecharge = false;
 		GetWorldTimerManager().ClearTimer(RechargeAragonHandle);
 	}
-
-
-
 }
 
 void AAsylumPlayerCharacter::UpdateSacrificeStatus()
@@ -755,8 +838,8 @@ void AAsylumPlayerCharacter::UpdateSacrificeStatus()
 
 void AAsylumPlayerCharacter::SetupFlashLight()
 {
-	SuitLight->AttenuationRadius = 800.0f;
-	SuitLight->InnerConeAngle = 22.0f;
+	/*SuitLight->AttenuationRadius = 800.0f;
+	SuitLight->InnerConeAngle = 22.0f;*/
 }
 
 void AAsylumPlayerCharacter::OnWeaponAttack()
@@ -766,8 +849,6 @@ void AAsylumPlayerCharacter::OnWeaponAttack()
 		CurrentEquippedWeapon->StartFire();
 		this->Execute_OnWeaponFire(this, CurrentEquippedWeapon->WeaponStatsData.WeaponType);
 		this->Execute_PlayerUIUpdate(this);
-		
-		
 	}
 }
 

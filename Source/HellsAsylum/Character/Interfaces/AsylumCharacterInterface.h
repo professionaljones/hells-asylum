@@ -64,7 +64,7 @@ public:
 		void OnWeaponFire(EWeaponType CurrentWeaponType);
 
 		UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Weapon")
-		void OnWeaponHolster(EWeaponType NewWeaponType);
+		void OnWeaponHolster();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Weapon")
 		void OnAI_Fire();

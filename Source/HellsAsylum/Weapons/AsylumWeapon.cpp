@@ -124,12 +124,7 @@ void AAsylumWeapon::CheckAmmo()
 		{
 			bCanWeaponFire = false;
 			WeaponStatsData.CurrentMagazineAmmo = 0;
-
-			//Execute Interface Event from BP - currently drives UI update
-			if (this->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
-			{
-				this->Execute_OnEmptyWeaponFire(this);
-			}
+			this->Execute_OnEmptyWeaponFire(this);
 		}
 		else
 		{
@@ -204,11 +199,7 @@ void AAsylumWeapon::Fire()
 	//Collision parameters
 	FCollisionQueryParams CollisionParameters;
 
-	//Execute Interface Event from BP - currently drives UI update
-	if (this->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
-	{
-		IAsylumWeaponInterface::Execute_OnFire(this);
-	}
+		this->Execute_OnFire(this);
 
 	//If this weapon is not reloading and has ammo in mag
 	if (!bIsReloading && bCanWeaponFire)
@@ -401,17 +392,10 @@ void AAsylumWeapon::FinishReload()
 		GetWorldTimerManager().ClearTimer(ReloadTimer);
 		CurrentReloadTime = 0.0f;
 		this->Execute_OnFinishReload(this);
-		if(MyPawn->GetClass()->ImplementsInterface(UAsylumPlayerInterface::StaticClass()))
+		if (MyPawn->GetClass()->ImplementsInterface(UAsylumPlayerInterface::StaticClass()))
 		{
 			IAsylumPlayerInterface::Execute_OnPlayerReloadFinish(MyPawn);
 		}
-		// if (this->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
-		// {
-		// 	IAsylumWeaponInterface::Execute_OnFinishReload(this);
-			
-		// }
-
-
 	}
 }
 

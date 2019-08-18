@@ -39,16 +39,27 @@ public:
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Aragon Percentage", Keywords = "Shield"), Category = "Character|Stats")
 		float GetAragonPercentage();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character|Movement")
+		bool bIsRunning = false;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character|Movement")
+		float CharacterRunSpeed = 800.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character|Movement")
+		float CharacterWalkSpeed = 600.0f;
 
 	UFUNCTION(BlueprintCallable, Category = "Character|Weapons")
 		void EquipWeapon(AAsylumWeapon* NewWeapon);
 
 	UFUNCTION(BlueprintCallable, Category = "Character|Weapons")
 		virtual	void HolsterWeapon();
+
+	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
+		virtual void CharacterSprint();
 
 public:
 	// Called every frame
@@ -79,7 +90,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character")
 		TArray<AActor*> LockOnActorsToIgnore;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character|Weapon|")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character|Weapon")
 		TArray<TEnumAsByte<EObjectTypeQuery>> TValidLockOnObjects;
 
 	/** Follow camera */

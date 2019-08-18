@@ -12,11 +12,11 @@ struct FAsylumCameraInfo
 {
 	GENERATED_USTRUCT_BODY()
 
-		/** The field of view (in degrees) in perspective mode (ignored in Orthographic mode) */
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
+	/** The field of view (in degrees) in perspective mode (ignored in Orthographic mode) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 		float FOV;
 
-	/** The field of view (in degrees) in perspective mode (ignored in Orthographic mode) */
+	/** The field of view (in degrees) in perspective mode (ignored in Orthographic mode) - when the player is crouched */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 		float FOV_Crouching;
 

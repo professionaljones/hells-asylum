@@ -7,9 +7,7 @@
 #include "HellsAsylum.h"
 #include "Items/ItemBase.h"
 #include "Character/Interfaces/AsylumInteractInterface.h"
-#include "Components/SpotLightComponent.h"
 #include "AsylumPlayerController.h"
-
 #include "Weapons/SuitAbilities/BaseOrb.h"
 #include "Components/SceneComponent.h"
 #include "GameComponents/AsylumSpringArmComponent.h"
@@ -136,7 +134,14 @@ public:
 
 protected:
 
+	bool bIsSprintingToggle = false;
+
+	void EquipWeaponOne();
+	void EquipWeaponTwo();
+	void EquipWeaponThree();
+
 	virtual void HolsterWeapon() override;
+	virtual void CharacterSprint() override;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -227,9 +232,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "Player")
 		class USceneComponent* MyScene;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player")
-		class USpotLightComponent* SuitLight;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Weapon")
 		class AAsylumWeapon* WeaponSlotOne;
 
@@ -276,21 +278,33 @@ public:
 	 * @param PlayerSelectedAbility this is the Ability we want to Activate
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
-		void ActivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility);
+		void ActivateMainAbility();
 
 	/**
 	 * Called via input to deactivate the selected Main Ability
 	 * @param PlayerSelectedAbility this is the Ability we want to Deactivate
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
-		void DeactivateMainAbility(EGoetheMainAbilities PlayerSelectedAbility);
+		void DeactivateMainAbility();
 
 	/**
 	 * Called via input to Activate the player's desired power to use
 	 * @param PowerSelected this is the Power we want to Activate
 	 */
-	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
+	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
 		void ActivateSelectedPower(EGoetheActivePowers PowerSelected);
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
+		void ActivatePowerOne();
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
+		void ActivatePowerTwo();
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
+		void ActivatePowerThree();
+
+	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
+		void DeactivatePowerThree();
 
 	/**
 	 * Called via input to stop the power in use
