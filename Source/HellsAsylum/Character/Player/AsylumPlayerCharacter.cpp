@@ -252,19 +252,26 @@ void AAsylumPlayerCharacter::ActivateMainAbility()
 	CheckAragonStatus();
 	if (GoetheSuitComponent->bEnableMainAbility)
 	{
-		if (PlayerSelectedAbility == MA_Quicksilver)
+		if (!GoetheSuitComponent->bStartMainAbility)
 		{
-			ActivateQuicksilver();
-		}
-		if (PlayerSelectedAbility == MA_Overdrive)
-		{
-			ActivateOverdrive();
-		}
-		if (PlayerSelectedAbility == MA_Sacrifice)
-		{
-			ActivateSacrifice();
-		}
+			if (PlayerSelectedAbility == MA_Quicksilver)
+			{
+				ActivateQuicksilver();
 
+			}
+			if (PlayerSelectedAbility == MA_Overdrive)
+			{
+				ActivateOverdrive();
+			}
+			if (PlayerSelectedAbility == MA_Sacrifice)
+			{
+				ActivateSacrifice();
+			}
+		}
+		else
+		{
+			DeactivateMainAbility();
+		}
 	}
 }
 
@@ -292,18 +299,22 @@ void AAsylumPlayerCharacter::DeactivateMainAbility()
 	EGoetheMainAbilities PlayerSelectedAbility = GoetheSuitComponent->SuitStatsData.GoetheSelectedMainAbility;
 	if (GoetheSuitComponent->bEnableMainAbility)
 	{
-		if (PlayerSelectedAbility == MA_Quicksilver)
+		if (GoetheSuitComponent->bStartMainAbility)
 		{
-			DeactivateQuicksilver();
+			if (PlayerSelectedAbility == MA_Quicksilver)
+			{
+				DeactivateQuicksilver();
+			}
+			if (PlayerSelectedAbility == MA_Overdrive)
+			{
+				DeactivateOverdrive();
+			}
+			if (PlayerSelectedAbility == MA_Sacrifice)
+			{
+				DeactivateSacrifice();
+			}
 		}
-		if (PlayerSelectedAbility == MA_Overdrive)
-		{
-			DeactivateOverdrive();
-		}
-		if (PlayerSelectedAbility == MA_Sacrifice)
-		{
-			DeactivateSacrifice();
-		}
+
 	}
 
 }
