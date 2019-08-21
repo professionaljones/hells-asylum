@@ -53,7 +53,7 @@ protected:
 		float CharacterWalkSpeed = 600.0f;
 
 	UFUNCTION(BlueprintCallable, Category = "Character|Weapons")
-		void EquipWeapon(AAsylumWeapon* NewWeapon);
+		virtual void EquipWeapon(AAsylumWeapon* NewWeapon);
 
 	UFUNCTION(BlueprintCallable, Category = "Character|Weapons")
 		virtual	void HolsterWeapon();

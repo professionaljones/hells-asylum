@@ -44,7 +44,12 @@ bool UAsylumGameInstance::GetCurrentSaveStatus()
 	return bWasSaveLoaded;
 }
 
-FName UAsylumGameInstance::GetCampaignDifficulty()
+TMap<int32, class AAsylumWeapon*> UAsylumGameInstance::GetSavedWeaponArray()
+{
+	return SavedPlayerWeaponArray;
+}
+
+FName UAsylumGameInstance::GetCampaignDifficultyName()
 {
 	switch (SaveDataStruct.SavedGameDifficulty_Campaign)
 	{
@@ -80,7 +85,18 @@ FName UAsylumGameInstance::GetCampaignDifficulty()
 		break;
 	default:
 		return "No Difficulty";
-		UE_LOG(LogTemp,Warning,TEXT("No difficulty has been selected!"));
+		UE_LOG(LogTemp,Warning,TEXT("No difficulty has been selected/saved!"));
 		break;
 	}
+}
+
+void UAsylumGameInstance::SetCampaignDiffculty(int32 NewDifficulty)
+{
+	SaveDataStruct.SavedGameDifficulty_Campaign = NewDifficulty;
+	//return SaveDataStruct.SavedGameDifficulty_Campaign;
+}
+
+int32 UAsylumGameInstance::GetCampaignDifficulty()
+{
+	return SaveDataStruct.SavedGameDifficulty_Campaign;
 }

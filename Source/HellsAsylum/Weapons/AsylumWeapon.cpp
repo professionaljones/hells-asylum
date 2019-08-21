@@ -11,7 +11,7 @@ AAsylumWeapon::AAsylumWeapon()
 	PrimaryActorTick.bCanEverTick = true;
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>("WeaponMesh");
-	//WeaponMesh = RootComponent;
+	RootComponent = WeaponMesh;
 	FireArrow = CreateDefaultSubobject<UArrowComponent>("FireLocationArrow");
 	FireArrow->SetupAttachment(WeaponMesh, ProjectileSocket);
 	WeaponAudioComponent = CreateDefaultSubobject<UAudioComponent>("WeaponAudioComponent");
@@ -21,7 +21,11 @@ AAsylumWeapon::AAsylumWeapon()
 	ObjectsToTarget.Add(UEngineTypes::ConvertToObjectType(ECC_Pawn));
 	ObjectsToTarget.Add(UEngineTypes::ConvertToObjectType(ECC_Destructible));
 
-
+	WeaponLevelMap.Add(1, "1");
+	WeaponLevelMap.Add(2, "2");
+	WeaponLevelMap.Add(3, "3");
+	WeaponLevelMap.Add(4, "4");
+	WeaponLevelMap.Add(5, "5");
 
 	if (WeaponStatsData.FireRate > 0)
 	{

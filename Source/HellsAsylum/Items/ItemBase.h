@@ -31,6 +31,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item|Properties")
 		TEnumAsByte<EItemType> ItemType;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item|Properties")
+		int32 KeyItemNum = 0;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item|Properties")
 		bool bIsKeyItem;
 

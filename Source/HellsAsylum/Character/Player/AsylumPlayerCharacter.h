@@ -48,8 +48,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		TMap<int32, TSubclassOf<AItemBase>> ItemInventory;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory|Weapon")
 		TMap<int32, TSubclassOf<AAsylumWeapon>> PlayerWeaponInventory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory|Weapon")
+		TMap<int32, class AAsylumWeapon*> CurrentWeaponInventory;
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
@@ -141,6 +144,7 @@ protected:
 	void EquipWeaponThree();
 
 	virtual void HolsterWeapon() override;
+	virtual void EquipWeapon(AAsylumWeapon* NewWeapon) override;
 	virtual void CharacterSprint() override;
 
 	// Called when the game starts or when spawned
@@ -186,6 +190,9 @@ protected:
 		bool bActivateFlashlight = false;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SFX)
+		TSoftObjectPtr<USoundBase> EmptyTankSO;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SFX)
 		class USoundBase* TanksEmptySound;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SFX)
@@ -208,6 +215,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Upgrade")
 		//These points determine misc player stats - movement noise
 		int32 CurrentSuitAuxPoints;
+
+	int32 WeaponSlotOneKey = 1;
+	int32 WeaponSlotTwoKey = 2;
+	int32 WeaponSlotThreeKey = 3;
+	int32 NewWeaponSlot = 0;
 
 public:
 
@@ -386,7 +398,6 @@ public:
 	FTimerHandle InteractHandle;
 	FTimerHandle TractorHandle;
 private:
-
 	void SetupFlashLight();
 
 	bool bGotForwardInput;

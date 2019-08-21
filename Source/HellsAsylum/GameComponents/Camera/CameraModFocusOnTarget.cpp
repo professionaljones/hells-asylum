@@ -81,7 +81,8 @@ bool UCameraModFocusOnTarget::ProcessViewRotation(class AActor* ViewTarget, floa
 			FVector2D targetSelectionInput = TargetActor->GetCurrentTargetSelectionInput();
 
 			FRotator deltaRot;
-			deltaRot.Yaw = targetSelectionInput.X * RotationSpeed * DeltaTime;
+			//deltaRot.Yaw = targetSelectionInput.X * RotationSpeed * DeltaTime;
+			deltaRot.Yaw = 0.0f;
 			deltaRot.Pitch = -targetSelectionInput.Y * RotationSpeed * DeltaTime;
 			deltaRot.Roll = 0.0f;
 

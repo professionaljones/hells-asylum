@@ -73,6 +73,7 @@ void AAsylumCharacter::EquipWeapon(AAsylumWeapon* NewWeapon)
 		CurrentEquippedWeapon->SetWeaponOwner(this);
 		CurrentEquippedWeapon->AttachToOwner();
 		this->Execute_OnWeaponEquip(this, CurrentEquippedWeapon->WeaponStatsData.WeaponType);
+		
 		bIsInCombat = true;
 	}
 }

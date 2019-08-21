@@ -43,6 +43,9 @@ public:
 		void OnCharacterDeath(bool bIsDead);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Character")
+		void OnCharacterDodge(bool bIsDodging);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Character")
 		void OnStaminaDrained();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Character")

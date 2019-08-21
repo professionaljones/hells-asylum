@@ -44,11 +44,11 @@ public:
 
 	//What difficulty setting did the player select?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Save Data")
-		int SavedGameDifficulty_Campaign = 2;
+		int32 SavedGameDifficulty_Campaign = 2;
 
 	//What difficulty setting did the player select?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Save Data")
-		int SavedGameDifficulty_Mission = 2;
+		int32 SavedGameDifficulty_Mission = 2;
 
 	//How many points does the player have (Campaign)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data|Campaign")
@@ -92,11 +92,11 @@ public:
 
 	//How many Aragon Shards does the player have (Campaign)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data|Campaign")
-		int PlayerCurrentShardCount = 0;
+		int32 PlayerCurrentShardCount = 0;
 
 	//How many Aragon Shards has the player gained throughout (Campaign)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Data|Campaign")
-		int PlayerLifetimeShardCount = 0;
+		int32 PlayerLifetimeShardCount = 0;
 };
 
 //Saved Options values
@@ -203,12 +203,21 @@ protected:
 
 	//Currently unused but may be necessary later
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Save Data|Player")
-		TMap<int, AAsylumWeapon*> SavedPlayerWeaponMap;
+		TMap<int32, class AAsylumWeapon*> SavedPlayerWeaponArray;
 
 public:
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game|Save Data")
+		TMap<int32, class AAsylumWeapon*> GetSavedWeaponArray();
+
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game|Campaign Data")
-		FName GetCampaignDifficulty();
+		FName GetCampaignDifficultyName();
+
+	UFUNCTION(BlueprintCallable, Category = "Game|Campaign Data")
+		void SetCampaignDiffculty(int32 NewDifficulty);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game|Campaign Data")
+		int32 GetCampaignDifficulty();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game|Save Data")
 		float GetSavedCurrentXP();

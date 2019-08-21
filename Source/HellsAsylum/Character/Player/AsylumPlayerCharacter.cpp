@@ -206,6 +206,7 @@ void AAsylumPlayerCharacter::PlayerJumpEvent()
 	else
 	{
 		bStartDodge = true;
+		this->Execute_OnCharacterDodge(this, bStartDodge);
 	}
 }
 
@@ -215,10 +216,11 @@ void AAsylumPlayerCharacter::PlayerEndJump()
 	{
 		StopJumping();
 	}
-	else
-	{
-		bStartDodge = false;
-	}
+	//else
+	//{
+	//	bStartDodge = false;
+	//	this->Execute_OnCharacterDodge(this, bStartDodge);
+	//}
 }
 
 void AAsylumPlayerCharacter::PlayerInteractRaycast()
@@ -339,7 +341,7 @@ void AAsylumPlayerCharacter::ActivatePowerOne()
 {
 	if (GoetheSuitComponent)
 	{
-		EGoetheActivePowers PowerSelected = AP_None;
+		EGoetheActivePowers PowerSelected = GoetheSuitComponent->SuitStatsData.GoetheActivePowerOne;
 		if (PowerSelected == AP_DespairOrb)
 		{
 			SpawnDespairOrb(GoetheSuitComponent->SuitStatsData.DespairOrbCurrentLevel);
@@ -355,7 +357,7 @@ void AAsylumPlayerCharacter::ActivatePowerTwo()
 {
 	if (GoetheSuitComponent)
 	{
-		EGoetheActivePowers PowerSelected = AP_None;
+		EGoetheActivePowers PowerSelected = GoetheSuitComponent->SuitStatsData.GoetheActivePowerTwo;
 		if (PowerSelected == AP_DespairOrb)
 		{
 			SpawnDespairOrb(GoetheSuitComponent->SuitStatsData.DespairOrbCurrentLevel);
@@ -371,7 +373,7 @@ void AAsylumPlayerCharacter::ActivatePowerThree()
 {
 	if (GoetheSuitComponent)
 	{
-		EGoetheActivePowers PowerSelected = AP_None;
+		EGoetheActivePowers PowerSelected = GoetheSuitComponent->SuitStatsData.GoetheActivePowerThree;
 		if (PowerSelected == AP_Tractor)
 		{
 			GetWorldTimerManager().SetTimer(TractorHandle, this, &AAsylumPlayerCharacter::ItemTractorBeam, UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), true);
@@ -577,6 +579,7 @@ void AAsylumPlayerCharacter::EquipWeaponOne()
 	if (WeaponSlotOne)
 	{
 		EquipWeapon(WeaponSlotOne);
+		//NewWeaponSlot = WeaponSlotOneKey;
 	}
 }
 
@@ -585,6 +588,7 @@ void AAsylumPlayerCharacter::EquipWeaponTwo()
 	if (WeaponSlotTwo)
 	{
 		EquipWeapon(WeaponSlotTwo);
+		//NewWeaponSlot = WeaponSlotTwoKey;
 	}
 }
 
@@ -593,6 +597,7 @@ void AAsylumPlayerCharacter::EquipWeaponThree()
 	if (WeaponSlotThree)
 	{
 		EquipWeapon(WeaponSlotThree);
+		//NewWeaponSlot = WeaponSlotThreeKey;
 	}
 }
 
@@ -601,6 +606,15 @@ void AAsylumPlayerCharacter::HolsterWeapon()
 	Super::HolsterWeapon();
 	this->Execute_PlayerUIUpdate(this);
 	this->Execute_OnWeaponEquip(this, WT_Unequipped);
+	bUseControllerRotationYaw = false;
+
+}
+
+void AAsylumPlayerCharacter::EquipWeapon(AAsylumWeapon* NewWeapon)
+{
+	Super::EquipWeapon(NewWeapon);
+	//CurrentWeaponInventory.Add(NewWeaponSlot, NewWeapon);
+	bUseControllerRotationYaw = true;
 }
 
 void AAsylumPlayerCharacter::CharacterSprint()
@@ -617,8 +631,9 @@ void AAsylumPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	//SetupFlashLight();
-	//TanksEmptySound = LoadObject<USoundBase>(nullptr, TEXT("SoundCue'/Game/Static/ArtAssets/SFX/Powers/Ar_TanksEmpty_Cue.Ar_TanksEmpty_Cue'"));
-	//TanksRechargedSound = LoadObject<USoundBase>(nullptr, TEXT("SoundWave'/Game/Static/ArtAssets/SFX/Powers/Power_Bar_Refilled.Power_Bar_Refilled'"));
+	
+	/*TanksEmptySound = LoadObject<USoundBase>(nullptr, TEXT("SoundCue'/Game/Static/ArtAssets/SFX/Powers/Ar_TanksEmpty_Cue.Ar_TanksEmpty_Cue'"));
+	TanksRechargedSound = LoadObject<USoundBase>(nullptr, TEXT("SoundWave'/Game/Static/ArtAssets/SFX/Powers/Power_Bar_Refilled.Power_Bar_Refilled'"));*/
 }
 
 void AAsylumPlayerCharacter::MoveForward(float Value)
@@ -869,7 +884,7 @@ void AAsylumPlayerCharacter::OnWeaponStop()
 	{
 		CurrentEquippedWeapon->FinishFire();
 		CurrentEquippedWeapon->Execute_OnFinishFire(CurrentEquippedWeapon);
-		this->Execute_PlayerUIUpdate(this);
+		//this->Execute_PlayerUIUpdate(this);
 	}
 }
 
