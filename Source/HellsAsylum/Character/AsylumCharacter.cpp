@@ -65,7 +65,7 @@ void AAsylumCharacter::EquipWeapon(AAsylumWeapon* NewWeapon)
 	{
 		if (CurrentEquippedWeapon)
 		{
-			CurrentEquippedWeapon->SetActorHiddenInGame(false);
+			CurrentEquippedWeapon->SetActorHiddenInGame(true);
 			CurrentEquippedWeapon = NULL;
 
 		}
