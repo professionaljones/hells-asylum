@@ -606,7 +606,7 @@ void AAsylumPlayerCharacter::HolsterWeapon()
 	Super::HolsterWeapon();
 	this->Execute_PlayerUIUpdate(this);
 	this->Execute_OnWeaponEquip(this, WT_Unequipped);
-	bUseControllerRotationYaw = false;
+	//bUseControllerRotationYaw = false;
 
 }
 
@@ -614,7 +614,7 @@ void AAsylumPlayerCharacter::EquipWeapon(AAsylumWeapon* NewWeapon)
 {
 	Super::EquipWeapon(NewWeapon);
 	//CurrentWeaponInventory.Add(NewWeaponSlot, NewWeapon);
-	bUseControllerRotationYaw = true;
+	//bUseControllerRotationYaw = true;
 }
 
 void AAsylumPlayerCharacter::CharacterSprint()
