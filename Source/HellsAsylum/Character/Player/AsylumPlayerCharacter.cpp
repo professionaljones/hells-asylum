@@ -225,27 +225,47 @@ void AAsylumPlayerCharacter::PlayerEndJump()
 
 void AAsylumPlayerCharacter::PlayerInteractRaycast()
 {
-	FVector StartLocation = FollowCamera->GetComponentLocation();
-	FVector EndLocation = FollowCamera->GetComponentLocation() + (FollowCamera->GetComponentLocation() * 800.0f);
-	FHitResult InteractHitResult;
-
-	TSubclassOf<UAsylumInteractInterface> InteractInterface;
+	//Local Start Point of Ray
+	FVector InteractStartLocation = FollowCamera->GetComponentLocation();
+	//Local End Point of Ray
+	FVector InteractEndLocation = InteractStartLocation + (FollowCamera->GetForwardVector() * 800.0f);
+	//Local reference to detected Actor
 	AActor* HitActor = InteractHitResult.GetActor();
-	TArray<AActor*> ActorsToIgnore;
-	if (UKismetSystemLibrary::LineTraceSingleForObjects(this, StartLocation, EndLocation, InteractableItems, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, InteractHitResult, true, FLinearColor::Blue, FLinearColor::White, 5.0f))
-	{
 
+	TArray<AActor*> ActorsToIgnore;
+	
+	//Single Line Trace
+	/*if (UKismetSystemLibrary::LineTraceSingleForObjects(this, InteractStartLocation, InteractEndLocation, InteractableItems, true, ActorsToIgnore, EDrawDebugTrace::ForDuration, InteractHitResult, true, FLinearColor::Blue, FLinearColor::White, 5.0f))
+	{
 		if (HitActor)
 		{
-			//PCon->Execute_OnInteractVisible(PCon);
-			this->Execute_OnInteractVisible(this);
+			if (HitActor->GetClass()->ImplementsInterface(UAsylumInteractInterface::StaticClass()))
+			{
+				IAsylumInteractInterface::Execute_OnInteractEvent(HitActor);
+			}
+		}
+	}*/
+
+	if (UKismetSystemLibrary::LineTraceMultiForObjects(this, InteractStartLocation, InteractEndLocation, InteractableItems, true, ActorsToIgnore, EDrawDebugTrace::ForDuration, InteractHitResults, true, FLinearColor::Blue, FLinearColor::White, 10.0f))
+	{
+		for (int32 i = 0; i < InteractHitResults.Num(); i++)
+		{
+			HitActor = InteractHitResults[i].GetActor();
+			if (HitActor)
+			{
+				if (HitActor->GetClass()->ImplementsInterface(UAsylumInteractInterface::StaticClass()))
+				{
+					IAsylumInteractInterface::Execute_OnInteractEvent(HitActor);
+				}
+			}
 		}
 	}
-	else
-	{
-		//this->Execute_
-	}
 
+	////DEBUG: for some reason the value isn't cleared when called again for a different actor
+	//if (HitActor)
+	//{
+	//	HitActor = NULL;
+	//}
 }
 
 void AAsylumPlayerCharacter::ActivateMainAbility()
@@ -376,7 +396,7 @@ void AAsylumPlayerCharacter::ActivatePowerThree()
 		EGoetheActivePowers PowerSelected = GoetheSuitComponent->SuitStatsData.GoetheActivePowerThree;
 		if (PowerSelected == AP_Tractor)
 		{
-			GetWorldTimerManager().SetTimer(TractorHandle, this, &AAsylumPlayerCharacter::ItemTractorBeam, UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), true);
+			GetWorldTimerManager().SetTimer(TractorHandle, this, &AAsylumPlayerCharacter::ItemTractorBeam, 0.01f, true);
 		}
 	}
 }
@@ -385,10 +405,10 @@ void AAsylumPlayerCharacter::DeactivatePowerThree()
 {
 	if (GoetheSuitComponent)
 	{
-		EGoetheActivePowers PowerSelected = AP_None;
+		EGoetheActivePowers PowerSelected = GoetheSuitComponent->SuitStatsData.GoetheActivePowerThree;
 		if (PowerSelected == AP_Tractor)
 		{
-			GetWorldTimerManager().SetTimer(TractorHandle, this, &AAsylumPlayerCharacter::ItemTractorBeam, UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), true);
+			GetWorldTimerManager().ClearTimer(TractorHandle);
 		}
 	}
 }
@@ -406,19 +426,19 @@ void AAsylumPlayerCharacter::SpawnDespairOrb(int DiscordPowerLevel)
 	FActorSpawnParameters SpawnParameters;
 
 	FRotator SpawnRotation = PCon->GetControlRotation();
-	if (World)
+	if (CurrentWorld)
 	{
 
 		switch (DiscordPowerLevel)
 		{
 		case 1:
-			World->SpawnActor<ABaseOrb>(DespairLVOne, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
+			CurrentWorld->SpawnActor<ABaseOrb>(DespairLVOne, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
 			break;
 		case 2:
-			World->SpawnActor<ABaseOrb>(DespairLVTwo, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
+			CurrentWorld->SpawnActor<ABaseOrb>(DespairLVTwo, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
 			break;
 		case 3:
-			World->SpawnActor<ABaseOrb>(DespairLVThree, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
+			CurrentWorld->SpawnActor<ABaseOrb>(DespairLVThree, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
 			break;
 		}
 	}
@@ -429,18 +449,18 @@ void AAsylumPlayerCharacter::SpawnHarmonyOrb(int HarmonyPowerLevel)
 {
 	FActorSpawnParameters SpawnParameters;
 	FRotator SpawnRotation = PCon->GetControlRotation();
-	if (World)
+	if (CurrentWorld)
 	{
 		switch (HarmonyPowerLevel)
 		{
 		case 1:
-			World->SpawnActor<ABaseOrb>(HarmonyLVOne, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
+			CurrentWorld->SpawnActor<ABaseOrb>(HarmonyLVOne, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
 			break;
 		case 2:
-			World->SpawnActor<ABaseOrb>(HarmonyLVTwo, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
+			CurrentWorld->SpawnActor<ABaseOrb>(HarmonyLVTwo, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
 			break;
 		case 3:
-			World->SpawnActor<ABaseOrb>(HarmonyLVThree, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
+			CurrentWorld->SpawnActor<ABaseOrb>(HarmonyLVThree, MyScene->GetComponentLocation(), SpawnRotation, SpawnParameters);
 			break;
 		}
 	}
@@ -539,29 +559,34 @@ void AAsylumPlayerCharacter::OnSacrificeConsumption()
 
 
 void AAsylumPlayerCharacter::ItemTractorBeam()
-{
-	FVector EndLocation = GetActorLocation() + (GetActorLocation() * 3000.0f);
+{	
 	FHitResult ItemHitResult;
 	AActor* HitActor = ItemHitResult.GetActor();
 	TArray<AActor*> ActorsToIgnore;
-	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetActorLocation(), EndLocation, GoetheSuitComponent->SuitStatsData.ScanRadius, Items, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, ItemHitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0f))
+	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, StartLocation, EndLocation, GoetheSuitComponent->SuitStatsData.ScanRadius, Items, false, ActorsToIgnore, EDrawDebugTrace::ForOneFrame, ItemHitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0f))
 	{
-		if (HitActor)
+		if (HitActor && !HitActor->ActorHasTag("MajorUpgrade"))
 		{
-			//TODO: Update function 
+			FVector NewItemLocation = UKismetMathLibrary::VInterpTo(HitActor->GetActorLocation(), StartLocation, UGameplayStatics::GetWorldDeltaSeconds(this), 5.0f);
+			if (HitActor->SetActorLocation(NewItemLocation, true, nullptr, ETeleportType::None) == true)
+			{
+				UE_LOG(LogTemp, Verbose, TEXT("Item is moving!"));
+			}
+			
+			
 		}
 	}
 }
 
 void AAsylumPlayerCharacter::PlayerEnergyDrain()
 {
-	FVector EndLocation = GetActorLocation() + (GetActorLocation() * 3000.0f);
+	FVector DrainEndLocation = GetActorLocation() + (GetActorLocation() * 3000.0f);
 	TArray<FHitResult> DrainHitResults;
 	//int32 DrainHitLength = DrainHitResults.Max();
 //	AActor* HitActor = DrainHitResult.GetActor();
 	TArray<AActor*> ActorsToIgnore;
 
-	if (UKismetSystemLibrary::SphereTraceMultiForObjects(this, GetActorLocation(), EndLocation, GoetheSuitComponent->SuitStatsData.EnemySearchRadius, DrainEnemyArray, true, ActorsToIgnore, EDrawDebugTrace::ForDuration, DrainHitResults, true, FLinearColor::Red, FLinearColor::Blue, 5.0f))
+	if (UKismetSystemLibrary::SphereTraceMultiForObjects(this, GetActorLocation(), DrainEndLocation, GoetheSuitComponent->SuitStatsData.EnemySearchRadius, DrainEnemyArray, true, ActorsToIgnore, EDrawDebugTrace::ForDuration, DrainHitResults, true, FLinearColor::Red, FLinearColor::Blue, 5.0f))
 	{
 		for (int32 i = 0; i < DrainHitResults.Max(); i++)
 		{
@@ -619,12 +644,19 @@ void AAsylumPlayerCharacter::EquipWeapon(AAsylumWeapon* NewWeapon)
 
 void AAsylumPlayerCharacter::CharacterSprint()
 {
-	bIsRunning = bIsSprintButtonDown;
+	bIsSprintButtonDown = !bIsSprintButtonDown;
 	Super::CharacterSprint();
-	if (bIsRunning && bIsSprintingToggle)
+	if (bIsSprintButtonDown)
 	{
+		bIsRunning = true;
 		Super::CharacterSprint();
 	}
+	else
+	{
+		bIsRunning = false;
+		Super::CharacterSprint();
+	}
+	
 }
 
 void AAsylumPlayerCharacter::BeginPlay()
@@ -706,9 +738,11 @@ void AAsylumPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
+	//Action Bindings
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AAsylumPlayerCharacter::PlayerJumpEvent);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AAsylumPlayerCharacter::PlayerEndJump);
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AAsylumPlayerCharacter::OnWeaponAttack);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AAsylumPlayerCharacter::PlayerInteractRaycast);
 	PlayerInputComponent->BindAction("Attack", IE_Released, this, &AAsylumPlayerCharacter::OnWeaponStop);
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AAsylumPlayerCharacter::OnWeaponReload);
 	PlayerInputComponent->BindAction("Holster", IE_Pressed, this, &AAsylumPlayerCharacter::HolsterWeapon);
@@ -724,6 +758,8 @@ void AAsylumPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 	PlayerInputComponent->BindAction("Select Primary Weapon One", IE_Pressed, this, &AAsylumPlayerCharacter::EquipWeaponOne);
 	PlayerInputComponent->BindAction("Select Primary Weapon Two", IE_Pressed, this, &AAsylumPlayerCharacter::EquipWeaponTwo);
 	PlayerInputComponent->BindAction("Select Secondary Weapon", IE_Pressed, this, &AAsylumPlayerCharacter::EquipWeaponThree);
+
+	//Axis Bindings
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AAsylumPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AAsylumPlayerCharacter::MoveRight);

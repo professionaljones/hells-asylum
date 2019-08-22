@@ -137,7 +137,7 @@ public:
 
 protected:
 
-	bool bIsSprintingToggle = false;
+	
 
 	void EquipWeaponOne();
 	void EquipWeaponTwo();
@@ -174,6 +174,13 @@ protected:
 
 	FName PlayerTag = "Attacker";
 
+	FVector StartLocation = GetActorLocation();
+	FHitResult InteractHitResult;
+	TArray<FHitResult> InteractHitResults;
+
+	FVector EndLocation = StartLocation + StartLocMult;
+	FVector StartLocMult = StartLocation * 2000.0f;
+
 
 	virtual bool GotMovementInput() const override;
 
@@ -181,7 +188,7 @@ protected:
 
 	virtual FVector2D GetCurrentTargetSelectionInput() const override;
 	AAsylumPlayerController* PCon = Cast<AAsylumPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	UWorld* World = GetWorld();
+	UWorld* CurrentWorld = GetWorld();
 
 	UFUNCTION(BlueprintCallable, Category = "Player|Suit")
 		void ActivateFlashlight();
@@ -241,20 +248,21 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Player")
 		class UAsylumSpringArmComponent* ThirdPersonCameraBoom;
 
+	//Spawn point for certain Goethe powers
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "Player")
 		class USceneComponent* MyScene;
 
+	//Reference to weapon in Slot One
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Weapon")
 		class AAsylumWeapon* WeaponSlotOne;
 
+	//Reference to weapon in Slot Two
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Weapon")
 		class AAsylumWeapon* WeaponSlotTwo;
 
+	//Reference to weapon in Slot Three
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Weapon")
 		class AAsylumWeapon* WeaponSlotThree;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player|Weapon")
-		class AAsylumWeapon* LastWeaponEquipped;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player")
 		bool bStartLockOn = false;
@@ -262,24 +270,31 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player")
 		bool bStartDodge = false;
 
+	//Called to give player full health
 	UFUNCTION(BlueprintCallable, Category = "Player")
 		void GrantFullHealth();
 
+	//Called to give player full shield
 	UFUNCTION(BlueprintCallable, Category = "Player")
 		void GrantFullShield();
 
+	//Called to give player full aragon capacity
 	UFUNCTION(BlueprintCallable, Category = "Player")
 		void GrantFullAragon();
 
+	//Called to give player full health, shield and aragon
 	UFUNCTION(BlueprintCallable, Category = "Player")
 		void GrantFullStats();
 
+	//Called via input to tell anim BP to Jump or Dodge
 	UFUNCTION(BlueprintCallable, Category = "Player")
 		void PlayerJumpEvent();
 
+	//Called via input to tell anim BP to Stop Jump or Dodge
 	UFUNCTION(BlueprintCallable, Category = "Player")
 		void PlayerEndJump();
 
+	//Called via input to interact with detected object
 	UFUNCTION(BlueprintCallable, Category = "Player")
 		void PlayerInteractRaycast();
 
@@ -306,15 +321,23 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
 		void ActivateSelectedPower(EGoetheActivePowers PowerSelected);
 
+	//Called via input to Activate Power One
+	//Desired power is a local variable that is set to first power value
 	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
 		void ActivatePowerOne();
 
+	//Called via input to Activate Power Two
+	//Desired power is a local variable that is set to second power value
 	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
 		void ActivatePowerTwo();
 
+	//Called via input to Activate Power Three
+	//Desired power is a local variable that is set to third power value
 	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
 		void ActivatePowerThree();
 
+	//Called via input to Deactivate Power Three
+	//Desired power is a local variable that is set to third power value
 	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
 		void DeactivatePowerThree();
 
@@ -325,11 +348,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Suit|Abilities")
 		void DeactivateSelectedPower(EGoetheActivePowers PowerUsed);
 
-	//Allows the player to spawn a Despair Orb
+	/**
+	 * Called via Activate Power function to spawn desired Despair Orb
+	 * @param DespairPowerLevel - Ensure that spawn the right level of Orb
+	 */
 	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
-		void SpawnDespairOrb(int DiscordPowerLevel);
+		void SpawnDespairOrb(int DespairPowerLevel);
 
-	//Allows the player to spawn a Harmony Orb
+	/**
+	 * Called via Activate Power function to spawn desired Harmony Orb
+	 * @param HarmonyPowerLevel - Ensure that spawn the right level of Orb
+	 */
 	UFUNCTION(BlueprintCallable, Category = "Suit|Powers")
 		void SpawnHarmonyOrb(int HarmonyPowerLevel);
 

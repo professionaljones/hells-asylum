@@ -203,7 +203,7 @@ void AAsylumWeapon::Fire()
 	//Collision parameters
 	FCollisionQueryParams CollisionParameters;
 
-		this->Execute_OnFire(this);
+	this->Execute_OnFire(this);
 
 	//If this weapon is not reloading and has ammo in mag
 	if (!bIsReloading && bCanWeaponFire)
@@ -264,11 +264,7 @@ void AAsylumWeapon::Fire()
 				//Apply damage
 				UGameplayStatics::ApplyPointDamage(HitActor, WeaponStatsData.DamageAmountSum, SingleHit.ImpactPoint, SingleHit, UGameplayStatics::GetPlayerController(GetWorld(), 0), this, WeaponStatsData.C_WeaponDamageType);
 
-
-				if (this->GetClass()->ImplementsInterface(UAsylumWeaponInterface::StaticClass()))
-				{
-					IAsylumWeaponInterface::Execute_OnHitTarget(this);
-				}
+				this->Execute_OnHitTarget(this);
 				if (WeaponStatsData.WeaponAmmoType == AT_Stun)
 				{
 					//Apply stamina damage - different characters will react differently to stamina loss

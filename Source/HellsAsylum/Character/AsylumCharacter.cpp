@@ -100,6 +100,10 @@ void AAsylumCharacter::CharacterSprint()
 	{
 		GetCharacterMovement()->MaxWalkSpeed = CharacterWalkSpeed;
 	}
+	if (bIsRunning && bIsSprintingToggle)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = CharacterRunSpeed;
+	}
 }
 
 // Called every frame

@@ -61,6 +61,8 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
 		virtual void CharacterSprint();
 
+	bool bIsSprintingToggle = false;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
