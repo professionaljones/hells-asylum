@@ -175,11 +175,12 @@ protected:
 	FName PlayerTag = "Attacker";
 
 	FVector StartLocation = GetActorLocation();
+	FVector StartLocMult = StartLocation * 2000.0f;
 	FHitResult InteractHitResult;
 	TArray<FHitResult> InteractHitResults;
 
 	FVector EndLocation = StartLocation + StartLocMult;
-	FVector StartLocMult = StartLocation * 2000.0f;
+	
 
 
 	virtual bool GotMovementInput() const override;
