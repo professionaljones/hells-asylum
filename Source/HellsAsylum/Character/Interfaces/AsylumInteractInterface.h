@@ -24,7 +24,7 @@ class HELLSASYLUM_API IAsylumInteractInterface
 public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event Response|Character")
-		void OnInteractEvent();
+		void OnInteractEvent(bool bIsDrone);
 
 	
 

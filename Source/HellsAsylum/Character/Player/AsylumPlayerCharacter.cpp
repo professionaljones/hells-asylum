@@ -255,7 +255,7 @@ void AAsylumPlayerCharacter::PlayerInteractRaycast()
 			{
 				if (HitActor->GetClass()->ImplementsInterface(UAsylumInteractInterface::StaticClass()))
 				{
-					IAsylumInteractInterface::Execute_OnInteractEvent(HitActor);
+					IAsylumInteractInterface::Execute_OnInteractEvent(HitActor, false);
 				}
 			}
 		}
