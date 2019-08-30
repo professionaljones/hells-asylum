@@ -233,7 +233,7 @@ void AAsylumPlayerCharacter::PlayerInteractRaycast()
 	AActor* HitActor = InteractHitResult.GetActor();
 
 	TArray<AActor*> ActorsToIgnore;
-	
+
 	//Single Line Trace
 	/*if (UKismetSystemLibrary::LineTraceSingleForObjects(this, InteractStartLocation, InteractEndLocation, InteractableItems, true, ActorsToIgnore, EDrawDebugTrace::ForDuration, InteractHitResult, true, FLinearColor::Blue, FLinearColor::White, 5.0f))
 	{
@@ -260,12 +260,6 @@ void AAsylumPlayerCharacter::PlayerInteractRaycast()
 			}
 		}
 	}
-
-	////DEBUG: for some reason the value isn't cleared when called again for a different actor
-	//if (HitActor)
-	//{
-	//	HitActor = NULL;
-	//}
 }
 
 void AAsylumPlayerCharacter::ActivateMainAbility()
@@ -559,7 +553,7 @@ void AAsylumPlayerCharacter::OnSacrificeConsumption()
 
 
 void AAsylumPlayerCharacter::ItemTractorBeam()
-{	
+{
 	FHitResult ItemHitResult;
 	AActor* HitActor = ItemHitResult.GetActor();
 	TArray<AActor*> ActorsToIgnore;
@@ -572,8 +566,6 @@ void AAsylumPlayerCharacter::ItemTractorBeam()
 			{
 				UE_LOG(LogTemp, Verbose, TEXT("Item is moving!"));
 			}
-			
-			
 		}
 	}
 }
@@ -631,7 +623,11 @@ void AAsylumPlayerCharacter::HolsterWeapon()
 	Super::HolsterWeapon();
 	this->Execute_PlayerUIUpdate(this);
 	this->Execute_OnWeaponEquip(this, WT_Unequipped);
-	//bUseControllerRotationYaw = false;
+	if (bUseControllerRotationYaw)
+	{
+		bUseControllerRotationYaw = false;
+	}
+
 
 }
 
@@ -656,14 +652,14 @@ void AAsylumPlayerCharacter::CharacterSprint()
 		bIsRunning = false;
 		Super::CharacterSprint();
 	}
-	
+
 }
 
 void AAsylumPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	//SetupFlashLight();
-	
+
 	/*TanksEmptySound = LoadObject<USoundBase>(nullptr, TEXT("SoundCue'/Game/Static/ArtAssets/SFX/Powers/Ar_TanksEmpty_Cue.Ar_TanksEmpty_Cue'"));
 	TanksRechargedSound = LoadObject<USoundBase>(nullptr, TEXT("SoundWave'/Game/Static/ArtAssets/SFX/Powers/Power_Bar_Refilled.Power_Bar_Refilled'"));*/
 }
@@ -750,7 +746,6 @@ void AAsylumPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AAsylumPlayerCharacter::CharacterSprint);
 	//PlayerInputComponent->BindAction("Flashlight", IE_Pressed, this, &AAsylumPlayerCharacter::ActivateFlashlight);
 	PlayerInputComponent->BindAction("Activate Main Ability", IE_Pressed, this, &AAsylumPlayerCharacter::ActivateMainAbility);
-	//PlayerInputComponent->BindAction("Activate Main Ability", IE_Released, this, &AAsylumPlayerCharacter::DeactivateMainAbility);
 	PlayerInputComponent->BindAction("Activate Power One", IE_Pressed, this, &AAsylumPlayerCharacter::ActivatePowerOne);
 	PlayerInputComponent->BindAction("Activate Power Two", IE_Pressed, this, &AAsylumPlayerCharacter::ActivatePowerTwo);
 	PlayerInputComponent->BindAction("Activate Power Three", IE_Pressed, this, &AAsylumPlayerCharacter::ActivatePowerThree);
@@ -758,6 +753,8 @@ void AAsylumPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 	PlayerInputComponent->BindAction("Select Primary Weapon One", IE_Pressed, this, &AAsylumPlayerCharacter::EquipWeaponOne);
 	PlayerInputComponent->BindAction("Select Primary Weapon Two", IE_Pressed, this, &AAsylumPlayerCharacter::EquipWeaponTwo);
 	PlayerInputComponent->BindAction("Select Secondary Weapon", IE_Pressed, this, &AAsylumPlayerCharacter::EquipWeaponThree);
+	PlayerInputComponent->BindAction("Select Next Weapon", IE_Pressed, this, &AAsylumPlayerCharacter::CycleWeaponUp);
+	PlayerInputComponent->BindAction("Select Previous Weapon", IE_Pressed, this, &AAsylumPlayerCharacter::CycleWeaponDown);
 
 	//Axis Bindings
 
@@ -930,5 +927,91 @@ void AAsylumPlayerCharacter::OnWeaponReload()
 	{
 		CurrentEquippedWeapon->StartReload();
 		this->Execute_OnPlayerReload(this);
+	}
+}
+
+void AAsylumPlayerCharacter::CycleWeaponUp()
+{
+	GamepadWeaponIndex++;
+
+	switch (GamepadWeaponIndex)
+	{
+	case 1:
+		if (WeaponSlotOne)
+		{
+			EquipWeaponOne();
+		}
+		else
+		{
+			HolsterWeapon();
+		}
+
+		break;
+	case 2:
+		if (WeaponSlotTwo)
+		{
+			EquipWeaponTwo();
+		}
+
+		else
+		{
+			HolsterWeapon();
+		}
+		break;
+	case 3:
+		if (WeaponSlotThree)
+		{
+			EquipWeaponThree();
+		}
+		else
+		{
+			HolsterWeapon();
+		}
+	case 4:
+		GamepadWeaponIndex = 0;
+		HolsterWeapon();
+	}
+}
+
+void AAsylumPlayerCharacter::CycleWeaponDown()
+{
+	GamepadWeaponIndex--;
+
+	switch (GamepadWeaponIndex)
+	{
+	case 1:
+		if (WeaponSlotOne)
+		{
+			EquipWeaponOne();
+		}
+		else
+		{
+			HolsterWeapon();
+		}
+
+		break;
+	case 2:
+		if (WeaponSlotTwo)
+		{
+			EquipWeaponTwo();
+		}
+
+		else
+		{
+			HolsterWeapon();
+		}
+		break;
+	case 3:
+		if (WeaponSlotThree)
+		{
+			EquipWeaponThree();
+		}
+		else
+		{
+			HolsterWeapon();
+		}
+	case 4:
+		GamepadWeaponIndex = 0;
+		HolsterWeapon();
 	}
 }

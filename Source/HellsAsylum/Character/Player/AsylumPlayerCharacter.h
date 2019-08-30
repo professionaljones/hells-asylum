@@ -229,6 +229,8 @@ protected:
 	int32 WeaponSlotThreeKey = 3;
 	int32 NewWeaponSlot = 0;
 
+	int32 GamepadWeaponIndex = 0;
+
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "Cheats")
@@ -436,5 +438,7 @@ private:
 	void OnWeaponAttack();
 	void OnWeaponStop();
 	void OnWeaponReload();
+	void CycleWeaponUp();
+	void CycleWeaponDown();
 
 };
