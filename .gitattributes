@@ -2,3 +2,4 @@ Content/Static/** filter=lfs diff=lfs merge=lfs -text
 Content/Movies/** filter=lfs diff=lfs merge=lfs -text
 Plugins/MissionPack01/** filter=lfs diff=lfs merge=lfs -text
 Content/SciFiMusic3/** filter=lfs diff=lfs merge=lfs -text
+Content/SciFiWeapDark/** filter=lfs diff=lfs merge=lfs -text

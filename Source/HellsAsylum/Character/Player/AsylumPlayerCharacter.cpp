@@ -134,7 +134,7 @@ void AAsylumPlayerCharacter::EnableGodModeToggle()
 		//Set toggle bool to true
 		bEnableGodMode = true;
 		//Prevent player from taking damage
-		this->bCanBeDamaged = false;
+		SetCanBeDamaged(false);
 		//This is temporary - multiply movement by 3
 		GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed * 3;
 		//Additionally, give player infinite ammo
@@ -147,7 +147,7 @@ void AAsylumPlayerCharacter::EnableGodModeToggle()
 	else
 	{
 		bEnableGodMode = false;
-		this->bCanBeDamaged = true;
+		SetCanBeDamaged(true);
 		GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed / 3;
 		if (IsValid(CurrentEquippedWeapon))
 		{

@@ -54,7 +54,7 @@ void AAsylumWeapon::AttachToOwner()
 		if (PawnMesh)
 		{
 			WeaponMesh->AttachToComponent(PawnMesh, FAttachmentTransformRules::KeepRelativeTransform, WeaponAttachPoint);
-			if (bHidden)
+			if (IsHidden())
 			{
 				this->SetActorHiddenInGame(false);
 			}
@@ -70,7 +70,6 @@ void AAsylumWeapon::SetWeaponOwner(AAsylumCharacter* NewOwner)
 {
 	if (MyPawn != NewOwner)
 	{
-		Instigator = NewOwner;
 		MyPawn = NewOwner;
 		SetOwner(NewOwner);
 	}
